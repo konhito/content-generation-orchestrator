@@ -26,6 +26,7 @@ from .models import (
     PhaseMarker,
     ShortBeatMode,
     CharacterTrack,
+    VisualRecipe,
 )
 
 
@@ -1154,6 +1155,7 @@ class ShortGenerator:
                 "mode": beat.mode.value,
                 "character_track": beat.character_track,
                 "character_data": beat.character_data.model_dump() if beat.character_data else None,
+                "visual_recipe": beat.visual_recipe.model_dump() if beat.visual_recipe else None,
                 "visual": visual_dict,
                 "caption_text": beat.caption_text,
                 "word_timestamps": beat.word_timestamps,
@@ -1251,6 +1253,11 @@ class ShortGenerator:
                 character_data=(
                     CharacterTrack.model_validate(beat_data["character_data"])
                     if beat_data.get("character_data")
+                    else None
+                ),
+                visual_recipe=(
+                    VisualRecipe.model_validate(beat_data["visual_recipe"])
+                    if beat_data.get("visual_recipe")
                     else None
                 ),
                 # Custom scene generation fields

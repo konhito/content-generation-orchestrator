@@ -72,6 +72,62 @@ class CharacterTrack(BaseModel):
         return self
 
 
+class RecipeCharacterLayer(BaseModel):
+    """Character placement and performance intent inside a mixed scene."""
+
+    presence: str = "primary"
+    position: str = "lower_center"
+    scale: float = Field(default=0.82, ge=0.2, le=1.4)
+    pose_intent: str = "explain"
+    emotion: str = "happy"
+
+
+class RecipeComponentLayer(BaseModel):
+    """Component visual role inside a mixed scene."""
+
+    role: str = "main_explanation"
+    component_type: str = "concept_card"
+    position: str = "background_stage"
+    emphasis_words: list[str] = Field(default_factory=list)
+
+
+class RecipeMemeLayer(BaseModel):
+    """Meme accent role inside a mixed scene."""
+
+    role: str = "none"
+    style: str = "none"
+    timing: str = "none"
+    intensity: float = Field(default=0.0, ge=0.0, le=1.0)
+
+
+class RecipeCamera(BaseModel):
+    """Beat-level camera motion for a mixed scene."""
+
+    motion: str = "steady"
+    punch_zoom_on: str | None = None
+
+
+class RecipeTransition(BaseModel):
+    """Beat-level transition style for a mixed scene."""
+
+    transition_in: str = "soft_cut"
+    transition_out: str = "soft_cut"
+
+
+class VisualRecipe(BaseModel):
+    """Layered edit recipe for composing character, component, and meme visuals."""
+
+    recipe_id: str
+    layout: str
+    intent: str
+    attention_strategy: str
+    character: RecipeCharacterLayer = Field(default_factory=RecipeCharacterLayer)
+    component: RecipeComponentLayer = Field(default_factory=RecipeComponentLayer)
+    meme: RecipeMemeLayer = Field(default_factory=RecipeMemeLayer)
+    camera: RecipeCamera = Field(default_factory=RecipeCamera)
+    transition: RecipeTransition = Field(default_factory=RecipeTransition)
+
+
 class VisualType(str, Enum):
     """Types of visuals that can be shown in shorts."""
 
@@ -180,6 +236,7 @@ class ShortsBeat(BaseModel):
     mode: ShortBeatMode = ShortBeatMode.COMPONENT
     character_track: str = ""
     character_data: CharacterTrack | None = None
+    visual_recipe: VisualRecipe | None = None
 
     # Custom scene generation fields
     visual_description: str = ""  # From source scene's visual_cue.description
