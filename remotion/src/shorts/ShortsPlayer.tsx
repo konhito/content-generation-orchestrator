@@ -18,8 +18,10 @@ import { ShortsVisualArea } from "./ShortsVisualArea";
 import { AnimatedCaptions } from "./AnimatedCaptions";
 import { ShortsProgressBar } from "./ShortsProgressBar";
 import { ShortsCharacterScene } from "./ShortsCharacterScene";
+import { ShortsMixedScene } from "./ShortsMixedScene";
 import { ShortsTransition } from "./ShortsTransition";
 import type { CharacterTrack } from "./characterTypes";
+import type { VisualRecipe } from "./recipeTypes";
 import { rendererForMode } from "./shortsDispatch";
 import { SHORTS_COLORS, SHORTS_FONTS } from "./shortsStyle";
 
@@ -109,6 +111,7 @@ export interface ShortsBeat {
   mode?: "character" | "component" | "meme";
   character_track?: string;
   character_data?: CharacterTrack;
+  visual_recipe?: VisualRecipe;
 }
 
 // Type for custom scene component
@@ -129,6 +132,12 @@ export interface ShortsStoryboard {
     };
   };
 }
+
+export const rendererForBeat = (beat: Partial<ShortsBeat>): "mixed" | "character" | "visual" => {
+  if (beat.visual_recipe) return "mixed";
+  if (rendererForMode(beat.mode) === "character" && beat.character_data) return "character";
+  return "visual";
+};
 
 interface ShortsPlayerProps {
   storyboard?: ShortsStoryboard;
@@ -296,6 +305,17 @@ const VisualRenderer: React.FC<{
   fps: number;
   scale: number;
 }> = ({ beat, frame, fps, scale }) => {
+  if (rendererForBeat(beat) === "mixed") {
+    return (
+      <ShortsMixedScene
+        beat={beat}
+        frame={Math.max(0, frame - Math.round(beat.start_seconds * fps))}
+        fps={fps}
+        scale={scale}
+      />
+    );
+  }
+
   if (rendererForMode(beat.mode) === "character" && beat.character_data) {
     const beatStartFrame = Math.round(beat.start_seconds * fps);
     return (
