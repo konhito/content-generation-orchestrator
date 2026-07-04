@@ -94,6 +94,8 @@ def test_generates_short_script_and_meme_plan(tmp_path):
     assert result.component_plan_path.exists()
     assert result.beat_mode_plan_path.exists()
     assert result.character_plan_path.exists()
+    assert result.scene_recipe_plan_path is not None
+    assert result.scene_recipe_plan_path.exists()
 
     script = ShortScript.model_validate_json(result.short_script_path.read_text(encoding="utf-8"))
     assert script.source_project == "ai-short"
@@ -117,6 +119,11 @@ def test_generates_short_script_and_meme_plan(tmp_path):
 
     character_plan = json.loads(result.character_plan_path.read_text(encoding="utf-8"))
     assert character_plan["character_id"] == "character_1"
+
+    scene_recipe_plan = json.loads(result.scene_recipe_plan_path.read_text(encoding="utf-8"))
+    assert scene_recipe_plan["recipes"]
+    assert scene_recipe_plan["recipes"][0]["recipe_id"]
+    assert scene_recipe_plan["recipes"][0]["character"]["presence"] == "primary"
 
 
 def test_mock_generation_does_not_call_llm(tmp_path):

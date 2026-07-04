@@ -2521,9 +2521,17 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
     """Replace generic storyboard beats with the clean Remotion component plan."""
     import json
     import shutil
+
     from ..config import load_config
     from ..short.character import attach_character_tracks
-    from ..short.models import ShortsBeat, ShortsVisual, VisualType, SceneComponentConfig, ShortBeatMode
+    from ..short.models import (
+        SceneComponentConfig,
+        ShortBeatMode,
+        ShortsBeat,
+        ShortsVisual,
+        VisualRecipe,
+        VisualType,
+    )
 
     if not component_plan_path.exists():
         return shorts_storyboard
@@ -2532,6 +2540,15 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
     components = plan.get("components", [])
     if not components:
         return shorts_storyboard
+    recipe_plan_path = component_plan_path.parent.parent / "plans" / "scene_recipe_plan.json"
+    recipes_by_id = {}
+    if recipe_plan_path.exists():
+        recipe_plan = json.loads(recipe_plan_path.read_text(encoding="utf-8"))
+        recipes = recipe_plan.get("recipes", [])
+        recipes_by_id = {
+            str(component.get("id")): recipe
+            for component, recipe in zip(components, recipes, strict=False)
+        }
 
     original_words = [word for beat in shorts_storyboard.beats for word in beat.word_timestamps]
     new_beats = []
@@ -2587,6 +2604,11 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
             ),
             caption_text=str(item.get("caption_text", "")),
             word_timestamps=beat_words,
+            visual_recipe=(
+                VisualRecipe.model_validate(recipes_by_id[str(item.get("id"))])
+                if str(item.get("id")) in recipes_by_id
+                else None
+            ),
         ))
     shorts_storyboard.beats = new_beats
     shorts_storyboard.total_duration_seconds = float(plan.get("duration_seconds", shorts_storyboard.total_duration_seconds))

@@ -203,6 +203,36 @@ def test_storyboard_loader_preserves_character_mode_and_track(tmp_path):
                             "duration_seconds": 3,
                             "events": [{"start": 0, "end": 3, "pose": "body1", "emotion": "content", "head": "M"}],
                         },
+                        "visual_recipe": {
+                            "recipe_id": "host_foreground_concept_backdrop",
+                            "layout": "character_foreground_visual_backdrop",
+                            "intent": "explain",
+                            "attention_strategy": "host_demonstrates_concept",
+                            "character": {
+                                "presence": "primary",
+                                "position": "lower_center",
+                                "scale": 0.82,
+                                "pose_intent": "explain",
+                                "emotion": "curious",
+                            },
+                            "component": {
+                                "role": "main_explanation",
+                                "component_type": "concept_card",
+                                "position": "background_stage",
+                                "emphasis_words": ["hello"],
+                            },
+                            "meme": {
+                                "role": "none",
+                                "style": "none",
+                                "timing": "none",
+                                "intensity": 0,
+                            },
+                            "camera": {"motion": "steady", "punch_zoom_on": None},
+                            "transition": {
+                                "transition_in": "match_cut",
+                                "transition_out": "soft_cut",
+                            },
+                        },
                         "caption_text": "Hello",
                         "visual": {"type": "text_highlight", "primary_text": "Hello"},
                     }
@@ -217,6 +247,8 @@ def test_storyboard_loader_preserves_character_mode_and_track(tmp_path):
     assert storyboard.beats[0].mode == ShortBeatMode.CHARACTER
     assert storyboard.beats[0].character_track == "character/tracks/beat_001.json"
     assert storyboard.beats[0].character_data.character_id == "character_1"
+    assert storyboard.beats[0].visual_recipe is not None
+    assert storyboard.beats[0].visual_recipe.recipe_id == "host_foreground_concept_backdrop"
 
 
 def test_component_plan_uses_one_full_frame_item_per_mode():

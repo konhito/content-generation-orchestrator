@@ -25,6 +25,7 @@ from .component_plan import build_component_plan
 from .meme_copy import generate_meme_copy
 from .models import ShortMode, ShortScene, ShortScript
 from .niche import get_editing_config, get_script_context, get_voice_config, load_niche
+from .scene_recipe import SceneRecipeInput, plan_scene_recipes
 from .script_beats import build_script_beats
 
 
@@ -98,6 +99,7 @@ class ShortFirstResult:
     component_plan_path: Path | None = None
     beat_mode_plan_path: Path | None = None
     character_plan_path: Path | None = None
+    scene_recipe_plan_path: Path | None = None
     error: str | None = None
 
 
@@ -283,6 +285,7 @@ class ShortFirstGenerator:
         component_plan_path = component_dir / "component_plan.json"
         beat_mode_plan_path = plans_dir / "beat_mode_plan.json"
         character_plan_path = plans_dir / "character_plan.json"
+        scene_recipe_plan_path = plans_dir / "scene_recipe_plan.json"
 
         profile = self.load_niche_profile(niche)
         yaml_profile = load_niche("general" if profile.name == "default" else profile.name)
@@ -329,6 +332,18 @@ class ShortFirstGenerator:
             duration=target_duration,
             niche=profile.name,
             mode_plan=beat_mode_plan,
+        )
+        recipe_inputs = _build_scene_recipe_inputs(
+            script_beats=script_beats,
+            component_plan=component_plan,
+            beat_mode_plan=beat_mode_plan,
+            project_id=project_id,
+            topic=topic,
+            niche=profile.name,
+        )
+        scene_recipes = plan_scene_recipes(
+            recipe_inputs,
+            seed=f"{project_id}:{variant}:{topic}:{profile.name}",
         )
 
         short_script = ShortScript(
@@ -403,6 +418,18 @@ class ShortFirstGenerator:
             json.dumps(character_plan, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        scene_recipe_plan_path.write_text(
+            json.dumps(
+                {
+                    "project_id": project_id,
+                    "variant": variant,
+                    "recipes": [recipe.model_dump() for recipe in scene_recipes],
+                },
+                indent=2,
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
 
         return ShortFirstResult(
             success=True,
@@ -415,6 +442,7 @@ class ShortFirstGenerator:
             component_plan_path=component_plan_path,
             beat_mode_plan_path=beat_mode_plan_path,
             character_plan_path=character_plan_path,
+            scene_recipe_plan_path=scene_recipe_plan_path,
         )
 
     def _build_prompt(
@@ -562,6 +590,60 @@ def _format_short_script_markdown(
         lines.append(f"{index}. {caption} — {visual}".strip())
     lines.extend(["", "## CTA", "", short_script.cta_narration, ""])
     return "\n".join(lines)
+
+
+def _build_scene_recipe_inputs(
+    *,
+    script_beats: list[dict[str, Any]],
+    component_plan: dict[str, Any],
+    beat_mode_plan: list[dict[str, Any]],
+    project_id: str,
+    topic: str,
+    niche: str,
+) -> list[SceneRecipeInput]:
+    components_by_id = {
+        str(item.get("id")): item for item in component_plan.get("components", [])
+    }
+    meme_beat_ids = {
+        str(item.get("id")) for item in beat_mode_plan if item.get("mode") == "meme"
+    }
+    total = len(script_beats)
+    return [
+        SceneRecipeInput(
+            beat_id=str(beat.get("beat_id", f"beat_{index + 1:03d}")),
+            beat_index=index,
+            beat_count=total,
+            topic=topic,
+            niche=niche,
+            narration=str(beat.get("script_text", "")),
+            caption_text=str(beat.get("script_text", "")),
+            visual_description=str(beat.get("visual_description", "")),
+            visual_elements=list(beat.get("entities", [])),
+            component_type=str(
+                (components_by_id.get(str(beat.get("beat_id"))) or {})
+                .get("visual", {})
+                .get("type", "concept_card")
+            ),
+            has_meme=str(beat.get("beat_id")) in meme_beat_ids,
+            seriousness_score=_seriousness_score(project_id, topic, niche),
+        )
+        for index, beat in enumerate(script_beats)
+    ]
+
+
+def _seriousness_score(project_id: str, topic: str, niche: str) -> float:
+    text = f"{project_id} {topic} {niche}".lower()
+    serious_terms = (
+        "war",
+        "death",
+        "disaster",
+        "election",
+        "violence",
+        "crime",
+        "disease",
+        "politics",
+    )
+    return 0.9 if any(term in text for term in serious_terms) else 0.0
 
 
 def _mock_short_payload(topic: str, duration: int) -> dict[str, Any]:
