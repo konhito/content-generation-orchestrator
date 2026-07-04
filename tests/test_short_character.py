@@ -19,6 +19,7 @@ from src.short.models import (
     ShortBeatMode,
     ShortsBeat,
     ShortsVisual,
+    VisualRecipe,
     VisualType,
 )
 
@@ -288,6 +289,51 @@ def test_attach_character_tracks_writes_artifact_and_reference(tmp_path):
         id="beat_001", start_seconds=1, end_seconds=3, mode=ShortBeatMode.CHARACTER,
         visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Hello"),
         caption_text="Hello", word_timestamps=[{"word": "Hello", "start_seconds": 1.2, "end_seconds": 1.8}],
+    )
+
+    attach_character_tracks([beat], manifest_path, tmp_path / "character/tracks")
+
+    assert beat.character_track == "character/tracks/beat_001.json"
+    assert beat.character_data is not None
+    assert (tmp_path / beat.character_track).exists()
+
+
+def test_attach_character_tracks_includes_mixed_recipe_beats(tmp_path):
+    manifest_path = tmp_path / "character-manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "fallbacks": {"body": "body1", "head": "M", "eyes": "content_M", "mouth": "m_b_close_h"},
+                "assets": {
+                    "body": {"body1": {}}, "head": {"M": {}},
+                    "eyes": {"content_M": {}}, "mouth": {"m_b_close_h": {}},
+                },
+                "mouth_map": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    beat = ShortsBeat(
+        id="beat_001",
+        start_seconds=0,
+        end_seconds=3,
+        mode=ShortBeatMode.COMPONENT,
+        visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Hello"),
+        visual_recipe=VisualRecipe.model_validate(
+            {
+                "recipe_id": "host_sidecar_main_diagram",
+                "layout": "character_sidecar_visual_main",
+                "intent": "explain",
+                "attention_strategy": "host_reacts_to_evidence",
+                "character": {"presence": "primary", "position": "side_left", "scale": 0.58},
+                "component": {"role": "supporting_evidence", "component_type": "patch_grid", "position": "main_stage"},
+                "meme": {"role": "none", "style": "sticker_pop", "timing": "none", "intensity": 0},
+                "camera": {"motion": "micro_parallax"},
+                "transition": {"transition_in": "match_cut", "transition_out": "soft_cut"},
+            }
+        ),
+        caption_text="Hello",
+        word_timestamps=[],
     )
 
     attach_character_tracks([beat], manifest_path, tmp_path / "character/tracks")

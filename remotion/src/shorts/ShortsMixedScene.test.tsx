@@ -1,7 +1,7 @@
 import React from "react";
 import {describe, expect, it} from "vitest";
 
-import {recipeLayerPlan, ShortsMixedScene} from "./ShortsMixedScene";
+import {recipeLayerPlan, ShortsMixedScene, visualBeatForMixedScene} from "./ShortsMixedScene";
 import type {VisualRecipe} from "./recipeTypes";
 
 const recipe: VisualRecipe = {
@@ -68,5 +68,15 @@ describe("ShortsMixedScene", () => {
         <ShortsMixedScene beat={{} as any} frame={0} fps={30} scale={1} />,
       ),
     ).toBe(true);
+  });
+
+  it("normalizes nested visual beat timing to local scene frames", () => {
+    const beat = visualBeatForMixedScene({
+      start_seconds: 12,
+      end_seconds: 18,
+    } as any);
+
+    expect(beat.start_seconds).toBe(0);
+    expect(beat.end_seconds).toBe(6);
   });
 });

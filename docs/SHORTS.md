@@ -4,11 +4,18 @@ Generate vertical shorts (1080x1920) optimized for YouTube Shorts, Instagram Ree
 
 ## Character, component, and meme flow
 
-Short-first generation plans one full-frame visual mode per narration beat:
-`character`, `component`, or `meme`. The first character implementation uses
-one recurring layered SyncToon character rendered natively in Remotion.
+Short-first generation now plans a mixed scene recipe per narration beat. Each
+recipe decides how the recurring SyncToon host character, component
+visualization, meme accent, callout, camera motion, and transition share the
+same frame. The character remains the main charm; components and memes support
+what the character is saying instead of replacing the full screen. Legacy
+`mode` values (`character`, `component`, `meme`) remain as fallback for older
+storyboards without `visual_recipe`.
+
+Generation writes `plans/scene_recipe_plan.json` and embeds the matching
+`visual_recipe` on each beat in `storyboard/shorts_storyboard.json`.
 Captions, progress, narration, music, design tokens, and mode transitions stay
-at the shared player level so visual modes do not reset between beats.
+at the shared player level so mixed scenes stay coupled between beats.
 
 Import or refresh the character source with:
 

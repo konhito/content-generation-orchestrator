@@ -15,6 +15,12 @@ export const recipeLayerPlan = (recipe: VisualRecipe) => ({
   memeVisible: recipe.meme.role !== "none" && recipe.meme.intensity > 0,
 });
 
+export const visualBeatForMixedScene = (beat: RecipeBeat): RecipeBeat => ({
+  ...beat,
+  start_seconds: 0,
+  end_seconds: beat.end_seconds - beat.start_seconds,
+});
+
 export const ShortsMixedScene: React.FC<{
   beat: RecipeBeat;
   frame: number;
@@ -28,11 +34,14 @@ export const ShortsMixedScene: React.FC<{
 
   const entrance = spring({frame, fps, config: SHORTS_MOTION.smoothSpring});
   const push = recipe.camera.motion === "slow_push"
-    ? interpolate(frame, [0, 120], [0.97, 1.02], {
+      ? interpolate(frame, [0, 120], [0.97, 1.02], {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp",
     })
     : 1;
+  const visualBeat = visualBeatForMixedScene(beat);
+  const mainStage = recipe.component.position === "main_stage";
+  const emphasisWords = recipe.component.emphasis_words.slice(0, 3);
   const memePop = spring({
     frame: Math.max(
       0,
@@ -60,15 +69,74 @@ export const ShortsMixedScene: React.FC<{
       <div
         style={{
           position: "absolute",
-          left: recipe.component.position === "main_stage" ? 360 * scale : 130 * scale,
-          top: recipe.component.position === "main_stage" ? 260 * scale : 190 * scale,
-          width: recipe.component.position === "main_stage" ? 600 * scale : 820 * scale,
-          height: recipe.component.position === "main_stage" ? 760 * scale : 850 * scale,
-          opacity: 0.82,
+          left: mainStage ? 390 * scale : 135 * scale,
+          top: mainStage ? 220 * scale : 170 * scale,
+          width: mainStage ? 590 * scale : 810 * scale,
+          height: mainStage ? 720 * scale : 610 * scale,
+          borderRadius: 38 * scale,
+          border: `${2 * scale}px solid ${SHORTS_COLORS.primary}30`,
+          background: `${SHORTS_COLORS.background}88`,
+          boxShadow: `0 18px 80px ${SHORTS_COLORS.primary}20`,
+          opacity: mainStage ? 0.98 : 0.92,
+          overflow: "hidden",
           transform: `scale(${push})`,
         }}
       >
-        <ShortsVisualArea beat={beat} frame={frame} fps={fps} scale={scale * 0.78} />
+        <ShortsVisualArea beat={visualBeat} frame={frame} fps={fps} scale={scale * (mainStage ? 0.72 : 0.66)} />
+        {emphasisWords.length > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              left: 26 * scale,
+              right: 26 * scale,
+              bottom: 28 * scale,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 12 * scale,
+              justifyContent: mainStage ? "flex-start" : "center",
+            }}
+          >
+            {emphasisWords.map((word) => (
+              <div
+                key={word}
+                style={{
+                  padding: `${8 * scale}px ${14 * scale}px`,
+                  borderRadius: 999,
+                  background: `${SHORTS_COLORS.primary}22`,
+                  border: `${1.5 * scale}px solid ${SHORTS_COLORS.primary}66`,
+                  color: SHORTS_COLORS.text,
+                  fontFamily: SHORTS_FONTS.primary,
+                  fontWeight: 800,
+                  fontSize: 24 * scale,
+                  textTransform: "uppercase",
+                  letterSpacing: 0.8 * scale,
+                }}
+              >
+                {word}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          left: mainStage ? 410 * scale : 275 * scale,
+          top: mainStage ? 190 * scale : 135 * scale,
+          padding: `${10 * scale}px ${16 * scale}px`,
+          borderRadius: 999,
+          background: SHORTS_COLORS.primary,
+          color: "#050509",
+          fontFamily: SHORTS_FONTS.primary,
+          fontWeight: 900,
+          fontSize: 22 * scale,
+          letterSpacing: 1.2 * scale,
+          textTransform: "uppercase",
+          boxShadow: `0 10px 40px ${SHORTS_COLORS.primary}44`,
+        }}
+      >
+        {recipe.component.component_type.replace(/_/g, " ")}
       </div>
 
       <ShortsCharacterScene
@@ -78,7 +146,7 @@ export const ShortsMixedScene: React.FC<{
         scale={scale}
         emphasis={beat.visual.primary_text}
         position={recipe.character.position}
-        characterScale={recipe.character.scale}
+        characterScale={recipe.character.scale * (mainStage ? 1 : 0.88)}
         showStage={false}
       />
 

@@ -227,7 +227,11 @@ def attach_character_tracks(
             except (OSError, httpx.HTTPError, ValueError) as exc:
                 warnings.append(f"Gentle alignment unavailable; using word timing fallback: {exc}")
     for beat in beats:
-        if beat.mode != ShortBeatMode.CHARACTER:
+        recipe_wants_character = (
+            beat.visual_recipe is not None
+            and beat.visual_recipe.character.presence == "primary"
+        )
+        if beat.mode != ShortBeatMode.CHARACTER and not recipe_wants_character:
             continue
         duration = beat.end_seconds - beat.start_seconds
         relative_words = [
