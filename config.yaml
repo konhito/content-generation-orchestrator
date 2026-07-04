@@ -1,0 +1,63 @@
+# Video Explainer Configuration
+
+# Video settings
+video:
+  resolution:
+    width: 1920
+    height: 1080
+  fps: 30
+  format: "mp4"
+  codec: "h264"
+
+# LLM settings
+llm:
+  # Provider: "openai" for production, "mock" for testing
+  provider: "openai"
+  # Model to use (when provider is not mock)
+  model: "gpt-5.4-mini"
+  # Maximum tokens for generation
+  max_tokens: 16384
+  # Temperature for generation
+  temperature: 0.7
+
+# TTS settings
+tts:
+  provider: "edge"
+  # Voice ID (will be set from environment or here)
+  voice_id: null
+  # Model to use
+  model: "edge-tts"
+  # Output format
+  output_format: "mp3_44100_128"
+
+# Budget limits (USD)
+budget:
+  llm_per_video: 50.00
+  tts_per_video: 10.00
+  image_gen_per_video: 20.00
+  total_per_video: 100.00
+
+# Paths
+paths:
+  output_dir: "output"
+  templates_dir: "templates"
+  animations_dir: "animations"
+
+# Review settings
+review:
+  # Enable human review checkpoints
+  enabled: true
+  # Checkpoints: script, storyboard, assets, final
+  checkpoints:
+    - script
+    - storyboard
+    - final
+
+# Shorts-only recurring character
+character:
+  enabled: true
+  character_id: "character_1"
+  asset_source: "remotion/public/characters/synctoon"
+  aligner_url: "http://localhost:49153/transcriptions?async=false"
+  aligner_timeout_seconds: 5.0
+  word_timing_fallback: true

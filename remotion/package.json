@@ -1,0 +1,47 @@
+{
+  "name": "video-explainer-remotion",
+  "version": "1.0.0",
+  "description": "Remotion animations for video explainer",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "render": "remotion render",
+    "render:all": "node scripts/render.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/space-grotesk": "^5.2.10",
+    "@react-three/drei": "^9.88.0",
+    "@react-three/fiber": "^8.15.19",
+    "@react-three/postprocessing": "^2.16.3",
+    "@remotion/bundler": "4.0.242",
+    "@remotion/cli": "4.0.242",
+    "@remotion/google-fonts": "4.0.242",
+    "@remotion/renderer": "4.0.242",
+    "@remotion/three": "4.0.242",
+    "@remotion/transitions": "4.0.242",
+    "postprocessing": "^6.36.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.242",
+    "three": "^0.170.0",
+    "zod": "3.22.4",
+    "zustand": "^3.7.2"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "@types/babel__traverse": "^7.20.4",
+    "@types/node": "22.10.2",
+    "@types/react": "18.3.12",
+    "@types/three": "^0.170.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

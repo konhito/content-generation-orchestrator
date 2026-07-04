@@ -1,0 +1,290 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://video-explainer/storyboard.schema.json",
+  "title": "Storyboard",
+  "description": "Schema for video explainer storyboards",
+  "type": "object",
+  "required": ["id", "title", "duration_seconds", "beats"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this storyboard",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of what this scene explains"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "description": "Total duration of the scene in seconds",
+      "minimum": 1
+    },
+    "audio": {
+      "$ref": "#/definitions/audio"
+    },
+    "style": {
+      "$ref": "#/definitions/style"
+    },
+    "beats": {
+      "type": "array",
+      "description": "Ordered list of beats (time-based segments)",
+      "items": {
+        "$ref": "#/definitions/beat"
+      },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "audio": {
+      "type": "object",
+      "description": "Audio file reference and timing metadata",
+      "required": ["file", "duration_seconds"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "description": "Path to audio file relative to output/audio/"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "description": "Audio duration in seconds"
+        },
+        "word_timestamps": {
+          "type": "array",
+          "description": "Word-level timing from TTS",
+          "items": {
+            "$ref": "#/definitions/word_timestamp"
+          }
+        }
+      }
+    },
+    "word_timestamp": {
+      "type": "object",
+      "required": ["word", "start", "end"],
+      "properties": {
+        "word": {
+          "type": "string"
+        },
+        "start": {
+          "type": "number",
+          "description": "Start time in seconds"
+        },
+        "end": {
+          "type": "number",
+          "description": "End time in seconds"
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "description": "Visual style overrides for this scene",
+      "properties": {
+        "background_color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "primary_color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "secondary_color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "font_family": {
+          "type": "string"
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "description": "A time-based segment of the scene",
+      "required": ["id", "start_seconds", "end_seconds"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this beat",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "start_seconds": {
+          "type": "number",
+          "description": "Start time in seconds",
+          "minimum": 0
+        },
+        "end_seconds": {
+          "type": "number",
+          "description": "End time in seconds",
+          "minimum": 0
+        },
+        "voiceover": {
+          "type": "string",
+          "description": "Voiceover text for this beat (for reference)"
+        },
+        "elements": {
+          "type": "array",
+          "description": "Visual elements in this beat",
+          "items": {
+            "$ref": "#/definitions/element"
+          }
+        },
+        "sync_points": {
+          "type": "array",
+          "description": "Audio-triggered actions",
+          "items": {
+            "$ref": "#/definitions/sync_point"
+          }
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "description": "A visual component instance",
+      "required": ["id", "component"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this element instance"
+        },
+        "component": {
+          "type": "string",
+          "description": "Component type from registry (e.g., 'token_row', 'gpu_gauge')"
+        },
+        "props": {
+          "type": "object",
+          "description": "Props to pass to the component",
+          "additionalProperties": true
+        },
+        "position": {
+          "$ref": "#/definitions/position"
+        },
+        "animations": {
+          "type": "array",
+          "description": "Animations to apply to this element",
+          "items": {
+            "$ref": "#/definitions/animation"
+          }
+        },
+        "enter": {
+          "$ref": "#/definitions/transition",
+          "description": "How the element enters the scene"
+        },
+        "exit": {
+          "$ref": "#/definitions/transition",
+          "description": "How the element exits the scene"
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "description": "Position on screen",
+      "properties": {
+        "x": {
+          "oneOf": [
+            {"type": "number"},
+            {"type": "string", "enum": ["left", "center", "right"]}
+          ],
+          "description": "X position (pixels or named position)"
+        },
+        "y": {
+          "oneOf": [
+            {"type": "number"},
+            {"type": "string", "enum": ["top", "center", "bottom"]}
+          ],
+          "description": "Y position (pixels or named position)"
+        },
+        "anchor": {
+          "type": "string",
+          "enum": ["top-left", "top-center", "top-right", "center-left", "center", "center-right", "bottom-left", "bottom-center", "bottom-right"],
+          "default": "center"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "description": "An animation to apply to an element",
+      "required": ["action", "at_seconds"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Animation action (component-specific or generic)",
+          "examples": ["activate", "fade_in", "fade_out", "scale", "move", "activate_all", "activate_sequential"]
+        },
+        "at_seconds": {
+          "type": "number",
+          "description": "When to trigger this animation (relative to scene start)"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "description": "Duration of the animation",
+          "default": 0.3
+        },
+        "easing": {
+          "type": "string",
+          "enum": ["linear", "ease-in", "ease-out", "ease-in-out", "spring"],
+          "default": "ease-out"
+        },
+        "params": {
+          "type": "object",
+          "description": "Action-specific parameters",
+          "additionalProperties": true
+        }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "description": "Element enter/exit transition",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["fade", "slide", "scale", "none"],
+          "default": "fade"
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["up", "down", "left", "right"],
+          "description": "Direction for slide transitions"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "default": 0.3
+        },
+        "delay_seconds": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    },
+    "sync_point": {
+      "type": "object",
+      "description": "Trigger an action when a word/phrase is spoken",
+      "required": ["trigger_seconds", "target", "action"],
+      "properties": {
+        "trigger_word": {
+          "type": "string",
+          "description": "Word or phrase that triggers this action (for documentation)"
+        },
+        "trigger_seconds": {
+          "type": "number",
+          "description": "Exact time to trigger (from TTS word timestamps)"
+        },
+        "target": {
+          "type": "string",
+          "description": "Element ID to target"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform on target"
+        },
+        "params": {
+          "type": "object",
+          "description": "Action parameters",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

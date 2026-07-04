@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+.agents/
+.claude/
+.codex/
+.remotion/
+.ruff_cache/
+.superpowers/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Environment
+.env
+.env.local
+*.env
+
+# Output files (keep structure, ignore content)
+output/scripts/*.json
+output/audio/*.mp3
+output/audio/*.wav
+output/video/*.mp4
+output/storyboards/*.yaml
+!output/**/.gitkeep
+output/
+
+# Projects directory (project-specific content, not committed)
+projects/
+
+# Remotion public symlinks (project-specific)
+remotion/public/voiceover
+remotion/public/music
+remotion/public/sfx
+
+# Motion Canvas
+animations/node_modules/
+animations/output/
+animations/.cache/
+animations/src/**/*.meta
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+.tmp/
+temp/
+*.tmp
+remotion/scripts/test-scene-*.tsx
