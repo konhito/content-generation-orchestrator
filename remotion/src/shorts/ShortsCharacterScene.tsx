@@ -23,6 +23,9 @@ interface ShortsCharacterSceneProps {
   fps: number;
   scale: number;
   emphasis?: string;
+  position?: string;
+  characterScale?: number;
+  showStage?: boolean;
 }
 
 const layerStyle = (left: number, top: number, width: number, height: number): React.CSSProperties => ({
@@ -40,6 +43,9 @@ export const ShortsCharacterScene: React.FC<ShortsCharacterSceneProps> = ({
   fps,
   scale,
   emphasis,
+  position = "lower_center",
+  characterScale = 1,
+  showStage = true,
 }) => {
   const time = Math.max(0, frame / fps);
   const state = resolveCharacterState(track, time);
@@ -49,24 +55,29 @@ export const ShortsCharacterScene: React.FC<ShortsCharacterSceneProps> = ({
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const positionOffset = position === "side_left"
+    ? {left: 0, top: 190, width: 620, height: 980}
+    : {left: 70, top: 170, width: 940, height: 1040};
 
   return (
     <div style={{position: "relative", width: 1080 * scale, height: 1500 * scale, overflow: "hidden"}}>
+      {showStage && (
+        <div style={{
+          position: "absolute",
+          inset: `${120 * scale}px ${80 * scale}px ${170 * scale}px`,
+          borderRadius: 48 * scale,
+          border: `${2 * scale}px solid ${SHORTS_COLORS.primary}44`,
+          background: `radial-gradient(circle at 50% 35%, ${SHORTS_COLORS.primary}22, ${SHORTS_COLORS.surface}dd 65%)`,
+          boxShadow: `0 30px 100px ${SHORTS_COLORS.primary}18`,
+        }} />
+      )}
       <div style={{
         position: "absolute",
-        inset: `${120 * scale}px ${80 * scale}px ${170 * scale}px`,
-        borderRadius: 48 * scale,
-        border: `${2 * scale}px solid ${SHORTS_COLORS.primary}44`,
-        background: `radial-gradient(circle at 50% 35%, ${SHORTS_COLORS.primary}22, ${SHORTS_COLORS.surface}dd 65%)`,
-        boxShadow: `0 30px 100px ${SHORTS_COLORS.primary}18`,
-      }} />
-      <div style={{
-        position: "absolute",
-        left: 70 * scale,
-        top: 170 * scale,
-        width: 940 * scale,
-        height: 1040 * scale,
-        transform: `translateY(${drift * scale}px) scale(${0.94 + entrance * 0.06})`,
+        left: positionOffset.left * scale,
+        top: positionOffset.top * scale,
+        width: positionOffset.width * scale,
+        height: positionOffset.height * scale,
+        transform: `translateY(${drift * scale}px) scale(${characterScale * (0.94 + entrance * 0.06)})`,
         opacity: entrance,
       }}>
         <Img src={staticFile(paths.body)} style={layerStyle(185 * scale, 470 * scale, 570 * scale, 510 * scale)} />

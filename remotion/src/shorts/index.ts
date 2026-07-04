@@ -7,8 +7,10 @@ export type { ShortsStoryboard, ShortsBeat, SceneComponentConfig } from "./Short
 export { AnimatedCaptions, SimpleAnimatedCaptions } from "./AnimatedCaptions";
 export { ShortsVisualArea } from "./ShortsVisualArea";
 export { ShortsCharacterScene } from "./ShortsCharacterScene";
+export { ShortsMixedScene } from "./ShortsMixedScene";
 export { ShortsTransition } from "./ShortsTransition";
 export type { CharacterTrack } from "./characterTypes";
+export type { VisualRecipe } from "./recipeTypes";
 export { ShortsProgressBar } from "./ShortsProgressBar";
 
 // Scene components for shorts
