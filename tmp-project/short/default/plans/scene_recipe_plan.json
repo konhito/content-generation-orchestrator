@@ -1,0 +1,172 @@
+{
+  "project_id": "ai-short",
+  "variant": "default",
+  "recipes": [
+    {
+      "recipe_id": "host_foreground_concept_backdrop",
+      "layout": "character_foreground_visual_backdrop",
+      "intent": "hook",
+      "attention_strategy": "host_demonstrates_concept",
+      "background_image": "characters/synctoon/character_1/background/office/office.png",
+      "character": {
+        "presence": "primary",
+        "position": "lower_center",
+        "scale": 0.78,
+        "pose_intent": "explain",
+        "body_type": "body15",
+        "head": "M",
+        "emotion": "curious",
+        "motion": "lean_in",
+        "gesture": "explain"
+      },
+      "component": {
+        "role": "main_explanation",
+        "component_type": "text_highlight",
+        "position": "background_stage",
+        "emphasis_words": [
+          "memorize",
+          "everything"
+        ]
+      },
+      "meme": {
+        "role": "none",
+        "style": "sticker_pop",
+        "timing": "none",
+        "intensity": 0.0
+      },
+      "camera": {
+        "motion": "steady",
+        "punch_zoom_on": null
+      },
+      "transition": {
+        "transition_in": "match_cut",
+        "transition_out": "soft_cut"
+      }
+    },
+    {
+      "recipe_id": "host_sidecar_main_diagram",
+      "layout": "character_sidecar_visual_main",
+      "intent": "explain",
+      "attention_strategy": "host_reacts_to_evidence",
+      "background_image": "characters/synctoon/character_1/background/office/office.png",
+      "character": {
+        "presence": "primary",
+        "position": "side_right",
+        "scale": 0.42,
+        "pose_intent": "react",
+        "body_type": "body22",
+        "head": "L",
+        "emotion": "curious",
+        "motion": "side_bob",
+        "gesture": "react"
+      },
+      "component": {
+        "role": "supporting_evidence",
+        "component_type": "meme_card",
+        "position": "main_stage",
+        "emphasis_words": [
+          "predicts",
+          "patterns"
+        ]
+      },
+      "meme": {
+        "role": "accent",
+        "style": "sticker_pop",
+        "timing": "after_key_claim",
+        "intensity": 0.35
+      },
+      "camera": {
+        "motion": "steady",
+        "punch_zoom_on": null
+      },
+      "transition": {
+        "transition_in": "match_cut",
+        "transition_out": "soft_cut"
+      }
+    },
+    {
+      "recipe_id": "host_foreground_concept_backdrop",
+      "layout": "character_foreground_visual_backdrop",
+      "intent": "explain",
+      "attention_strategy": "host_demonstrates_concept",
+      "background_image": "characters/synctoon/character_1/background/office/office.png",
+      "character": {
+        "presence": "primary",
+        "position": "lower_center",
+        "scale": 0.78,
+        "pose_intent": "explain",
+        "body_type": "body11",
+        "head": "R",
+        "emotion": "curious",
+        "motion": "gentle_bob",
+        "gesture": "When the pattern is weak, it guesses with confidence."
+      },
+      "component": {
+        "role": "main_explanation",
+        "component_type": "question",
+        "position": "background_stage",
+        "emphasis_words": [
+          "pattern",
+          "guesses",
+          "confidence"
+        ]
+      },
+      "meme": {
+        "role": "none",
+        "style": "sticker_pop",
+        "timing": "none",
+        "intensity": 0.0
+      },
+      "camera": {
+        "motion": "steady",
+        "punch_zoom_on": null
+      },
+      "transition": {
+        "transition_in": "match_cut",
+        "transition_out": "soft_cut"
+      }
+    },
+    {
+      "recipe_id": "host_sidecar_main_diagram",
+      "layout": "character_sidecar_visual_main",
+      "intent": "explain",
+      "attention_strategy": "host_reacts_to_evidence",
+      "background_image": "characters/synctoon/character_1/background/office/office.png",
+      "character": {
+        "presence": "primary",
+        "position": "side_right",
+        "scale": 0.42,
+        "pose_intent": "react",
+        "body_type": "body12",
+        "head": "L",
+        "emotion": "curious",
+        "motion": "side_bob",
+        "gesture": "That is why checking sources still matters."
+      },
+      "component": {
+        "role": "supporting_evidence",
+        "component_type": "meme_card",
+        "position": "main_stage",
+        "emphasis_words": [
+          "checking",
+          "sources",
+          "still"
+        ]
+      },
+      "meme": {
+        "role": "accent",
+        "style": "sticker_pop",
+        "timing": "after_key_claim",
+        "intensity": 0.35
+      },
+      "camera": {
+        "motion": "steady",
+        "punch_zoom_on": null
+      },
+      "transition": {
+        "transition_in": "match_cut",
+        "transition_out": "soft_cut"
+      }
+    }
+  ]
+}

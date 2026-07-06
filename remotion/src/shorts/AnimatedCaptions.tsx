@@ -126,7 +126,7 @@ export const AnimatedCaptions: React.FC<AnimatedCaptionsProps> = ({
                     ? SHORTS_COLORS.text
                     : SHORTS_COLORS.textMuted,
                 textShadow: isActive
-                  ? `0 0 20px ${SHORTS_COLORS.primaryGlow}, 0 0 40px ${SHORTS_COLORS.primaryGlow}30`
+                  ? `0 ${6 * scale}px ${18 * scale}px ${SHORTS_COLORS.primaryGlow}`
                   : "none",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
@@ -175,9 +175,6 @@ const CaptionWord: React.FC<CaptionWordProps> = ({
     color = SHORTS_COLORS.text; // Past words - normal white
   }
 
-  // Glow effect for active word
-  const glowOpacity = isActive ? 0.8 : 0;
-
   return (
     <span
       style={{
@@ -188,7 +185,7 @@ const CaptionWord: React.FC<CaptionWordProps> = ({
         transform: `scale(${activeScale})`,
         transition: "all 0.15s ease-out",
         textShadow: isActive
-          ? `0 0 20px ${SHORTS_COLORS.primaryGlow}, 0 0 40px ${SHORTS_COLORS.primaryGlow}40`
+          ? `0 ${6 * scale}px ${18 * scale}px ${SHORTS_COLORS.primaryGlow}`
           : "none",
         display: "inline-block",
       }}

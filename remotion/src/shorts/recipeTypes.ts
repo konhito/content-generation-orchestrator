@@ -3,7 +3,11 @@ export interface RecipeCharacterLayer {
   position: string;
   scale: number;
   pose_intent: string;
+  body_type: string;
+  head: string;
   emotion: string;
+  motion: string;
+  gesture: string;
 }
 
 export interface RecipeComponentLayer {
@@ -35,6 +39,7 @@ export interface VisualRecipe {
   layout: string;
   intent: string;
   attention_strategy: string;
+  background_image: string;
   character: RecipeCharacterLayer;
   component: RecipeComponentLayer;
   meme: RecipeMemeLayer;

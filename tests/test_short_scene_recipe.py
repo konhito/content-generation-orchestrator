@@ -82,6 +82,7 @@ def test_visual_recipe_round_trips_through_shorts_storyboard(tmp_path):
         "not truth",
     ]
     assert loaded.beats[0].visual_recipe.meme.intensity == 0.35
+    assert loaded.beats[0].visual_recipe.character.motion == "gentle_bob"
 
 
 def test_scene_recipe_planner_is_seeded_and_deterministic():
@@ -123,6 +124,8 @@ def test_scene_recipe_planner_is_seeded_and_deterministic():
     assert first[0].character.presence == "primary"
     assert first[0].component.role in {"main_explanation", "supporting_evidence"}
     assert first[1].meme.intensity > 0
+    assert first[0].character.motion in {"lean_in", "gentle_bob", "side_bob", "subtle_bob", "quick_shift", "snap_shift"}
+    assert first[1].character.position in {"side_left", "side_right", "upper_left", "upper_right", "center_float", "lower_center"}
 
 
 def test_serious_topic_lowers_meme_intensity():
@@ -151,3 +154,44 @@ def test_serious_topic_lowers_meme_intensity():
         "timeline_walkthrough",
         "rapid_evidence_wall",
     }
+
+
+def test_flat_explanation_background_is_replaced_with_rich_scene():
+    item = SceneRecipeInput(
+        beat_id="beat_001",
+        beat_index=0,
+        beat_count=1,
+        topic="Game release news",
+        niche="tech",
+        narration="Official details are finally here.",
+        caption_text="official details",
+        visual_description="news breakdown",
+        visual_elements=["news"],
+        component_type="concept_card",
+        background_image="characters/synctoon/character_1/background/explanation/explanation.png",
+    )
+
+    recipe = plan_scene_recipes([item], seed="background-demo")[0]
+
+    assert recipe.background_image != item.background_image
+    assert "/background/" in recipe.background_image
+
+
+def test_scene_recipe_keeps_one_character_head_identity():
+    item = SceneRecipeInput(
+        beat_id="beat_001",
+        beat_index=0,
+        beat_count=1,
+        topic="Tech",
+        niche="tech",
+        narration="Explain it",
+        caption_text="Explain it",
+        visual_description="diagram",
+        visual_elements=[],
+        component_type="token_grid",
+        head="L",
+    )
+
+    recipe = plan_scene_recipes([item], seed="identity")[0]
+
+    assert recipe.character.head == "M"

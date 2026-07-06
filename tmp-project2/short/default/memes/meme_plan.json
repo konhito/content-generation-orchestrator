@@ -1,0 +1,37 @@
+{
+  "project": "ai-short",
+  "variant": "default",
+  "niche": "tech",
+  "provider": "imgflip",
+  "env": {
+    "template_id": "MCP_MEME_TEMPLATE_ID",
+    "username": "IMGFLIP_USERNAME",
+    "password": "IMGFLIP_PASSWORD"
+  },
+  "moments": [
+    {
+      "type": "meme",
+      "query": "confidently wrong",
+      "template_hint": "reaction_label",
+      "meme_text_top": "CONFIDENTLY WRONG",
+      "meme_text_bottom": "AI DOES NOT MEMORIZE EVERYTHING",
+      "time_start": 18,
+      "time_end": 22,
+      "provider": "imgflip",
+      "meme_template_id": "12345",
+      "meme_template_name": "Drake Hotline Bling",
+      "image_path": "D:\\video_explainer\\tmp-project2\\short\\default\\memes\\assets\\imgflip_12345_0.jpg"
+    },
+    {
+      "type": "meme",
+      "query": "It predicts patterns.",
+      "template_hint": "surprised",
+      "meme_text_top": "IT PREDICTS PATTERNS.",
+      "meme_text_bottom": "IT PREDICTS PATTERNS",
+      "provider": "imgflip",
+      "meme_template_id": "12345",
+      "meme_template_name": "Drake Hotline Bling",
+      "image_path": "D:\\video_explainer\\tmp-project2\\short\\default\\memes\\assets\\imgflip_12345_0.jpg"
+    }
+  ]
+}

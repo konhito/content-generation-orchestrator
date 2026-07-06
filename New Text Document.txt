@@ -1,0 +1,1 @@
+.\.venv\Scripts\python.exe -m src.cli short generate test-2 --topic "Reality of coding" --niche tech --research

@@ -1,0 +1,22 @@
+{
+  "source_project": "ai-short",
+  "title": "Why AI Guesses Wrong",
+  "condensed_narration": "AI does not memorize everything. It predicts patterns. When the pattern is weak, it guesses with confidence. That is why checking sources still matters.",
+  "hook_question": "AI can sound right while being wrong.",
+  "scenes": [
+    {
+      "source_scene_id": "short_first_beat_1",
+      "condensed_narration": "",
+      "duration_seconds": 15.0
+    },
+    {
+      "source_scene_id": "short_first_beat_2",
+      "condensed_narration": "",
+      "duration_seconds": 20.0
+    }
+  ],
+  "cta_text": "Follow for the full breakdown.",
+  "cta_narration": "Follow for the full breakdown.",
+  "total_duration_seconds": 50.0,
+  "mode": "hook"
+}

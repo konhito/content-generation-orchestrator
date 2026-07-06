@@ -19,8 +19,8 @@
  */
 
 import React from "react";
-import { interpolate, spring, useVideoConfig } from "remotion";
-import { SHORTS_COLORS, SHORTS_FONTS, ShortsBeat } from "./ShortsPlayer";
+import { Img, Video, interpolate, spring, staticFile, useVideoConfig } from "remotion";
+import { SHORTS_COLORS, SHORTS_FONTS, SHORTS_GLASS, ShortsBeat } from "./ShortsPlayer";
 import {
   ShortsTokenGrid,
   ShortsProgressBars,
@@ -33,12 +33,39 @@ import {
   ShortsMaskedGrid,
 } from "./ShortsSceneComponents";
 
+export const GIPHY_PLAYBACK_RATE = 0.55;
+
+const TEXT_VISUAL_TYPES = new Set(["big_number", "comparison", "text_highlight", "simple_flow", "icon_stat", "key_point", "question"]);
+
+export const isTextVisualType = (visualType: string): boolean => TEXT_VISUAL_TYPES.has(visualType);
+
+export const memeAssetRenderMode = (assetPath: string): "video" | "animated-image" | "image" => {
+  if (isVideoAsset(assetPath)) {
+    return "video";
+  }
+  if (isAnimatedAsset(assetPath)) {
+    return "animated-image";
+  }
+  return "image";
+};
+
 interface ShortsVisualAreaProps {
   beat: ShortsBeat;
   frame: number;
   fps: number;
   scale: number;
 }
+
+export const flowStepsForBeat = (beat: ShortsBeat): string[] => {
+  const explicit = [beat.visual.primary_text, beat.visual.secondary_text, beat.visual.tertiary_text]
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
+  if (explicit.length > 0) {
+    return explicit;
+  }
+  const caption = beat.caption_text?.trim() || "Key point";
+  return caption.split(/\s+(?:versus|vs\.?|but|then)\s+/i).filter(Boolean).slice(0, 3);
+};
 
 export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
   beat,
@@ -76,8 +103,12 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
   };
 
   const color = getColor(visual.color);
+  const staticMeme = visual.type === "meme_card";
 
   const renderVisual = () => {
+    if (isTextVisualType(visual.type)) {
+      return <AttentionGraphic color={color} scale={scale} frame={localFrame} />;
+    }
     switch (visual.type) {
       case "big_number":
         return (
@@ -174,6 +205,7 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
           <MemeCardVisual
             topText={visual.primary_text}
             bottomText={visual.secondary_text || ""}
+            imagePath={visual.scene_config?.image_path || ""}
             color={color}
             scale={scale}
             frame={localFrame}
@@ -229,7 +261,7 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
       case "image":
         return (
           <ShortsImage
-            src={visual.scene_config?.image_path || ""}
+            src={toStaticAssetPath(visual.scene_config?.image_path || "")}
             caption={visual.scene_config?.caption || visual.secondary_text}
             scale={scale}
           />
@@ -258,11 +290,10 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
 
       case "attention_visual":
         return (
-          <ShortsAttentionVisual
-            size={visual.scene_config?.size as number || 6}
+          <AttentionGraphic
+            color={color}
             scale={scale}
-            label={visual.primary_text}
-            pattern={visual.scene_config?.pattern as "self" | "cross" | "causal" || "self"}
+            frame={localFrame}
           />
         );
 
@@ -281,11 +312,7 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
         // Flow diagram is rendered like simple_flow or diagram
         return (
           <SimpleFlowVisual
-            steps={[
-              visual.primary_text,
-              visual.secondary_text || "",
-              visual.tertiary_text || "",
-            ].filter(Boolean)}
+            steps={flowStepsForBeat(beat)}
             color={color}
             scale={scale}
             frame={localFrame}
@@ -314,13 +341,31 @@ export const ShortsVisualArea: React.FC<ShortsVisualAreaProps> = ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        opacity: entryOpacity,
-        transform: `scale(${entryScale})`,
+        opacity: staticMeme ? 1 : entryOpacity,
+        transform: staticMeme ? "none" : `scale(${entryScale})`,
         width: "100%",
         height: "100%",
       }}
     >
-      {renderVisual()}
+      {staticMeme ? (
+        renderVisual()
+      ) : (
+        <div
+          style={{
+            ...SHORTS_GLASS,
+            borderRadius: 28 * scale,
+            padding: `${34 * scale}px ${36 * scale}px`,
+            minWidth: 680 * scale,
+            maxWidth: 980 * scale,
+            minHeight: 360 * scale,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {renderVisual()}
+        </div>
+      )}
     </div>
   );
 };
@@ -343,8 +388,6 @@ const BigNumberVisual: React.FC<{
   });
 
   // Pulsing glow effect
-  const glowIntensity = 0.5 + Math.sin(frame * 0.1) * 0.2;
-
   return (
     <div
       style={{
@@ -361,7 +404,7 @@ const BigNumberVisual: React.FC<{
           fontFamily: SHORTS_FONTS.heading,
           fontWeight: 800,
           color: color,
-          textShadow: `0 0 ${40 * glowIntensity}px ${color}, 0 0 ${80 * glowIntensity}px ${color}40`,
+          textShadow: `0 ${8 * scale}px ${24 * scale}px ${SHORTS_COLORS.primaryGlow}`,
           lineHeight: 1,
           marginBottom: 16 * scale,
         }}
@@ -377,7 +420,7 @@ const BigNumberVisual: React.FC<{
             fontFamily: SHORTS_FONTS.primary,
             fontWeight: 500,
             color: SHORTS_COLORS.text,
-            opacity: 0.9,
+            opacity: 0.92,
             marginBottom: sublabel ? 8 * scale : 0,
           }}
         >
@@ -488,7 +531,7 @@ const ComparisonVisual: React.FC<{
             fontFamily: SHORTS_FONTS.heading,
             fontWeight: 800,
             color: color,
-            textShadow: `0 0 30px ${color}60`,
+            textShadow: `0 ${8 * scale}px ${20 * scale}px ${SHORTS_COLORS.primaryGlow}`,
           }}
         >
           {rightValue}
@@ -519,8 +562,6 @@ const TextHighlightVisual: React.FC<{
   frame: number;
   fps: number;
 }> = ({ text, subtext, color, scale, frame, fps }) => {
-  const glowIntensity = 0.6 + Math.sin(frame * 0.08) * 0.2;
-
   return (
     <div
       style={{
@@ -537,7 +578,7 @@ const TextHighlightVisual: React.FC<{
           fontFamily: SHORTS_FONTS.heading,
           fontWeight: 700,
           color: color,
-          textShadow: `0 0 ${30 * glowIntensity}px ${color}`,
+          textShadow: `0 ${8 * scale}px ${22 * scale}px ${SHORTS_COLORS.primaryGlow}`,
           lineHeight: 1.3,
           maxWidth: 900 * scale,
         }}
@@ -603,8 +644,8 @@ const SimpleFlowVisual: React.FC<{
             )}
             <div
               style={{
-                background: index === steps.length - 1 ? `${color}20` : "rgba(255,255,255,0.05)",
-                border: `2px solid ${index === steps.length - 1 ? color : "rgba(255,255,255,0.1)"}`,
+                background: index === steps.length - 1 ? "rgba(10, 132, 255, 0.12)" : SHORTS_COLORS.surfaceStrong,
+                border: `1px solid ${index === steps.length - 1 ? color : SHORTS_COLORS.borderMuted}`,
                 borderRadius: 16 * scale,
                 padding: `${20 * scale}px ${40 * scale}px`,
                 opacity: entry,
@@ -669,7 +710,7 @@ const IconStatVisual: React.FC<{
           fontFamily: SHORTS_FONTS.heading,
           fontWeight: 800,
           color: color,
-          textShadow: `0 0 30px ${color}60`,
+          textShadow: `0 ${8 * scale}px ${20 * scale}px ${SHORTS_COLORS.primaryGlow}`,
         }}
       >
         {stat}
@@ -710,7 +751,7 @@ const KeyPointVisual: React.FC<{
         alignItems: "flex-start",
         gap: 24 * scale,
         padding: `${32 * scale}px`,
-        background: "rgba(255,255,255,0.03)",
+        background: SHORTS_COLORS.surfaceStrong,
         borderLeft: `4px solid ${color}`,
         borderRadius: `0 ${16 * scale}px ${16 * scale}px 0`,
         maxWidth: 900 * scale,
@@ -764,8 +805,6 @@ const QuestionVisual: React.FC<{
   fps: number;
 }> = ({ question, color, scale, frame, fps }) => {
   const pulseScale = 1 + Math.sin(frame * 0.08) * 0.02;
-  const glowIntensity = 0.5 + Math.sin(frame * 0.06) * 0.3;
-
   return (
     <div
       style={{
@@ -783,7 +822,7 @@ const QuestionVisual: React.FC<{
           fontSize: 80 * scale,
           color: color,
           marginBottom: 32 * scale,
-          textShadow: `0 0 ${40 * glowIntensity}px ${color}`,
+          textShadow: `0 ${10 * scale}px ${22 * scale}px ${SHORTS_COLORS.primaryGlow}`,
         }}
       >
         ?
@@ -806,89 +845,167 @@ const QuestionVisual: React.FC<{
   );
 };
 
+const AttentionGraphic: React.FC<{color: string; scale: number; frame: number}> = ({color, scale, frame}) => (
+  <div style={{display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 12 * scale, width: 620 * scale}}>
+    {Array.from({length: 36}).map((_, index) => {
+      const active = (index + Math.floor(frame / 4)) % 7 < 3;
+      return <div key={index} style={{aspectRatio: "1", borderRadius: 12 * scale, background: active ? color : SHORTS_COLORS.surfaceStrong, opacity: active ? 0.9 : 0.45, boxShadow: active ? `0 ${8 * scale}px ${20 * scale}px ${SHORTS_COLORS.primaryGlow}` : "none"}} />;
+    })}
+  </div>
+);
+
 const MemeCardVisual: React.FC<{
   topText: string;
   bottomText: string;
+  imagePath?: string;
   color: string;
   scale: number;
   frame: number;
   fps: number;
-}> = ({ topText, bottomText, color, scale, frame, fps }) => {
-  const pop = spring({
-    frame,
-    fps,
-    config: { damping: 14, stiffness: 180 },
-  });
-  const opacity = interpolate(frame, [0, 0.2 * fps], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const shake = Math.sin(frame * 0.55) * 1.5;
-  const scalePop = interpolate(pop, [0, 1], [0.72, 1]);
-
+}> = ({ topText, bottomText, imagePath, color, scale, frame, fps }) => {
   return (
     <div
       style={{
-        width: 820 * scale,
-        minHeight: 620 * scale,
-        borderRadius: 42 * scale,
-        background: "linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%)",
-        border: `${8 * scale}px solid #111`,
-        boxShadow: `0 ${28 * scale}px ${80 * scale}px rgba(0,0,0,0.45), 0 0 ${50 * scale}px ${color}66`,
+        width: 940 * scale,
+        minHeight: 760 * scale,
+        borderRadius: 28 * scale,
+        background: SHORTS_COLORS.surfaceStrong,
+        backdropFilter: "blur(28px)",
+        WebkitBackdropFilter: "blur(28px)",
+        border: `${1.5 * scale}px solid ${SHORTS_COLORS.border}`,
+        boxShadow: `0 ${28 * scale}px ${80 * scale}px ${SHORTS_COLORS.shadow}`,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: `${42 * scale}px ${34 * scale}px`,
-        opacity,
-        transform: `scale(${scalePop}) rotate(${shake}deg)`,
+        padding: `${34 * scale}px ${30 * scale}px`,
       }}
-    >
-      <div
-        style={{
-          color: "#080808",
-          fontFamily: SHORTS_FONTS.heading,
-          fontSize: 54 * scale,
-          fontWeight: 950,
-          lineHeight: 1.02,
-          textAlign: "center",
-          textTransform: "uppercase",
-          letterSpacing: -2 * scale,
-        }}
       >
-        {topText}
-      </div>
-      <div
-        style={{
-          backgroundColor: "#111",
-          color: color,
-          fontFamily: SHORTS_FONTS.mono,
-          fontSize: 28 * scale,
-          fontWeight: 900,
-          padding: `${12 * scale}px ${24 * scale}px`,
-          borderRadius: 999,
-          textTransform: "uppercase",
-          boxShadow: `0 0 ${24 * scale}px ${color}88`,
-        }}
-      >
-        Meme cut
-      </div>
-      <div
-        style={{
-          color: "#080808",
-          fontFamily: SHORTS_FONTS.heading,
-          fontSize: 58 * scale,
-          fontWeight: 1000,
-          lineHeight: 1.02,
-          textAlign: "center",
-          textTransform: "uppercase",
-          letterSpacing: -2 * scale,
-        }}
-      >
-        {bottomText}
-      </div>
+        {imagePath ? (
+          <>
+            <div
+              style={{
+                width: "100%",
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(255, 255, 255, 0.7)",
+                borderRadius: 28 * scale,
+                overflow: "hidden",
+                border: `${1.5 * scale}px solid ${SHORTS_COLORS.borderMuted}`,
+                minHeight: 610 * scale,
+                }}
+              >
+              {memeAssetRenderMode(imagePath) === "video" ? (
+                <Video
+                  src={toStaticAssetPath(imagePath)}
+                  muted
+                  loop
+                  playbackRate={GIPHY_PLAYBACK_RATE}
+                  data-animated-meme="true"
+                  data-playback-rate={String(GIPHY_PLAYBACK_RATE)}
+                  data-asset={imagePath}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
+              ) : (
+                <Img
+                  src={toStaticAssetPath(imagePath)}
+                  alt="Meme asset"
+                  data-asset={imagePath}
+                  data-animated-meme={memeAssetRenderMode(imagePath) === "animated-image" ? "browser-default" : undefined}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                color: "#080808",
+                fontFamily: SHORTS_FONTS.heading,
+                fontSize: 54 * scale,
+                fontWeight: 950,
+                lineHeight: 1.02,
+                textAlign: "center",
+                textTransform: "uppercase",
+                letterSpacing: -2 * scale,
+              }}
+            >
+              {topText}
+            </div>
+            <div
+              style={{
+                backgroundColor: "rgba(17, 24, 39, 0.92)",
+                color: color,
+                fontFamily: SHORTS_FONTS.mono,
+                fontSize: 28 * scale,
+                fontWeight: 900,
+                padding: `${12 * scale}px ${24 * scale}px`,
+                borderRadius: 999,
+                textTransform: "uppercase",
+                boxShadow: `0 ${12 * scale}px ${30 * scale}px ${SHORTS_COLORS.primaryGlow}`,
+              }}
+            >
+              Meme cut
+            </div>
+            <div
+              style={{
+                color: "#080808",
+                fontFamily: SHORTS_FONTS.heading,
+                fontSize: 58 * scale,
+                fontWeight: 1000,
+                lineHeight: 1.02,
+                textAlign: "center",
+                textTransform: "uppercase",
+                letterSpacing: -2 * scale,
+              }}
+            >
+              {bottomText}
+            </div>
+          </>
+        )}
     </div>
   );
 };
 
 export default ShortsVisualArea;
+
+const toStaticAssetPath = (assetPath: string): string => {
+  if (!assetPath) {
+    return "";
+  }
+  if (/^(https?:)?\/\//.test(assetPath)) {
+    return assetPath;
+  }
+  const normalized = assetPath.replace(/^file:\/\/+/, "").replace(/\\/g, "/");
+  const shortIndex = normalized.indexOf("/short/");
+  if (shortIndex >= 0) {
+    return staticFile(normalized.slice(shortIndex + 1));
+  }
+  const rootIndex = normalized.indexOf("/projects/");
+  if (rootIndex >= 0) {
+    const suffix = normalized.slice(normalized.indexOf("/short/", rootIndex));
+    if (suffix.startsWith("/short/")) {
+      return staticFile(suffix.slice(1));
+    }
+  }
+  return staticFile(normalized.replace(/^[\\/]+/, ""));
+};
+
+const isAnimatedAsset = (assetPath: string): boolean =>
+  /\.(gif|webp|apng|avif)(?:$|[?#])/i.test(assetPath);
+
+const isVideoAsset = (assetPath: string): boolean =>
+  /\.(mp4|webm|mov)(?:$|[?#])/i.test(assetPath);

@@ -230,7 +230,7 @@ python -m src.cli voiceover <project> --mock
 | `--scene` | Generate specific scene only |
 | `--mock` | Use mock audio |
 | `--audio-dir` | Directory for manual recordings |
-| `--whisper-model` | Whisper model for manual provider |
+| `--whisper-model` | Whisper model for automatic or manual transcription |
 | `--export-script` | Export recording script |
 
 **Output:** `projects/<project>/voiceover/*.mp3`, `manifest.json`

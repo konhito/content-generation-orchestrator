@@ -9,7 +9,7 @@
 
 import React from "react";
 import { interpolate, useCurrentFrame, useVideoConfig, spring } from "remotion";
-import { SHORTS_COLORS, SHORTS_FONTS } from "./ShortsPlayer";
+import { SHORTS_COLORS, SHORTS_FONTS, SHORTS_GLASS } from "./ShortsPlayer";
 
 interface ShortsTokenGridProps {
   tokens?: string[];
@@ -49,8 +49,6 @@ export const ShortsTokenGrid: React.FC<ShortsTokenGridProps> = ({
   });
 
   // Pulsing glow effect
-  const pulseIntensity = 0.7 + Math.sin(frame * 0.1) * 0.3;
-
   const getCellAnimation = (index: number) => {
     if (mode === "prefill") {
       // All cells animate together with slight wave
@@ -93,9 +91,9 @@ export const ShortsTokenGrid: React.FC<ShortsTokenGridProps> = ({
           gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
           gap: gap,
           padding: 12 * scale,
-          backgroundColor: `${tokenColor}08`,
-          borderRadius: 16 * scale,
-          boxShadow: `0 0 ${60 * pulseIntensity * scale}px ${tokenColor}20`,
+          ...SHORTS_GLASS,
+          borderRadius: 18 * scale,
+          boxShadow: `0 ${18 * scale}px ${54 * scale}px ${SHORTS_COLORS.shadow}, inset 0 1px 0 rgba(255,255,255,0.72)`,
         }}
       >
         {Array.from({ length: totalCells }).map((_, index) => {
@@ -108,11 +106,11 @@ export const ShortsTokenGrid: React.FC<ShortsTokenGridProps> = ({
                 width: cellSize,
                 height: cellSize,
                 borderRadius: 8 * scale,
-                background: `linear-gradient(135deg, ${tokenColor}, ${tokenColor}90)`,
+                background: `linear-gradient(135deg, ${tokenColor}d9, ${tokenColor}7a)`,
                 opacity: progress,
                 transform: `scale(${0.3 + progress * 0.7})`,
-                boxShadow: `0 0 ${20 * scale}px ${tokenColor}60, inset 0 0 ${15 * scale}px rgba(255,255,255,0.1)`,
-                border: `2px solid ${tokenColor}`,
+                boxShadow: `0 ${8 * scale}px ${18 * scale}px ${tokenColor}24, inset 0 1px 0 rgba(255,255,255,0.45)`,
+                border: `1px solid rgba(255,255,255,0.72)`,
               }}
             />
           );
@@ -214,7 +212,7 @@ export const ShortsProgressBars: React.FC<ShortsProgressBarsProps> = ({
               style={{
                 width: barWidth,
                 height: barHeight,
-                backgroundColor: "rgba(255,255,255,0.1)",
+                backgroundColor: "rgba(148, 163, 184, 0.18)",
                 borderRadius: barHeight / 2,
                 overflow: "hidden",
               }}
@@ -225,7 +223,7 @@ export const ShortsProgressBars: React.FC<ShortsProgressBarsProps> = ({
                   height: "100%",
                   backgroundColor: color,
                   borderRadius: barHeight / 2,
-                  boxShadow: `0 0 ${20 * scale}px ${color}60`,
+                  boxShadow: `0 ${8 * scale}px ${18 * scale}px ${color}24`,
                 }}
               />
             </div>
@@ -272,8 +270,7 @@ export const ShortsCodeBlock: React.FC<ShortsCodeBlockProps> = ({
   return (
     <div
       style={{
-        backgroundColor: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(10px)",
+        ...SHORTS_GLASS,
         borderRadius: 16 * scale,
         padding: `${24 * scale}px ${32 * scale}px`,
         opacity: entryProgress,
@@ -321,9 +318,7 @@ export const ShortsCodeBlock: React.FC<ShortsCodeBlockProps> = ({
               style={{
                 opacity: lineOpacity,
                 color: SHORTS_COLORS.text,
-                backgroundColor: isHighlighted
-                  ? `${SHORTS_COLORS.primary}20`
-                  : "transparent",
+                backgroundColor: isHighlighted ? "rgba(10, 132, 255, 0.12)" : "transparent",
                 padding: `${4 * scale}px ${8 * scale}px`,
                 marginLeft: -8 * scale,
                 marginRight: -8 * scale,
@@ -386,10 +381,8 @@ export const ShortsDiagram: React.FC<ShortsDiagramProps> = ({
             {/* Node */}
             <div
               style={{
-                backgroundColor: isLast
-                  ? `${SHORTS_COLORS.primary}20`
-                  : "rgba(255,255,255,0.05)",
-                border: `2px solid ${isLast ? SHORTS_COLORS.primary : "rgba(255,255,255,0.1)"}`,
+                backgroundColor: isLast ? "rgba(10, 132, 255, 0.12)" : SHORTS_COLORS.surfaceStrong,
+                border: `1px solid ${isLast ? SHORTS_COLORS.primary : SHORTS_COLORS.borderMuted}`,
                 borderRadius: 16 * scale,
                 padding: `${20 * scale}px ${40 * scale}px`,
                 opacity: progress,
@@ -468,7 +461,8 @@ export const ShortsImage: React.FC<ShortsImageProps> = ({
           maxHeight: 600 * scale,
           borderRadius: 16 * scale,
           overflow: "hidden",
-          boxShadow: `0 0 ${40 * scale}px rgba(0,0,0,0.5)`,
+          boxShadow: `0 ${20 * scale}px ${56 * scale}px ${SHORTS_COLORS.shadow}`,
+          border: `1px solid ${SHORTS_COLORS.border}`,
         }}
       >
         <img
@@ -539,19 +533,16 @@ export const ShortsPatchGrid: React.FC<ShortsPatchGridProps> = ({
   const getColor = (index: number) => {
     const colors = [
       SHORTS_COLORS.primary,
-      "#00b4d8",
-      "#0096c7",
-      "#0077b6",
+      "#64d2ff",
+      "#5ac8fa",
+      "#0a84ff",
       SHORTS_COLORS.accent,
-      "#7c3aed",
-      "#6d28d9",
-      "#5b21b6",
+      "#5e5ce6",
+      "#7d7aff",
+      "#bf5af2",
     ];
     return colors[index % colors.length];
   };
-
-  // Pulsing glow effect
-  const pulseIntensity = 0.7 + Math.sin(frame * 0.1) * 0.3;
 
   return (
     <div
@@ -573,9 +564,8 @@ export const ShortsPatchGrid: React.FC<ShortsPatchGridProps> = ({
           gridTemplateRows: `repeat(${rows}, ${patchSize}px)`,
           gap: gap,
           padding: 12 * scale,
-          backgroundColor: "rgba(0, 212, 255, 0.03)",
-          borderRadius: 16 * scale,
-          boxShadow: `0 0 ${60 * pulseIntensity * scale}px rgba(0, 212, 255, 0.15)`,
+          ...SHORTS_GLASS,
+          borderRadius: 18 * scale,
         }}
       >
         {Array.from({ length: totalPatches }).map((_, index) => {
@@ -600,15 +590,15 @@ export const ShortsPatchGrid: React.FC<ShortsPatchGridProps> = ({
                 width: patchSize,
                 height: patchSize,
                 borderRadius: 8 * scale,
-                background: `linear-gradient(135deg, ${color}, ${color}90)`,
+                background: `linear-gradient(135deg, ${color}d9, ${color}7a)`,
                 opacity: patchProgress,
                 transform: `scale(${0.3 + patchProgress * 0.7})`,
                 border: isHighlighted
-                  ? `3px solid ${SHORTS_COLORS.warning}`
-                  : `2px solid ${color}`,
+                  ? `2px solid ${SHORTS_COLORS.warning}`
+                  : `1px solid rgba(255,255,255,0.72)`,
                 boxShadow: isHighlighted
-                  ? `0 0 ${30 * scale}px ${SHORTS_COLORS.warning}`
-                  : `0 0 ${20 * scale}px ${color}60, inset 0 0 ${15 * scale}px rgba(255,255,255,0.1)`,
+                  ? `0 ${8 * scale}px ${18 * scale}px rgba(255,159,10,0.28)`
+                  : `0 ${8 * scale}px ${18 * scale}px ${color}24, inset 0 1px 0 rgba(255,255,255,0.45)`,
               }}
             />
           );
@@ -655,9 +645,6 @@ export const ShortsEmbeddingBars: React.FC<ShortsEmbeddingBarsProps> = ({
     0.3 + Math.sin(i * 1.5) * 0.3 + Math.cos(i * 0.8) * 0.2
   );
 
-  // Pulsing glow effect
-  const pulseIntensity = 0.7 + Math.sin(frame * 0.08) * 0.3;
-
   return (
     <div
       style={{
@@ -678,9 +665,8 @@ export const ShortsEmbeddingBars: React.FC<ShortsEmbeddingBarsProps> = ({
           gap: gap,
           height: maxHeight + 40 * scale,
           padding: `${20 * scale}px`,
-          backgroundColor: "rgba(0, 212, 255, 0.03)",
-          borderRadius: 16 * scale,
-          boxShadow: `0 0 ${60 * pulseIntensity * scale}px rgba(0, 212, 255, 0.15)`,
+          ...SHORTS_GLASS,
+          borderRadius: 18 * scale,
         }}
       >
         {barValues.slice(0, dimensions).map((value, index) => {
@@ -706,7 +692,7 @@ export const ShortsEmbeddingBars: React.FC<ShortsEmbeddingBarsProps> = ({
                 height: animatedHeight,
                 background: `linear-gradient(180deg, ${color}, ${color}90)`,
                 borderRadius: `${6 * scale}px ${6 * scale}px 0 0`,
-                boxShadow: `0 0 ${25 * scale}px ${color}60, inset 0 0 ${10 * scale}px rgba(255,255,255,0.1)`,
+                boxShadow: `0 ${8 * scale}px ${18 * scale}px rgba(10,132,255,0.18), inset 0 1px 0 rgba(255,255,255,0.45)`,
               }}
             />
           );
@@ -747,9 +733,6 @@ export const ShortsAttentionVisual: React.FC<ShortsAttentionVisualProps> = ({
   const gap = 3 * scale;
   const cellSize = Math.floor((availableWidth - (size - 1) * gap) / size);
 
-  // Pulsing glow effect
-  const pulseIntensity = 0.7 + Math.sin(frame * 0.08) * 0.3;
-
   // Generate attention weights based on pattern (seeded by frame for consistency)
   const getWeight = (row: number, col: number): number => {
     const seed = row * 100 + col;
@@ -784,9 +767,8 @@ export const ShortsAttentionVisual: React.FC<ShortsAttentionVisualProps> = ({
           gridTemplateRows: `repeat(${size}, ${cellSize}px)`,
           gap: gap,
           padding: 12 * scale,
-          backgroundColor: "rgba(0, 212, 255, 0.03)",
-          borderRadius: 16 * scale,
-          boxShadow: `0 0 ${60 * pulseIntensity * scale}px rgba(0, 212, 255, 0.15)`,
+          ...SHORTS_GLASS,
+          borderRadius: 18 * scale,
         }}
       >
         {Array.from({ length: size * size }).map((_, index) => {
@@ -818,8 +800,8 @@ export const ShortsAttentionVisual: React.FC<ShortsAttentionVisualProps> = ({
                 background: `linear-gradient(135deg, ${color}, ${color}80)`,
                 opacity: 0.2 + animatedWeight * 0.8,
                 boxShadow: animatedWeight > 0.5
-                  ? `0 0 ${15 * scale}px ${color}60, inset 0 0 ${8 * scale}px rgba(255,255,255,0.1)`
-                  : `inset 0 0 ${5 * scale}px rgba(255,255,255,0.05)`,
+                  ? `0 ${7 * scale}px ${16 * scale}px ${color}24, inset 0 1px 0 rgba(255,255,255,0.45)`
+                  : `inset 0 1px 0 rgba(255,255,255,0.35)`,
                 transform: `scale(${0.3 + cellProgress * 0.7})`,
               }}
             />
@@ -864,9 +846,6 @@ export const ShortsMaskedGrid: React.FC<ShortsMaskedGridProps> = ({
   const gap = 6 * scale;
   const cellSize = Math.floor((availableWidth - (cols - 1) * gap) / cols);
 
-  // Pulsing glow effect
-  const pulseIntensity = 0.7 + Math.sin(frame * 0.1) * 0.3;
-
   return (
     <div
       style={{
@@ -886,9 +865,8 @@ export const ShortsMaskedGrid: React.FC<ShortsMaskedGridProps> = ({
           gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
           gap: gap,
           padding: 12 * scale,
-          backgroundColor: "rgba(0, 212, 255, 0.03)",
-          borderRadius: 16 * scale,
-          boxShadow: `0 0 ${60 * pulseIntensity * scale}px rgba(0, 212, 255, 0.15)`,
+          ...SHORTS_GLASS,
+          borderRadius: 18 * scale,
         }}
       >
         {Array.from({ length: totalCells }).map((_, index) => {
@@ -919,16 +897,16 @@ export const ShortsMaskedGrid: React.FC<ShortsMaskedGridProps> = ({
                 height: cellSize,
                 borderRadius: 8 * scale,
                 background: isMasked
-                  ? `linear-gradient(135deg, ${maskedColor}50, ${maskedColor}30)`
-                  : `linear-gradient(135deg, ${visibleColor}, ${visibleColor}90)`,
+                  ? `linear-gradient(135deg, ${maskedColor}72, ${maskedColor}36)`
+                  : `linear-gradient(135deg, ${visibleColor}d9, ${visibleColor}7a)`,
                 border: isMasked
-                  ? `3px dashed ${maskedColor}`
-                  : `2px solid ${visibleColor}`,
+                  ? `2px dashed ${maskedColor}`
+                  : `1px solid rgba(255,255,255,0.72)`,
                 opacity: cellProgress * maskPulse,
                 transform: `scale(${0.3 + cellProgress * 0.7})`,
                 boxShadow: isMasked
-                  ? `0 0 ${25 * maskPulse * scale}px ${maskedColor}60`
-                  : `0 0 ${20 * scale}px ${visibleColor}60, inset 0 0 ${15 * scale}px rgba(255,255,255,0.1)`,
+                  ? `0 ${8 * scale}px ${18 * scale}px rgba(255,159,10,0.24)`
+                  : `0 ${8 * scale}px ${18 * scale}px ${visibleColor}24, inset 0 1px 0 rgba(255,255,255,0.45)`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

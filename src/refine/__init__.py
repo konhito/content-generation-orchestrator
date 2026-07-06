@@ -78,8 +78,20 @@ from .narration_principles import (
     format_checklist_for_prompt as format_narration_checklist_for_prompt,
 )
 from .validation import validate_project_sync, ProjectValidator
-from .visual import BeatParser, ScreenshotCapture, VisualInspector
-from .script import ScriptAnalyzer, ScriptRefiner, NarrationRefiner
+
+try:  # pragma: no cover - optional analysis dependencies
+    from .visual import BeatParser, ScreenshotCapture, VisualInspector
+except ModuleNotFoundError:  # pragma: no cover - keep package importable in lean envs
+    BeatParser = None
+    ScreenshotCapture = None
+    VisualInspector = None
+
+try:  # pragma: no cover - optional analysis dependencies
+    from .script import ScriptAnalyzer, ScriptRefiner, NarrationRefiner
+except ModuleNotFoundError:  # pragma: no cover - keep package importable in lean envs
+    ScriptAnalyzer = None
+    ScriptRefiner = None
+    NarrationRefiner = None
 
 __all__ = [
     # Core Models

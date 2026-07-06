@@ -14,7 +14,7 @@ llm:
   # Provider: "openai" for production, "mock" for testing
   provider: "openai"
   # Model to use (when provider is not mock)
-  model: "gpt-5.4-mini"
+  model: "gpt-5.4"
   # Maximum tokens for generation
   max_tokens: 16384
   # Temperature for generation

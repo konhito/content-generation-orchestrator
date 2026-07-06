@@ -24,6 +24,7 @@ from src.cli.main import (
     cmd_short_storyboard,
     main,
     RESOLUTION_PRESETS,
+    _apply_component_plan_to_storyboard,
 )
 
 
@@ -163,6 +164,277 @@ class TestCmdInfo:
         assert result == 1
         captured = capsys.readouterr()
         assert "Error" in captured.err
+
+
+class TestShortStoryboardPlanApplication:
+    def test_component_plan_does_not_truncate_voiceover_runtime(self, tmp_path):
+        from types import SimpleNamespace
+
+        import src.config as app_config
+        from src.short.models import (
+            ShortBeatMode,
+            ShortsBeat,
+            ShortsStoryboard,
+            ShortsVisual,
+            VisualType,
+        )
+
+        storyboard = ShortsStoryboard(
+            id="test_short",
+            title="Test Short",
+            total_duration_seconds=65.5,
+            beats=[
+                ShortsBeat(
+                    id="beat_001",
+                    start_seconds=0.0,
+                    end_seconds=30.0,
+                    visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Intro"),
+                    caption_text="Intro",
+                    word_timestamps=[
+                        {"word": "Intro", "start_seconds": 0.0, "end_seconds": 0.5},
+                    ],
+                    mode=ShortBeatMode.CHARACTER,
+                ),
+                ShortsBeat(
+                    id="beat_002",
+                    start_seconds=30.0,
+                    end_seconds=65.5,
+                    visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Outro"),
+                    caption_text="Outro",
+                    word_timestamps=[
+                        {"word": "Later", "start_seconds": 50.0, "end_seconds": 50.5},
+                    ],
+                    mode=ShortBeatMode.COMPONENT,
+                ),
+            ],
+        )
+
+        app_config.load_config = lambda: SimpleNamespace(character=SimpleNamespace(enabled=False))
+
+        component_plan_path = tmp_path / "component_plan.json"
+        component_plan_path.parent.mkdir(parents=True, exist_ok=True)
+        component_plan_path.write_text(
+            json.dumps(
+                {
+                    "duration_seconds": 45,
+                    "components": [
+                        {
+                            "id": "beat_001",
+                            "start_seconds": 0.0,
+                            "end_seconds": 22.5,
+                            "mode": "character",
+                            "caption_text": "Intro",
+                            "visual": {"type": "text_highlight", "primary_text": "Intro"},
+                        },
+                        {
+                            "id": "beat_002",
+                            "start_seconds": 22.5,
+                            "end_seconds": 45.0,
+                            "mode": "component",
+                            "caption_text": "Outro",
+                            "visual": {"type": "text_highlight", "primary_text": "Outro"},
+                        },
+                    ],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        updated = _apply_component_plan_to_storyboard(storyboard, component_plan_path)
+
+        assert updated.total_duration_seconds == 65.5
+        assert updated.beats[-1].end_seconds == 65.5
+        assert any(word["word"] == "Later" for word in updated.beats[-1].word_timestamps)
+
+    def test_component_plan_attaches_character_tracks_for_mixed_recipe_beats(self, tmp_path, monkeypatch):
+        from types import SimpleNamespace
+
+        from src.short.models import (
+            ShortBeatMode,
+            ShortsBeat,
+            ShortsStoryboard,
+            ShortsVisual,
+            VisualRecipe,
+            VisualType,
+        )
+
+        storyboard = ShortsStoryboard(
+            id="test_short",
+            title="Test Short",
+            total_duration_seconds=4.0,
+            beats=[
+                ShortsBeat(
+                    id="beat_001",
+                    start_seconds=0.0,
+                    end_seconds=4.0,
+                    visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Intro"),
+                    caption_text="Intro",
+                    word_timestamps=[{"word": "Intro", "start_seconds": 0.0, "end_seconds": 0.5}],
+                    mode=ShortBeatMode.COMPONENT,
+                    visual_recipe=VisualRecipe.model_validate(
+                        {
+                            "recipe_id": "host_foreground_concept_backdrop",
+                            "layout": "character_foreground_visual_backdrop",
+                            "intent": "explain",
+                            "attention_strategy": "host_demonstrates_concept",
+                            "character": {"presence": "primary", "position": "lower_center", "scale": 0.82},
+                            "component": {"role": "main_explanation", "component_type": "concept_card", "position": "background_stage"},
+                            "meme": {"role": "none", "style": "none", "timing": "none", "intensity": 0},
+                            "camera": {"motion": "steady"},
+                            "transition": {"transition_in": "match_cut", "transition_out": "soft_cut"},
+                        }
+                    ),
+                ),
+            ],
+        )
+
+        monkeypatch.setattr(
+            "src.config.load_config",
+            lambda: SimpleNamespace(
+                character=SimpleNamespace(
+                    enabled=True,
+                    asset_source="remotion/public/characters/synctoon",
+                    aligner_url="http://localhost:49153/transcriptions?async=false",
+                    aligner_timeout_seconds=5.0,
+                )
+            ),
+        )
+
+        component_plan_path = tmp_path / "short" / "default" / "components" / "component_plan.json"
+        component_plan_path.parent.mkdir(parents=True, exist_ok=True)
+        component_plan_path.write_text(
+            json.dumps(
+                {
+                    "duration_seconds": 4.0,
+                    "components": [
+                        {
+                            "id": "beat_001",
+                            "start_seconds": 0.0,
+                            "end_seconds": 4.0,
+                            "mode": "component",
+                            "caption_text": "Intro",
+                            "visual": {"type": "text_highlight", "primary_text": "Intro"},
+                        }
+                    ],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        recipe_plan_path = component_plan_path.parent.parent / "plans" / "scene_recipe_plan.json"
+        recipe_plan_path.parent.mkdir(parents=True, exist_ok=True)
+        recipe_plan_path.write_text(
+            json.dumps(
+                {
+                    "recipes": [
+                        {
+                            "recipe_id": "host_foreground_concept_backdrop",
+                            "layout": "character_foreground_visual_backdrop",
+                            "intent": "explain",
+                            "attention_strategy": "host_demonstrates_concept",
+                            "character": {"presence": "primary", "position": "lower_center", "scale": 0.82},
+                            "component": {"role": "main_explanation", "component_type": "concept_card", "position": "background_stage"},
+                            "meme": {"role": "none", "style": "none", "timing": "none", "intensity": 0},
+                            "camera": {"motion": "steady"},
+                            "transition": {"transition_in": "match_cut", "transition_out": "soft_cut"},
+                        }
+                    ]
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        updated = _apply_component_plan_to_storyboard(storyboard, component_plan_path)
+
+        assert updated.beats[0].character_data is not None
+        assert updated.beats[0].character_track.endswith("character/tracks/beat_001.json")
+
+    def test_component_plan_matches_zero_padded_beat_ids(self, tmp_path):
+        from src.short.models import (
+            ShortBeatMode,
+            ShortsBeat,
+            ShortsStoryboard,
+            ShortsVisual,
+            VisualType,
+        )
+
+        storyboard = ShortsStoryboard(
+            id="test_short",
+            title="Test Short",
+            total_duration_seconds=4.0,
+            beats=[
+                ShortsBeat(
+                    id="beat_1",
+                    start_seconds=0.0,
+                    end_seconds=4.0,
+                    visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Intro"),
+                    caption_text="Intro",
+                    mode=ShortBeatMode.COMPONENT,
+                )
+            ],
+        )
+        component_plan_path = tmp_path / "component_plan.json"
+        component_plan_path.write_text(
+            json.dumps(
+                {
+                    "components": [
+                        {
+                            "id": "beat_001",
+                            "overlay_type": "none",
+                            "visual": {"type": "text_highlight"},
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        updated = _apply_component_plan_to_storyboard(storyboard, component_plan_path)
+
+        assert updated.beats[0].mode != ShortBeatMode.COMPONENT
+
+    def test_component_plan_matches_split_storyboard_beats_by_time(self, tmp_path):
+        from src.short.models import ShortBeatMode, ShortsBeat, ShortsStoryboard, ShortsVisual, VisualType
+
+        storyboard = ShortsStoryboard(
+            id="test_short",
+            title="Test Short",
+            total_duration_seconds=8.0,
+            beats=[
+                ShortsBeat(
+                    id="beat_9",
+                    start_seconds=4.0,
+                    end_seconds=8.0,
+                    visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Detail"),
+                    caption_text="Detail",
+                    mode=ShortBeatMode.COMPONENT,
+                )
+            ],
+        )
+        component_plan_path = tmp_path / "component_plan.json"
+        component_plan_path.write_text(
+            json.dumps(
+                {
+                    "components": [
+                        {
+                            "id": "beat_002",
+                            "start_seconds": 4.0,
+                            "end_seconds": 8.0,
+                            "overlay_type": "none",
+                            "visual": {"type": "text_highlight"},
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        updated = _apply_component_plan_to_storyboard(storyboard, component_plan_path)
+
+        assert updated.beats[0].mode == ShortBeatMode.CHARACTER
 
 
 class TestCmdCreate:

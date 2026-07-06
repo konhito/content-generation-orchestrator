@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 4.0,
+  "components": [
+    {
+      "id": "beat_001",
+      "start_seconds": 0.0,
+      "end_seconds": 4.0,
+      "mode": "component",
+      "caption_text": "Intro",
+      "visual": {
+        "type": "text_highlight",
+        "primary_text": "Intro"
+      }
+    }
+  ]
+}

@@ -21,7 +21,7 @@ class LLMConfig(BaseModel):
     """LLM provider configuration."""
 
     provider: str = "openai"
-    model: str = "gpt-5.4-mini"
+    model: str = "gpt-5.4"
     max_tokens: int = 16384
     temperature: float = 0.7
 

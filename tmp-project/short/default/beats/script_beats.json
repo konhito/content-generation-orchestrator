@@ -1,0 +1,97 @@
+{
+  "beats": [
+    {
+      "beat_id": "beat_001",
+      "script_text": "AI does not memorize everything.",
+      "intent": "context",
+      "entities": [
+        "not",
+        "memorize",
+        "everything"
+      ],
+      "visual_description": "pattern grid",
+      "search_queries": [
+        "AI does not memorize everything. tech",
+        "not memorize everything",
+        "tech not"
+      ],
+      "preferred_types": [
+        "web_research",
+        "meme",
+        "text_highlight"
+      ],
+      "avoid": [],
+      "caption_text": "AI predicts patterns"
+    },
+    {
+      "beat_id": "beat_002",
+      "script_text": "It predicts patterns.",
+      "intent": "context",
+      "entities": [
+        "predicts",
+        "patterns"
+      ],
+      "visual_description": "warning stamp",
+      "search_queries": [
+        "It predicts patterns. tech",
+        "predicts patterns",
+        "tech predicts"
+      ],
+      "preferred_types": [
+        "web_research",
+        "meme",
+        "text_highlight"
+      ],
+      "avoid": [],
+      "caption_text": "Weak pattern, confident guess"
+    },
+    {
+      "beat_id": "beat_003",
+      "script_text": "When the pattern is weak, it guesses with confidence.",
+      "intent": "context",
+      "entities": [
+        "When",
+        "pattern",
+        "weak",
+        "guesses",
+        "confidence"
+      ],
+      "visual_description": "When the pattern is weak, it guesses with confidence.",
+      "search_queries": [
+        "When the pattern is weak, it guesses with confidence. tech",
+        "When pattern weak",
+        "tech When"
+      ],
+      "preferred_types": [
+        "web_research",
+        "meme",
+        "text_highlight"
+      ],
+      "avoid": []
+    },
+    {
+      "beat_id": "beat_004",
+      "script_text": "That is why checking sources still matters.",
+      "intent": "context",
+      "entities": [
+        "why",
+        "checking",
+        "sources",
+        "still",
+        "matters"
+      ],
+      "visual_description": "That is why checking sources still matters.",
+      "search_queries": [
+        "That is why checking sources still matters. tech",
+        "why checking sources",
+        "tech why"
+      ],
+      "preferred_types": [
+        "web_research",
+        "meme",
+        "text_highlight"
+      ],
+      "avoid": []
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "beats": [
+    {
+      "id": "beat_001",
+      "mode": "component",
+      "reason": "minimum visual-explanation guardrail",
+      "intent": "context",
+      "script_text": "AI does not memorize everything."
+    },
+    {
+      "id": "beat_002",
+      "mode": "meme",
+      "reason": "planned punchline",
+      "intent": "context",
+      "script_text": "It predicts patterns."
+    },
+    {
+      "id": "beat_003",
+      "mode": "character",
+      "reason": "direct host explanation",
+      "intent": "context",
+      "script_text": "When the pattern is weak, it guesses with confidence."
+    },
+    {
+      "id": "beat_004",
+      "mode": "meme",
+      "reason": "planned punchline",
+      "intent": "context",
+      "script_text": "That is why checking sources still matters."
+    }
+  ]
+}

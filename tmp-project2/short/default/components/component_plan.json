@@ -1,0 +1,82 @@
+{
+  "niche": "tech",
+  "duration_seconds": 50,
+  "components": [
+    {
+      "id": "beat_001",
+      "start_seconds": 0.0,
+      "end_seconds": 12.5,
+      "mode": "component",
+      "caption_text": "AI does not memorize everything.",
+      "intent": "context",
+      "visual": {
+        "type": "text_highlight",
+        "primary_text": "AI predicts patterns",
+        "secondary_text": "AI does not memorize everything."
+      },
+      "effect": "hard_cut"
+    },
+    {
+      "id": "beat_002",
+      "start_seconds": 12.5,
+      "end_seconds": 25.0,
+      "mode": "meme",
+      "caption_text": "It predicts patterns.",
+      "intent": "context",
+      "visual": {
+        "type": "meme_card",
+        "primary_text": "CONFIDENTLY WRONG",
+        "secondary_text": "AI DOES NOT MEMORIZE EVERYTHING",
+        "template_hint": "reaction_label",
+        "template_id": "12345",
+        "query": "confidently wrong",
+        "scene_config": {
+          "component_type": "meme_card",
+          "image_path": "D:\\video_explainer\\tmp-project2\\short\\default\\memes\\assets\\imgflip_12345_0.jpg",
+          "caption": "AI DOES NOT MEMORIZE EVERYTHING"
+        }
+      },
+      "effect": "punch_zoom"
+    },
+    {
+      "id": "beat_003",
+      "start_seconds": 25.0,
+      "end_seconds": 37.5,
+      "mode": "character",
+      "caption_text": "When the pattern is weak, it guesses with confidence.",
+      "intent": "context",
+      "visual": {
+        "type": "question",
+        "primary_text": "Why pattern weak guesses confidence?"
+      },
+      "effect": "pan"
+    },
+    {
+      "id": "beat_004",
+      "start_seconds": 37.5,
+      "end_seconds": 50.0,
+      "mode": "meme",
+      "caption_text": "That is why checking sources still matters.",
+      "intent": "context",
+      "visual": {
+        "type": "meme_card",
+        "primary_text": "IT PREDICTS PATTERNS.",
+        "secondary_text": "IT PREDICTS PATTERNS",
+        "template_hint": "surprised",
+        "template_id": "12345",
+        "query": "It predicts patterns.",
+        "scene_config": {
+          "component_type": "meme_card",
+          "image_path": "D:\\video_explainer\\tmp-project2\\short\\default\\memes\\assets\\imgflip_12345_0.jpg",
+          "caption": "IT PREDICTS PATTERNS"
+        }
+      },
+      "effect": "shake"
+    }
+  ],
+  "component_types": [
+    "meme_card",
+    "question",
+    "text_highlight"
+  ]
+}

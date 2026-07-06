@@ -91,6 +91,99 @@ def test_component_plan_maps_beats_to_clean_remotion_visuals():
     plan = build_component_plan(beats, memes, duration=50, niche="tech")
 
     assert len(plan["components"]) >= len(beats)
-    assert any(item["visual"]["type"] == "attention_visual" for item in plan["components"])
+    assert any(item["visual"]["type"] == "text_highlight" for item in plan["components"])
     assert any(item["visual"]["type"] == "meme_card" for item in plan["components"])
+    assert any(item.get("overlay_type") == "component" for item in plan["components"])
     json.dumps(plan)
+
+
+def test_component_plan_prefers_visual_description_over_generic_sentence_text():
+    beats = [
+        {
+            "beat_id": "beat_001",
+            "script_text": "Direct explanation",
+            "visual_description": "Why does the model guess instead of knowing?",
+            "entities": [],
+        }
+    ]
+
+    plan = build_component_plan(beats, [], duration=5, niche="tech")
+
+    assert plan["components"][0]["visual"]["type"] == "question"
+
+
+def test_component_plan_keeps_plain_explanation_as_text_highlight():
+    beats = [
+        {
+            "beat_id": "beat_001",
+            "script_text": "Most people think coding is just typing fast and building cool stuff.",
+            "visual_description": "",
+            "entities": ["coding", "typing", "fast"],
+        }
+    ]
+
+    plan = build_component_plan(beats, [], duration=5, niche="tech")
+
+    assert plan["components"][0]["visual"]["type"] == "text_highlight"
+    assert "coding" in plan["components"][0]["visual"]["primary_text"].lower()
+    assert plan["components"][0]["overlay_type"] == "none"
+
+
+def test_component_plan_only_uses_animated_visuals_for_component_overlay():
+    beats = [
+        {
+            "beat_id": "beat_001",
+            "script_text": "Recent developer survey data shows AI coding tools are already common.",
+            "visual_description": "",
+            "entities": ["developer", "survey", "data"],
+        },
+        {
+            "beat_id": "beat_002",
+            "script_text": "Debugging means tracing the bug through logs and errors.",
+            "visual_description": "",
+            "entities": ["debugging", "logs", "errors"],
+        },
+    ]
+    modes = [
+        {"id": "beat_001", "mode": "component"},
+        {"id": "beat_002", "mode": "component"},
+    ]
+
+    plan = build_component_plan(beats, [], duration=10, niche="tech", mode_plan=modes)
+
+    assert plan["components"][0]["visual"]["type"] == "text_highlight"
+    assert plan["components"][0]["overlay_type"] == "none"
+    assert plan["components"][1]["visual"]["type"] == "progress_bars"
+    assert plan["components"][1]["overlay_type"] == "component"
+
+
+def test_component_plan_does_not_turn_plain_because_into_flow_diagram():
+    beats = [
+        {
+            "beat_id": "beat_001",
+            "script_text": "They look things up constantly, because the skill is knowing what to build.",
+            "visual_description": "",
+            "entities": ["they", "look", "things"],
+        }
+    ]
+
+    plan = build_component_plan(beats, [], duration=5, niche="tech")
+
+    assert plan["components"][0]["visual"]["type"] == "text_highlight"
+    assert plan["components"][0]["overlay_type"] == "none"
+
+
+def test_component_plan_skips_filler_words_when_building_primary_text():
+    beats = [
+        {
+            "beat_id": "beat_001",
+            "script_text": "Most people think coding is just typing fast and building cool stuff.",
+            "visual_description": "Why real?",
+            "entities": ["Most", "people", "think", "coding", "just"],
+        }
+    ]
+
+    plan = build_component_plan(beats, [], duration=5, niche="tech")
+
+    assert "coding" in plan["components"][0]["visual"]["primary_text"].lower()
+    assert plan["components"][0]["visual"]["primary_text"].lower() != "most"

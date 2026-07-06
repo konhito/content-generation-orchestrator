@@ -80,7 +80,11 @@ class RecipeCharacterLayer(BaseModel):
     position: str = "lower_center"
     scale: float = Field(default=0.82, ge=0.2, le=1.4)
     pose_intent: str = "explain"
+    body_type: str = "body1"
+    head: str = "M"
     emotion: str = "happy"
+    motion: str = "gentle_bob"
+    gesture: str = ""
 
 
 class RecipeComponentLayer(BaseModel):
@@ -122,6 +126,7 @@ class VisualRecipe(BaseModel):
     layout: str
     intent: str
     attention_strategy: str
+    background_image: str = ""
     character: RecipeCharacterLayer = Field(default_factory=RecipeCharacterLayer)
     component: RecipeComponentLayer = Field(default_factory=RecipeComponentLayer)
     meme: RecipeMemeLayer = Field(default_factory=RecipeMemeLayer)

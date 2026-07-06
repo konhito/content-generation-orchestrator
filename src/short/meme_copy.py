@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 from copy import deepcopy
+from typing import Callable
 
 GENERIC_COPY = {
     ("WAIT WHAT", "IT GETS WORSE"),
@@ -17,14 +18,18 @@ def generate_meme_copy(
     script: str,
     transcript_words: list[dict],
     *,
-    provider: str = "openai",
+    provider: str = "imgflip",
     llm=None,
+    logger: Callable[[str], None] | None = None,
 ) -> list[dict]:
     """Replace generic meme captions with unique beat-specific text."""
 
     result = deepcopy(plan)
     targets = [index for index, item in enumerate(result) if item.get("type") == "meme" and _is_generic(item)]
+    log = logger or (lambda _message: None)
+    log(f"meme plan items={len(plan)} generic_targets={len(targets)} provider={provider}")
     if not targets:
+        log("no generic meme captions detected")
         return result
 
     replacements = {}
@@ -51,8 +56,12 @@ def generate_meme_copy(
                 for item in parsed.get("memes", [])
                 if isinstance(item, dict) and "index" in item
             }
+            log(f"llm meme replacements={len(replacements)}")
         except Exception:
             replacements = {}
+            log("llm meme replacement failed; using fallback lines")
+    else:
+        log("meme replacement using fallback lines only")
 
     used = {
         (str(item.get("meme_text_top", "")).strip().upper(), str(item.get("meme_text_bottom", "")).strip().upper())
@@ -68,6 +77,9 @@ def generate_meme_copy(
         if not top or not bottom or pair in used or pair in GENERIC_COPY:
             top, bottom = fallback_lines[position]
             pair = (top, bottom)
+            log(f"fallback meme[{index}] top={top!r} bottom={bottom!r}")
+        else:
+            log(f"meme[{index}] top={top!r} bottom={bottom!r}")
         while pair in used:
             bottom = _clean(f"{bottom} #{position + 1}")
             pair = (top, bottom)

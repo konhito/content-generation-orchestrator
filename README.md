@@ -194,8 +194,15 @@ See [docs/REFINEMENT.md](docs/REFINEMENT.md) for the 4-phase refinement process.
 ### Shorts Generation
 
 ```bash
-python -m src.cli short generate <project>    # Full shorts pipeline
+python -m src.cli short generate <project> --render    # Full shorts pipeline
 python -m src.cli render <project> --short    # Render the short
+```
+
+Example:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli short generate test-1 --topic "Why AI hallucinates" --niche tech
+.\.venv\Scripts\python.exe -m src.cli render test-1 --short
 ```
 
 See [docs/SHORTS.md](docs/SHORTS.md) for shorts workflow and timing sync.

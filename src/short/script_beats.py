@@ -9,7 +9,11 @@ _STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "but", "by", "for",
     "from", "has", "have", "here", "in", "is", "it", "its", "of", "on",
     "or", "our", "out", "so", "that", "the", "their", "this", "to", "we",
-    "with", "you", "your",
+    "with", "you", "your", "because", "did", "do", "does", "gets", "get",
+    "going", "go", "keep", "keeps", "know", "knowing", "look", "looks",
+    "looking", "make", "makes", "mean", "means", "read", "reading", "search",
+    "searches", "think", "thinks", "thinking", "type", "typing", "write",
+    "writing", "things",
 }
 
 
@@ -117,7 +121,7 @@ def _preferred_types(sentence: str) -> list[str]:
         return ["meme", "attention_visual", "web_research"]
     if any(word in lowered for word in ("attention", "token", "connect")):
         return ["attention_visual", "token_grid", "meme"]
-    return ["web_research", "meme", "flow_diagram"]
+    return ["web_research", "meme", "text_highlight"]
 
 
 def _avoid_terms(sentence: str) -> list[str]:

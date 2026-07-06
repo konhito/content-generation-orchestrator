@@ -32,7 +32,7 @@ def test_factory_returns_openai_provider():
 def test_default_config_uses_openai_provider():
     config = Config()
     assert config.llm.provider == "openai"
-    assert config.llm.model == "gpt-5.4-mini"
+    assert config.llm.model == "gpt-5.4"
     assert isinstance(get_llm_provider(config), OpenAILLMProvider)
 
 

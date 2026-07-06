@@ -1,0 +1,1 @@
+AI predicts the next useful pattern.

@@ -26,7 +26,11 @@ from .models import (
 )
 from .validation import validate_project_sync, ProjectValidator
 from .visual import VisualInspector, ClaudeCodeVisualInspector
-from .script import ScriptAnalyzer, ScriptRefiner
+try:  # pragma: no cover - optional analysis dependencies
+    from .script import ScriptAnalyzer, ScriptRefiner
+except ModuleNotFoundError:  # pragma: no cover - keep CLI importable in lean envs
+    ScriptAnalyzer = None
+    ScriptRefiner = None
 from .visual_cue import VisualCueRefiner
 
 

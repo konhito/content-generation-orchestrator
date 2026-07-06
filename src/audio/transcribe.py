@@ -4,7 +4,14 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from .tts import WordTimestamp
+try:  # pragma: no cover - optional runtime dependency
+    from .tts import WordTimestamp
+except ModuleNotFoundError:  # pragma: no cover - keeps import working without TTS deps
+    @dataclass
+    class WordTimestamp:
+        word: str
+        start_seconds: float
+        end_seconds: float
 
 
 @dataclass

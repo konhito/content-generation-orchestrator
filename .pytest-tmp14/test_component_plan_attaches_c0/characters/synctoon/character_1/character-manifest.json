@@ -1,0 +1,3451 @@
+{
+  "version": 1,
+  "character_id": "character_1",
+  "source_revision": "bd71bff81d68c68fe46dba7751efc6b88399583a",
+  "assets": {
+    "body": {
+      "body1": {
+        "path": "characters/synctoon/character_1/body/body1.png"
+      },
+      "body9": {
+        "path": "characters/synctoon/character_1/body/body9.png"
+      },
+      "body10": {
+        "path": "characters/synctoon/character_1/body/body10.png"
+      },
+      "body11": {
+        "path": "characters/synctoon/character_1/body/body11.png"
+      },
+      "body12": {
+        "path": "characters/synctoon/character_1/body/body12.png"
+      },
+      "body13": {
+        "path": "characters/synctoon/character_1/body/body13.png"
+      },
+      "body14": {
+        "path": "characters/synctoon/character_1/body/body14.png"
+      },
+      "body15": {
+        "path": "characters/synctoon/character_1/body/body15.png"
+      },
+      "body16": {
+        "path": "characters/synctoon/character_1/body/body16.png"
+      },
+      "body17": {
+        "path": "characters/synctoon/character_1/body/body17.png"
+      },
+      "body18": {
+        "path": "characters/synctoon/character_1/body/body18.png"
+      },
+      "body19": {
+        "path": "characters/synctoon/character_1/body/body19.png"
+      },
+      "body2": {
+        "path": "characters/synctoon/character_1/body/body2.png"
+      },
+      "body20": {
+        "path": "characters/synctoon/character_1/body/body20.png"
+      },
+      "body21": {
+        "path": "characters/synctoon/character_1/body/body21.png"
+      },
+      "body22": {
+        "path": "characters/synctoon/character_1/body/body22.png"
+      },
+      "body23": {
+        "path": "characters/synctoon/character_1/body/body23.png"
+      },
+      "body24": {
+        "path": "characters/synctoon/character_1/body/body24.png"
+      },
+      "body25": {
+        "path": "characters/synctoon/character_1/body/body25.png"
+      },
+      "body26": {
+        "path": "characters/synctoon/character_1/body/body26.png"
+      },
+      "body27": {
+        "path": "characters/synctoon/character_1/body/body27.png"
+      },
+      "body28": {
+        "path": "characters/synctoon/character_1/body/body28.png"
+      },
+      "body29": {
+        "path": "characters/synctoon/character_1/body/body29.png"
+      },
+      "body3": {
+        "path": "characters/synctoon/character_1/body/body3.png"
+      },
+      "body30": {
+        "path": "characters/synctoon/character_1/body/body30.png"
+      },
+      "body31": {
+        "path": "characters/synctoon/character_1/body/body31.png"
+      },
+      "body32": {
+        "path": "characters/synctoon/character_1/body/body32.png"
+      },
+      "body33": {
+        "path": "characters/synctoon/character_1/body/body33.png"
+      },
+      "body34": {
+        "path": "characters/synctoon/character_1/body/body34.png"
+      },
+      "body35": {
+        "path": "characters/synctoon/character_1/body/body35.png"
+      },
+      "body36": {
+        "path": "characters/synctoon/character_1/body/body36.png"
+      },
+      "body37": {
+        "path": "characters/synctoon/character_1/body/body37.png"
+      },
+      "body38": {
+        "path": "characters/synctoon/character_1/body/body38.png"
+      },
+      "body39": {
+        "path": "characters/synctoon/character_1/body/body39.png"
+      },
+      "body4": {
+        "path": "characters/synctoon/character_1/body/body4.png"
+      },
+      "body40": {
+        "path": "characters/synctoon/character_1/body/body40.png"
+      },
+      "body41": {
+        "path": "characters/synctoon/character_1/body/body41.png"
+      },
+      "body42": {
+        "path": "characters/synctoon/character_1/body/body42.png"
+      },
+      "body43": {
+        "path": "characters/synctoon/character_1/body/body43.png"
+      },
+      "body44": {
+        "path": "characters/synctoon/character_1/body/body44.png"
+      },
+      "body45": {
+        "path": "characters/synctoon/character_1/body/body45.png"
+      },
+      "body46": {
+        "path": "characters/synctoon/character_1/body/body46.png"
+      },
+      "body47": {
+        "path": "characters/synctoon/character_1/body/body47.png"
+      },
+      "body48": {
+        "path": "characters/synctoon/character_1/body/body48.png"
+      },
+      "body49": {
+        "path": "characters/synctoon/character_1/body/body49.png"
+      },
+      "body5": {
+        "path": "characters/synctoon/character_1/body/body5.png"
+      },
+      "body50": {
+        "path": "characters/synctoon/character_1/body/body50.png"
+      },
+      "body51": {
+        "path": "characters/synctoon/character_1/body/body51.png"
+      },
+      "body52": {
+        "path": "characters/synctoon/character_1/body/body52.png"
+      },
+      "body53": {
+        "path": "characters/synctoon/character_1/body/body53.png"
+      },
+      "body54": {
+        "path": "characters/synctoon/character_1/body/body54.png"
+      },
+      "body55": {
+        "path": "characters/synctoon/character_1/body/body55.png"
+      },
+      "body56": {
+        "path": "characters/synctoon/character_1/body/body56.png"
+      },
+      "body57": {
+        "path": "characters/synctoon/character_1/body/body57.png"
+      },
+      "body58": {
+        "path": "characters/synctoon/character_1/body/body58.png"
+      },
+      "body59": {
+        "path": "characters/synctoon/character_1/body/body59.png"
+      },
+      "body6": {
+        "path": "characters/synctoon/character_1/body/body6.png"
+      },
+      "body60": {
+        "path": "characters/synctoon/character_1/body/body60.png"
+      },
+      "body61": {
+        "path": "characters/synctoon/character_1/body/body61.png"
+      },
+      "body62": {
+        "path": "characters/synctoon/character_1/body/body62.png"
+      },
+      "body63": {
+        "path": "characters/synctoon/character_1/body/body63.png"
+      },
+      "body64": {
+        "path": "characters/synctoon/character_1/body/body64.png"
+      },
+      "body65": {
+        "path": "characters/synctoon/character_1/body/body65.png"
+      },
+      "body7": {
+        "path": "characters/synctoon/character_1/body/body7.png"
+      },
+      "body8": {
+        "path": "characters/synctoon/character_1/body/body8.png"
+      },
+      "chilling:body56": {
+        "path": "characters/synctoon/character_1/body/chilling/body56.png"
+      },
+      "come:body55": {
+        "path": "characters/synctoon/character_1/body/come/body55.png"
+      },
+      "confuse:body22": {
+        "path": "characters/synctoon/character_1/body/confuse/body22.png"
+      },
+      "crazy:body25": {
+        "path": "characters/synctoon/character_1/body/crazy/body25.png"
+      },
+      "dancing:body18": {
+        "path": "characters/synctoon/character_1/body/dancing/body18.png"
+      },
+      "explain:body15": {
+        "path": "characters/synctoon/character_1/body/explain/body15.png"
+      },
+      "feeling_down:body48": {
+        "path": "characters/synctoon/character_1/body/feeling_down/body48.png"
+      },
+      "hi:body1": {
+        "path": "characters/synctoon/character_1/body/hi/body1.png"
+      },
+      "i:body11": {
+        "path": "characters/synctoon/character_1/body/i/body11.png"
+      },
+      "idea:body28": {
+        "path": "characters/synctoon/character_1/body/idea/body28.png"
+      },
+      "idk:body34": {
+        "path": "characters/synctoon/character_1/body/idk/body34.png"
+      },
+      "joy:body30": {
+        "path": "characters/synctoon/character_1/body/joy/body30.png"
+      },
+      "jumping:body30": {
+        "path": "characters/synctoon/character_1/body/jumping/body30.png"
+      },
+      "kung_fu:body25": {
+        "path": "characters/synctoon/character_1/body/kung_fu/body25.png"
+      },
+      "love:body58": {
+        "path": "characters/synctoon/character_1/body/love/body58.png"
+      },
+      "me:body11": {
+        "path": "characters/synctoon/character_1/body/me/body11.png"
+      },
+      "meditation:body46": {
+        "path": "characters/synctoon/character_1/body/meditation/body46.png"
+      },
+      "model:body31": {
+        "path": "characters/synctoon/character_1/body/model/body31.png"
+      },
+      "not_me:body1": {
+        "path": "characters/synctoon/character_1/body/not_me/body1.png"
+      },
+      "paper:body21": {
+        "path": "characters/synctoon/character_1/body/paper/body21.png"
+      },
+      "praying:body64": {
+        "path": "characters/synctoon/character_1/body/praying/body64.png"
+      },
+      "question:body9": {
+        "path": "characters/synctoon/character_1/body/question/body9.png"
+      },
+      "running:body29": {
+        "path": "characters/synctoon/character_1/body/running/body29.png"
+      },
+      "sad:body48": {
+        "path": "characters/synctoon/character_1/body/sad/body48.png"
+      },
+      "search:body65": {
+        "path": "characters/synctoon/character_1/body/search/body65.png"
+      },
+      "shy:body22": {
+        "path": "characters/synctoon/character_1/body/shy/body22.png"
+      },
+      "singing:body13": {
+        "path": "characters/synctoon/character_1/body/singing/body13.png"
+      },
+      "sneaky:body36": {
+        "path": "characters/synctoon/character_1/body/sneaky/body36.png"
+      },
+      "standing:body33": {
+        "path": "characters/synctoon/character_1/body/standing/body33.png"
+      },
+      "technical:body35": {
+        "path": "characters/synctoon/character_1/body/technical/body35.png"
+      },
+      "that:body15": {
+        "path": "characters/synctoon/character_1/body/that/body15.png"
+      },
+      "thinking:body6": {
+        "path": "characters/synctoon/character_1/body/thinking/body6.png"
+      },
+      "this:body24": {
+        "path": "characters/synctoon/character_1/body/this/body24.png"
+      },
+      "what:body3": {
+        "path": "characters/synctoon/character_1/body/what/body3.png"
+      },
+      "why:body1": {
+        "path": "characters/synctoon/character_1/body/why/body1.png"
+      },
+      "winner:body16": {
+        "path": "characters/synctoon/character_1/body/winner/body16.png"
+      },
+      "yeah:body52": {
+        "path": "characters/synctoon/character_1/body/yeah/body52.png"
+      },
+      "you:body24": {
+        "path": "characters/synctoon/character_1/body/you/body24.png"
+      }
+    },
+    "head": {
+      "L": {
+        "path": "characters/synctoon/character_1/head/L/L.png"
+      },
+      "M": {
+        "path": "characters/synctoon/character_1/head/M/M.png"
+      },
+      "R": {
+        "path": "characters/synctoon/character_1/head/R/R.png"
+      }
+    },
+    "eyes": {
+      "02": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/02.png"
+      },
+      "03": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/03.png"
+      },
+      "04": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/04.png"
+      },
+      "angry_L": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/angry_L.png"
+      },
+      "angry_M": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/angry_M.png"
+      },
+      "angry_R": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_blink/angry_R.png"
+      },
+      "angry:angry_L": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_L.png"
+      },
+      "angry:angry_M": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_M.png"
+      },
+      "angry:angry_R": {
+        "path": "characters/synctoon/character_1/eyes/angry/angry_R.png"
+      },
+      "angry_2:angry_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/02.png"
+      },
+      "angry_2:angry_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/03.png"
+      },
+      "angry_2:angry_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/04.png"
+      },
+      "angry_2_L": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/angry_2_L.png"
+      },
+      "angry_2_M": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/angry_2_M.png"
+      },
+      "angry_2_R": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_blink/angry_2_R.png"
+      },
+      "angry_2:angry_2_L": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_L.png"
+      },
+      "angry_2:angry_2_M": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_M.png"
+      },
+      "angry_2:angry_2_R": {
+        "path": "characters/synctoon/character_1/eyes/angry_2/angry_2_R.png"
+      },
+      "bore:bore_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/02.png"
+      },
+      "bore:bore_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/03.png"
+      },
+      "bore:bore_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/04.png"
+      },
+      "bore_L": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/bore_L.png"
+      },
+      "bore_M": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/bore_M.png"
+      },
+      "bore_R": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_blink/bore_R.png"
+      },
+      "bore:bore_L": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_L.png"
+      },
+      "bore:bore_M": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_M.png"
+      },
+      "bore:bore_R": {
+        "path": "characters/synctoon/character_1/eyes/bore/bore_R.png"
+      },
+      "bore_2:bore_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/02.png"
+      },
+      "bore_2:bore_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/03.png"
+      },
+      "bore_2:bore_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/04.png"
+      },
+      "bore_2_L": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/bore_2_L.png"
+      },
+      "bore_2_M": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/bore_2_M.png"
+      },
+      "bore_2_R": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_blink/bore_2_R.png"
+      },
+      "bore_2:bore_2_L": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_L.png"
+      },
+      "bore_2:bore_2_M": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_M.png"
+      },
+      "bore_2:bore_2_R": {
+        "path": "characters/synctoon/character_1/eyes/bore_2/bore_2_R.png"
+      },
+      "content:content_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/02.png"
+      },
+      "content:content_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/03.png"
+      },
+      "content:content_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/04.png"
+      },
+      "content_L": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/content_L.png"
+      },
+      "content_M": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/content_M.png"
+      },
+      "content_R": {
+        "path": "characters/synctoon/character_1/eyes/content/content_blink/content_R.png"
+      },
+      "content:content_L": {
+        "path": "characters/synctoon/character_1/eyes/content/content_L.png"
+      },
+      "content:content_M": {
+        "path": "characters/synctoon/character_1/eyes/content/content_M.png"
+      },
+      "content:content_R": {
+        "path": "characters/synctoon/character_1/eyes/content/content_R.png"
+      },
+      "content_2:content_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/02.png"
+      },
+      "content_2:content_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/03.png"
+      },
+      "content_2:content_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/04.png"
+      },
+      "content_2_L": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/content_2_L.png"
+      },
+      "content_2_M": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/content_2_M.png"
+      },
+      "content_2_R": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_blink/content_2_R.png"
+      },
+      "content_2:content_2_L": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_L.png"
+      },
+      "content_2:content_2_M": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_M.png"
+      },
+      "content_2:content_2_R": {
+        "path": "characters/synctoon/character_1/eyes/content_2/content_2_R.png"
+      },
+      "crazy:crazy_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/02.png"
+      },
+      "crazy:crazy_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/03.png"
+      },
+      "crazy:crazy_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/04.png"
+      },
+      "crazy_L": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/crazy_L.png"
+      },
+      "crazy_M": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/crazy_M.png"
+      },
+      "crazy_R": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_blink/crazy_R.png"
+      },
+      "crazy:crazy_L": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_L.png"
+      },
+      "crazy:crazy_M": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_M.png"
+      },
+      "crazy:crazy_R": {
+        "path": "characters/synctoon/character_1/eyes/crazy/crazy_R.png"
+      },
+      "crazy_2:crazy_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/02.png"
+      },
+      "crazy_2:crazy_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/03.png"
+      },
+      "crazy_2:crazy_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/04.png"
+      },
+      "crazy_2_L": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/crazy_2_L.png"
+      },
+      "crazy_2_M": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/crazy_2_M.png"
+      },
+      "crazy_2_R": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_blink/crazy_2_R.png"
+      },
+      "crazy_2:crazy_2_L": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_L.png"
+      },
+      "crazy_2:crazy_2_M": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_M.png"
+      },
+      "crazy_2:crazy_2_R": {
+        "path": "characters/synctoon/character_1/eyes/crazy_2/crazy_2_R.png"
+      },
+      "evil_laugh:evil_laugh_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/02.png"
+      },
+      "evil_laugh:evil_laugh_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/03.png"
+      },
+      "evil_laugh:evil_laugh_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/04.png"
+      },
+      "evil_laugh_L": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/evil_laugh_L.png"
+      },
+      "evil_laugh_M": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/evil_laugh_M.png"
+      },
+      "evil_laugh_R": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_blink/evil_laugh_R.png"
+      },
+      "evil_laugh:evil_laugh_L": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_L.png"
+      },
+      "evil_laugh:evil_laugh_M": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_M.png"
+      },
+      "evil_laugh:evil_laugh_R": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh/evil_laugh_R.png"
+      },
+      "evil_laugh_2:evil_laugh_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/02.png"
+      },
+      "evil_laugh_2:evil_laugh_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/03.png"
+      },
+      "evil_laugh_2:evil_laugh_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/04.png"
+      },
+      "evil_laugh_2_L": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/evil_laugh_2_L.png"
+      },
+      "evil_laugh_2_M": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/evil_laugh_2_M.png"
+      },
+      "evil_laugh_2_R": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_blink/evil_laugh_2_R.png"
+      },
+      "evil_laugh_2:evil_laugh_2_L": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_L.png"
+      },
+      "evil_laugh_2:evil_laugh_2_M": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_M.png"
+      },
+      "evil_laugh_2:evil_laugh_2_R": {
+        "path": "characters/synctoon/character_1/eyes/evil_laugh_2/evil_laugh_2_R.png"
+      },
+      "glare:glare_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/02.png"
+      },
+      "glare:glare_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/03.png"
+      },
+      "glare:glare_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/04.png"
+      },
+      "glare_L": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/glare_L.png"
+      },
+      "glare_M": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/glare_M.png"
+      },
+      "glare_R": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_blink/glare_R.png"
+      },
+      "glare:glare_L": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_L.png"
+      },
+      "glare:glare_M": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_M.png"
+      },
+      "glare:glare_R": {
+        "path": "characters/synctoon/character_1/eyes/glare/glare_R.png"
+      },
+      "glare_2:glare_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/02.png"
+      },
+      "glare_2:glare_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/03.png"
+      },
+      "glare_2:glare_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/04.png"
+      },
+      "glare_2_L": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/glare_2_L.png"
+      },
+      "glare_2_M": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/glare_2_M.png"
+      },
+      "glare_2_R": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_blink/glare_2_R.png"
+      },
+      "glare_2:glare_2_L": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_L.png"
+      },
+      "glare_2:glare_2_M": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_M.png"
+      },
+      "glare_2:glare_2_R": {
+        "path": "characters/synctoon/character_1/eyes/glare_2/glare_2_R.png"
+      },
+      "happy:happy_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/02.png"
+      },
+      "happy:happy_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/03.png"
+      },
+      "happy:happy_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/04.png"
+      },
+      "happy_L": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/happy_L.png"
+      },
+      "happy_M": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/happy_M.png"
+      },
+      "happy_R": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_blink/happy_R.png"
+      },
+      "happy:happy_L": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_L.png"
+      },
+      "happy:happy_M": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_M.png"
+      },
+      "happy:happy_R": {
+        "path": "characters/synctoon/character_1/eyes/happy/happy_R.png"
+      },
+      "happy_2:happy_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/02.png"
+      },
+      "happy_2:happy_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/03.png"
+      },
+      "happy_2:happy_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/04.png"
+      },
+      "happy_2_L": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/happy_2_L.png"
+      },
+      "happy_2_M": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/happy_2_M.png"
+      },
+      "happy_2_R": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_blink/happy_2_R.png"
+      },
+      "happy_2:happy_2_L": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_L.png"
+      },
+      "happy_2:happy_2_M": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_M.png"
+      },
+      "happy_2:happy_2_R": {
+        "path": "characters/synctoon/character_1/eyes/happy_2/happy_2_R.png"
+      },
+      "lust:lust_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/02.png"
+      },
+      "lust:lust_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/03.png"
+      },
+      "lust:lust_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/04.png"
+      },
+      "lust_L": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/lust_L.png"
+      },
+      "lust_M": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/lust_M.png"
+      },
+      "lust_R": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_blink/lust_R.png"
+      },
+      "lust:lust_L": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_L.png"
+      },
+      "lust:lust_M": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_M.png"
+      },
+      "lust:lust_R": {
+        "path": "characters/synctoon/character_1/eyes/lust/lust_R.png"
+      },
+      "lust_2:lust_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/02.png"
+      },
+      "lust_2:lust_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/03.png"
+      },
+      "lust_2:lust_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/04.png"
+      },
+      "lust_2_L": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/lust_2_L.png"
+      },
+      "lust_2_M": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/lust_2_M.png"
+      },
+      "lust_2_R": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_blink/lust_2_R.png"
+      },
+      "lust_2:lust_2_L": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_L.png"
+      },
+      "lust_2:lust_2_M": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_M.png"
+      },
+      "lust_2:lust_2_R": {
+        "path": "characters/synctoon/character_1/eyes/lust_2/lust_2_R.png"
+      },
+      "sad:sad_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/02.png"
+      },
+      "sad:sad_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/03.png"
+      },
+      "sad:sad_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/04.png"
+      },
+      "sad_L": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/sad_L.png"
+      },
+      "sad_M": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/sad_M.png"
+      },
+      "sad_R": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_blink/sad_R.png"
+      },
+      "sad:sad_L": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_L.png"
+      },
+      "sad:sad_M": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_M.png"
+      },
+      "sad:sad_R": {
+        "path": "characters/synctoon/character_1/eyes/sad/sad_R.png"
+      },
+      "sad_2:sad_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/02.png"
+      },
+      "sad_2:sad_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/03.png"
+      },
+      "sad_2:sad_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/04.png"
+      },
+      "sad_2_L": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/sad_2_L.png"
+      },
+      "sad_2_M": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/sad_2_M.png"
+      },
+      "sad_2_R": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_blink/sad_2_R.png"
+      },
+      "sad_2:sad_2_L": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_L.png"
+      },
+      "sad_2:sad_2_M": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_M.png"
+      },
+      "sad_2:sad_2_R": {
+        "path": "characters/synctoon/character_1/eyes/sad_2/sad_2_R.png"
+      },
+      "sarcasm:sarcasm_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/02.png"
+      },
+      "sarcasm:sarcasm_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/03.png"
+      },
+      "sarcasm:sarcasm_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/04.png"
+      },
+      "sarcasm_L": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/sarcasm_L.png"
+      },
+      "sarcasm_M": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/sarcasm_M.png"
+      },
+      "sarcasm_R": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_blink/sarcasm_R.png"
+      },
+      "sarcasm:sarcasm_L": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_L.png"
+      },
+      "sarcasm:sarcasm_M": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_M.png"
+      },
+      "sarcasm:sarcasm_R": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm/sarcasm_R.png"
+      },
+      "sarcasm_2:sarcasm_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/02.png"
+      },
+      "sarcasm_2:sarcasm_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/03.png"
+      },
+      "sarcasm_2:sarcasm_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/04.png"
+      },
+      "sarcasm_2_L": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/sarcasm_2_L.png"
+      },
+      "sarcasm_2_M": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/sarcasm_2_M.png"
+      },
+      "sarcasm_2_R": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_blink/sarcasm_2_R.png"
+      },
+      "sarcasm_2:sarcasm_2_L": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_L.png"
+      },
+      "sarcasm_2:sarcasm_2_M": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_M.png"
+      },
+      "sarcasm_2:sarcasm_2_R": {
+        "path": "characters/synctoon/character_1/eyes/sarcasm_2/sarcasm_2_R.png"
+      },
+      "shock:shock_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/02.png"
+      },
+      "shock:shock_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/03.png"
+      },
+      "shock:shock_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/04.png"
+      },
+      "shock_L": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/shock_L.png"
+      },
+      "shock_M": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/shock_M.png"
+      },
+      "shock_R": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_blink/shock_R.png"
+      },
+      "shock:shock_L": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_L.png"
+      },
+      "shock:shock_M": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_M.png"
+      },
+      "shock:shock_R": {
+        "path": "characters/synctoon/character_1/eyes/shock/shock_R.png"
+      },
+      "shock_2:shock_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/02.png"
+      },
+      "shock_2:shock_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/03.png"
+      },
+      "shock_2:shock_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/04.png"
+      },
+      "shock_2_L": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/shock_2_L.png"
+      },
+      "shock_2_M": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/shock_2_M.png"
+      },
+      "shock_2_R": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_blink/shock_2_R.png"
+      },
+      "shock_2:shock_2_L": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_L.png"
+      },
+      "shock_2:shock_2_M": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_M.png"
+      },
+      "shock_2:shock_2_R": {
+        "path": "characters/synctoon/character_1/eyes/shock_2/shock_2_R.png"
+      },
+      "silly:silly_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/02.png"
+      },
+      "silly:silly_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/03.png"
+      },
+      "silly:silly_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/04.png"
+      },
+      "silly_L": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/silly_L.png"
+      },
+      "silly_M": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/silly_M.png"
+      },
+      "silly_R": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_blink/silly_R.png"
+      },
+      "silly:silly_L": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_L.png"
+      },
+      "silly:silly_M": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_M.png"
+      },
+      "silly:silly_R": {
+        "path": "characters/synctoon/character_1/eyes/silly/silly_R.png"
+      },
+      "silly_2:silly_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/02.png"
+      },
+      "silly_2:silly_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/03.png"
+      },
+      "silly_2:silly_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/04.png"
+      },
+      "silly_2_L": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/silly_2_L.png"
+      },
+      "silly_2_M": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/silly_2_M.png"
+      },
+      "silly_2_R": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_blink/silly_2_R.png"
+      },
+      "silly_2:silly_2_L": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_L.png"
+      },
+      "silly_2:silly_2_M": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_M.png"
+      },
+      "silly_2:silly_2_R": {
+        "path": "characters/synctoon/character_1/eyes/silly_2/silly_2_R.png"
+      },
+      "spoked:spoked_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/02.png"
+      },
+      "spoked:spoked_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/03.png"
+      },
+      "spoked:spoked_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/04.png"
+      },
+      "spoked_L": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/spoked_L.png"
+      },
+      "spoked_M": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/spoked_M.png"
+      },
+      "spoked_R": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_blink/spoked_R.png"
+      },
+      "spoked:spoked_L": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_L.png"
+      },
+      "spoked:spoked_M": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_M.png"
+      },
+      "spoked:spoked_R": {
+        "path": "characters/synctoon/character_1/eyes/spoked/spoked_R.png"
+      },
+      "spoked_2:spoked_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/02.png"
+      },
+      "spoked_2:spoked_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/03.png"
+      },
+      "spoked_2:spoked_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/04.png"
+      },
+      "spoked_2_L": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/spoked_2_L.png"
+      },
+      "spoked_2_M": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/spoked_2_M.png"
+      },
+      "spoked_2_R": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_blink/spoked_2_R.png"
+      },
+      "spoked_2:spoked_2_L": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_L.png"
+      },
+      "spoked_2:spoked_2_M": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_M.png"
+      },
+      "spoked_2:spoked_2_R": {
+        "path": "characters/synctoon/character_1/eyes/spoked_2/spoked_2_R.png"
+      },
+      "worried:worried_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/02.png"
+      },
+      "worried:worried_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/03.png"
+      },
+      "worried:worried_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/04.png"
+      },
+      "worried_L": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/worried_L.png"
+      },
+      "worried_M": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/worried_M.png"
+      },
+      "worried_R": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_blink/worried_R.png"
+      },
+      "worried:worried_L": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_L.png"
+      },
+      "worried:worried_M": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_M.png"
+      },
+      "worried:worried_R": {
+        "path": "characters/synctoon/character_1/eyes/worried/worried_R.png"
+      },
+      "worried_2:worried_2_blink:02": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/02.png"
+      },
+      "worried_2:worried_2_blink:03": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/03.png"
+      },
+      "worried_2:worried_2_blink:04": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/04.png"
+      },
+      "worried_2_L": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/worried_2_L.png"
+      },
+      "worried_2_M": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/worried_2_M.png"
+      },
+      "worried_2_R": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_blink/worried_2_R.png"
+      },
+      "worried_2:worried_2_L": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_L.png"
+      },
+      "worried_2:worried_2_M": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_M.png"
+      },
+      "worried_2:worried_2_R": {
+        "path": "characters/synctoon/character_1/eyes/worried_2/worried_2_R.png"
+      }
+    },
+    "mouth": {
+      "a_e_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/a_e_h.png"
+      },
+      "d_j_ch_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/d_j_ch_h.png"
+      },
+      "f_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/f_h.png"
+      },
+      "l_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/l_h.png"
+      },
+      "m_b_close_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/m_b_close_h.png"
+      },
+      "o_big_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/o_big_h.png"
+      },
+      "o_small_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/o_small_h.png"
+      },
+      "oh_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/oh_h.png"
+      },
+      "th_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/th_h.png"
+      },
+      "trans_h": {
+        "path": "characters/synctoon/character_1/mouth/happy/trans_h.png"
+      },
+      "a_e_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/a_e_s.png"
+      },
+      "d_j_ch_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/d_j_ch_s.png"
+      },
+      "f_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/f_s.png"
+      },
+      "l_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/l_s.png"
+      },
+      "m_b_close_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/m_b_close_s.png"
+      },
+      "o_big_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/o_big_s.png"
+      },
+      "o_small_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/o_small_s.png"
+      },
+      "oh_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/oh_s.png"
+      },
+      "th_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/th_s.png"
+      },
+      "trans_s": {
+        "path": "characters/synctoon/character_1/mouth/sad/trans_s.png"
+      }
+    },
+    "background": {
+      "abandant-street": {
+        "path": "characters/synctoon/character_1/background/abandant-street/abandant-street.png"
+      },
+      "bar": {
+        "path": "characters/synctoon/character_1/background/bar/bar.png"
+      },
+      "bedroom-1": {
+        "path": "characters/synctoon/character_1/background/bedroom-1/bedroom-1.png"
+      },
+      "bedroom-2": {
+        "path": "characters/synctoon/character_1/background/bedroom-2/bedroom-2.png"
+      },
+      "black": {
+        "path": "characters/synctoon/character_1/background/black/black.png"
+      },
+      "classroom": {
+        "path": "characters/synctoon/character_1/background/classroom/classroom.png"
+      },
+      "dining-room": {
+        "path": "characters/synctoon/character_1/background/dining-room/dining-room.png"
+      },
+      "dream-forest": {
+        "path": "characters/synctoon/character_1/background/dream-forest/dream-forest.png"
+      },
+      "empty-classroom": {
+        "path": "characters/synctoon/character_1/background/empty-classroom/empty-classroom.png"
+      },
+      "explanation": {
+        "path": "characters/synctoon/character_1/background/explanation/explanation.png"
+      },
+      "forest": {
+        "path": "characters/synctoon/character_1/background/forest/forest.png"
+      },
+      "gardan": {
+        "path": "characters/synctoon/character_1/background/gardan/gardan.png"
+      },
+      "green": {
+        "path": "characters/synctoon/character_1/background/green/green.png"
+      },
+      "green-backyard": {
+        "path": "characters/synctoon/character_1/background/green-backyard/green-backyard.png"
+      },
+      "indoor-living-room-and-study-area": {
+        "path": "characters/synctoon/character_1/background/indoor-living-room-and-study-area/indoor-living-room-and-study-area.png"
+      },
+      "kitchen": {
+        "path": "characters/synctoon/character_1/background/kitchen/kitchen.png"
+      },
+      "kitchen-and-dining-room": {
+        "path": "characters/synctoon/character_1/background/kitchen-and-dining-room/kitchen-and-dining-room.png"
+      },
+      "kitchen-dining": {
+        "path": "characters/synctoon/character_1/background/kitchen-dining/kitchen-dining.png"
+      },
+      "library-and-book-shop": {
+        "path": "characters/synctoon/character_1/background/library-and-book-shop/library-and-book-shop.png"
+      },
+      "living-room-1": {
+        "path": "characters/synctoon/character_1/background/living-room-1/living-room-1.png"
+      },
+      "living-room-2": {
+        "path": "characters/synctoon/character_1/background/living-room-2/living-room-2.png"
+      },
+      "office": {
+        "path": "characters/synctoon/character_1/background/office/office.png"
+      },
+      "orange": {
+        "path": "characters/synctoon/character_1/background/orange/orange.png"
+      },
+      "outdoor-cafe": {
+        "path": "characters/synctoon/character_1/background/outdoor-cafe/outdoor-cafe.png"
+      },
+      "park": {
+        "path": "characters/synctoon/character_1/background/park/park.png"
+      },
+      "plain": {
+        "path": "characters/synctoon/character_1/background/plain/plain.png"
+      },
+      "sitting-area": {
+        "path": "characters/synctoon/character_1/background/sitting-area/sitting-area.png"
+      },
+      "store": {
+        "path": "characters/synctoon/character_1/background/store/store.png"
+      },
+      "street": {
+        "path": "characters/synctoon/character_1/background/street/street.png"
+      },
+      "swamp-and-dense-forrest": {
+        "path": "characters/synctoon/character_1/background/swamp-and-dense-forrest/swamp-and-dense-forrest.png"
+      },
+      "train-station": {
+        "path": "characters/synctoon/character_1/background/train-station/train-station.png"
+      },
+      "white": {
+        "path": "characters/synctoon/character_1/background/white/white.png"
+      },
+      "yellow": {
+        "path": "characters/synctoon/character_1/background/yellow/yellow.png"
+      }
+    }
+  },
+  "fallbacks": {
+    "body": "body1",
+    "head": "M",
+    "eyes": "content_M",
+    "mouth": "m_b_close_h",
+    "background": "abandant-street"
+  },
+  "metadata": {
+    "background": {
+      "office": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          690,
+          150
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          950,
+          370
+        ]
+      },
+      "explanation": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          20,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "white": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          20,
+          160
+        ],
+        "mirror": false,
+        "addition": false,
+        "zoom_point": [
+          120,
+          216
+        ]
+      },
+      "plain": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          20,
+          160
+        ],
+        "mirror": false,
+        "addition": false,
+        "zoom_point": [
+          120,
+          216
+        ]
+      },
+      "black": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "green": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "orange": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "abandant-street": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "bar": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "bedroom-1": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "bedroom-2": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "classroom": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "dining-room": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "dream-forest": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "empty-classroom": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "forest": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "garden": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "green-backyard": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "indoor-living-room-and-study-area": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "kitchen": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "kitchen-and-dining-room": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "kitchen-dining": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "library-and-book-shop": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "living-room-1": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "living-room-2": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "outdoor-cafe": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "park": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "sitting-area": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "store": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "street": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "train-station": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      },
+      "yellow": {
+        "size": [
+          750,
+          1080
+        ],
+        "position": [
+          250,
+          160
+        ],
+        "mirror": false,
+        "addition": true,
+        "zoom_point": [
+          700,
+          400
+        ]
+      }
+    },
+    "body": {
+      "body1": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body2": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body3": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body4": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body5": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body6": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body7": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body8": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body9": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body10": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body11": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          220,
+          25
+        ]
+      },
+      "body12": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          220,
+          25
+        ]
+      },
+      "body13": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body14": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body15": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body16": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body17": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          25
+        ]
+      },
+      "body18": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          240,
+          35
+        ]
+      },
+      "body19": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          210,
+          35
+        ]
+      },
+      "body20": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          210,
+          35
+        ]
+      },
+      "body21": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          510,
+          55
+        ]
+      },
+      "body22": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          5,
+          160
+        ]
+      },
+      "body23": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          40
+        ]
+      },
+      "body24": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          500,
+          60
+        ]
+      },
+      "body25": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          200,
+          60
+        ]
+      },
+      "body26": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          350,
+          80
+        ]
+      },
+      "body27": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          450,
+          150
+        ]
+      },
+      "body28": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          30
+        ]
+      },
+      "body29": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          10,
+          350
+        ]
+      },
+      "body30": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          35
+        ]
+      },
+      "body31": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          35
+        ]
+      },
+      "body32": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          35
+        ]
+      },
+      "body33": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body34": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body35": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body36": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          150,
+          125
+        ]
+      },
+      "body37": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          35
+        ]
+      },
+      "body38": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body39": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body40": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body41": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body42": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          230,
+          25
+        ]
+      },
+      "body43": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          500,
+          150
+        ]
+      },
+      "body44": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          40
+        ]
+      },
+      "body45": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          40
+        ]
+      },
+      "body46": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          35
+        ]
+      },
+      "body47": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          30
+        ]
+      },
+      "body48": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          30
+        ]
+      },
+      "body49": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          30
+        ]
+      },
+      "body50": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          25
+        ]
+      },
+      "body51": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          25
+        ]
+      },
+      "body52": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          250,
+          30
+        ]
+      },
+      "body53": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          225,
+          45
+        ]
+      },
+      "body54": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body55": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body56": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body57": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body58": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body59": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          295,
+          125
+        ]
+      },
+      "body60": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          245,
+          45
+        ]
+      },
+      "body61": {
+        "size": [
+          310,
+          275
+        ],
+        "position": [
+          235,
+          15
+        ]
+      },
+      "body62": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          255,
+          25
+        ]
+      },
+      "body63": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          245,
+          100
+        ]
+      },
+      "body64": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          245,
+          30
+        ]
+      },
+      "body65": {
+        "size": [
+          285,
+          255
+        ],
+        "position": [
+          280,
+          35
+        ]
+      }
+    },
+    "eyes": {
+      "angry": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "angry_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "bore": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "bore_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "content": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "content_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "crazy": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "crazy_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "evil_laugh": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "evil_laugh_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "glare": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "glare_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "happy": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "happy_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "lust": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "lust_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "sad": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "sad_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "shock": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "shock_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "sarcasm": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "sarcasm_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "silly": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "silly_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "spoked": {
+        "size": [
+          250,
+          180
+        ],
+        "position": [
+          10,
+          0
+        ]
+      },
+      "spoked_2": {
+        "size": [
+          250,
+          110
+        ],
+        "position": [
+          10,
+          0
+        ]
+      },
+      "worried": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          10,
+          30
+        ]
+      },
+      "worried_2": {
+        "size": [
+          250,
+          150
+        ],
+        "position": [
+          5,
+          30
+        ]
+      }
+    },
+    "mouth": {
+      "a_e_h": {
+        "size": [
+          110,
+          55
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "d_j_ch_h": {
+        "size": [
+          110,
+          55
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "f_h": {
+        "size": [
+          110,
+          55
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "l_h": {
+        "size": [
+          110,
+          55
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "m_b_close_h": {
+        "size": [
+          110,
+          15
+        ],
+        "position": [
+          60,
+          220
+        ]
+      },
+      "o_big_h": {
+        "size": [
+          50,
+          50
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "o_small_h": {
+        "size": [
+          40,
+          40
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "oh_h": {
+        "size": [
+          50,
+          50
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "th_h": {
+        "size": [
+          110,
+          55
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "trans_h": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "trans_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "a_e_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "d_j_ch_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "f_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "l_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "m_b_close_s": {
+        "size": [
+          110,
+          15
+        ],
+        "position": [
+          60,
+          220
+        ]
+      },
+      "o_big_s": {
+        "size": [
+          50,
+          50
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "o_small_s": {
+        "size": [
+          40,
+          40
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "oh_s": {
+        "size": [
+          50,
+          50
+        ],
+        "position": [
+          80,
+          200
+        ]
+      },
+      "th_s": {
+        "size": [
+          110,
+          45
+        ],
+        "position": [
+          60,
+          200
+        ]
+      },
+      "angry": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "angry_2": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "bore": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "bore_2": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "content": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "content_2": {
+        "size": [
+          120,
+          55
+        ],
+        "position": [
+          80,
+          220
+        ]
+      },
+      "crazy": {
+        "size": [
+          220,
+          105
+        ],
+        "position": [
+          50,
+          180
+        ]
+      },
+      "crazy_2": {
+        "size": [
+          220,
+          105
+        ],
+        "position": [
+          50,
+          180
+        ]
+      },
+      "evil_laugh": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          50,
+          170
+        ]
+      },
+      "evil_laugh_2": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          50,
+          170
+        ]
+      },
+      "glare": {
+        "size": [
+          80,
+          55
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "glare_2": {
+        "size": [
+          200,
+          55
+        ],
+        "position": [
+          80,
+          180
+        ]
+      },
+      "happy": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "happy_2": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "lust": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "lust_2": {
+        "size": [
+          200,
+          100
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "sad": {
+        "size": [
+          200,
+          55
+        ],
+        "position": [
+          80,
+          190
+        ]
+      },
+      "sad_2": {
+        "size": [
+          200,
+          55
+        ],
+        "position": [
+          80,
+          190
+        ]
+      },
+      "sarcasm": {
+        "size": [
+          200,
+          55
+        ],
+        "position": [
+          50,
+          190
+        ]
+      },
+      "sarcasm_2": {
+        "size": [
+          200,
+          55
+        ],
+        "position": [
+          50,
+          190
+        ]
+      },
+      "silly": {
+        "size": [
+          180,
+          110
+        ],
+        "position": [
+          60,
+          170
+        ]
+      },
+      "silly_2": {
+        "size": [
+          180,
+          110
+        ],
+        "position": [
+          60,
+          170
+        ]
+      },
+      "spoked": {
+        "size": [
+          180,
+          110
+        ],
+        "position": [
+          40,
+          170
+        ]
+      },
+      "spoked_2": {
+        "size": [
+          210,
+          240
+        ],
+        "position": [
+          0,
+          60
+        ]
+      },
+      "worried": {
+        "size": [
+          210,
+          70
+        ],
+        "position": [
+          40,
+          180
+        ]
+      },
+      "worried_2": {
+        "size": [
+          210,
+          70
+        ],
+        "position": [
+          40,
+          180
+        ]
+      }
+    }
+  },
+  "mouth_map": {
+    "AA0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AA1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AA2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AE0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AE1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AE2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AH0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AH1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AH2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AO0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AO1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AO2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AW0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AW1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AW2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AY0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AY1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "AY2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "B": {
+      "happy": "m_b_close_h",
+      "sad": "m_b_close_s"
+    },
+    "CH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "D": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "DH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "EH0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "EH1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "EH2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "ER0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "ER1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "ER2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "EY0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "EY1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "EY2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "F": {
+      "happy": "f_h",
+      "sad": "f_s"
+    },
+    "G": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "HH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "IH0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "IH1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "IH2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "IY0": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "IY1": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "IY2": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "JH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "K": {
+      "happy": "a_e_h",
+      "sad": "a_e_s"
+    },
+    "L": {
+      "happy": "l_h",
+      "sad": "l_s"
+    },
+    "M": {
+      "happy": "m_b_close_h",
+      "sad": "m_b_close_s"
+    },
+    "N": {
+      "happy": "th_h",
+      "sad": "th_s"
+    },
+    "NG": {
+      "happy": "th_h",
+      "sad": "th_s"
+    },
+    "OW0": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "OW1": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "OW2": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "OY0": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "OY1": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "OY2": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "P": {
+      "happy": "m_b_close_h",
+      "sad": "m_b_close_s"
+    },
+    "R": {
+      "happy": "th_h",
+      "sad": "th_s"
+    },
+    "S": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "SH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "T": {
+      "happy": "th_h",
+      "sad": "th_s"
+    },
+    "TH": {
+      "happy": "th_h",
+      "sad": "th_s"
+    },
+    "UH0": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UH1": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UH2": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UW": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UW0": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UW1": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "UW2": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "V": {
+      "happy": "f_h",
+      "sad": "f_s"
+    },
+    "W": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "Y": {
+      "happy": "o_small_h",
+      "sad": "o_small_s"
+    },
+    "Z": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    },
+    "ZH": {
+      "happy": "d_j_ch_h",
+      "sad": "d_j_ch_s"
+    }
+  }
+}

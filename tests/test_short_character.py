@@ -298,6 +298,42 @@ def test_attach_character_tracks_writes_artifact_and_reference(tmp_path):
     assert (tmp_path / beat.character_track).exists()
 
 
+def test_attach_character_tracks_uses_beat_local_word_timestamps(tmp_path):
+    manifest_path = tmp_path / "character-manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "fallbacks": {"body": "body1", "head": "M", "eyes": "content_M", "mouth": "m_b_close_h"},
+                "assets": {
+                    "body": {"body1": {}}, "head": {"M": {}},
+                    "eyes": {"content_M": {}}, "mouth": {"m_b_close_h": {}, "a_e_h": {}},
+                },
+                "mouth_map": {"AE": {"happy": "a_e_h"}, "M": {"happy": "m_b_close_h"}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    beat = ShortsBeat(
+        id="beat_002",
+        start_seconds=5,
+        end_seconds=8,
+        mode=ShortBeatMode.CHARACTER,
+        visual=ShortsVisual(type=VisualType.TEXT_HIGHLIGHT, primary_text="Hello"),
+        caption_text="Hello later",
+        word_timestamps=[
+            {"word": "Hello", "start_seconds": 0.0, "end_seconds": 0.6},
+            {"word": "later", "start_seconds": 0.7, "end_seconds": 1.2},
+        ],
+    )
+
+    attach_character_tracks([beat], manifest_path, tmp_path / "character/tracks")
+
+    assert beat.character_data is not None
+    assert beat.character_data.mouth_cues
+    assert beat.character_data.mouth_cues[0].start == 0.0
+    assert beat.character_data.mouth_cues[-1].end <= 3.0
+
+
 def test_attach_character_tracks_includes_mixed_recipe_beats(tmp_path):
     manifest_path = tmp_path / "character-manifest.json"
     manifest_path.write_text(

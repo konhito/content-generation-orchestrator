@@ -1,0 +1,5 @@
+.\.venv\Scripts\python.exe -m src.cli short generate test-2 --topic "Gta 6 news" --niche tech --research --whisper-model small
+
+.\.venv\Scripts\python.exe -m src.cli render test-2 --short  
+
+python -m src.cli create test-2

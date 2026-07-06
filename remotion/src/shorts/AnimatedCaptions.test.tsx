@@ -248,7 +248,7 @@ describe("AnimatedCaptions", () => {
       expect(chunkWords[0].props.style.fontWeight).toBe(700);
     });
 
-    it("should have glow text shadow on active word", () => {
+    it("should have soft elevation shadow on active word", () => {
       const result = AnimatedCaptions({
         ...defaultProps,
         currentTime: 0.2,
@@ -256,7 +256,7 @@ describe("AnimatedCaptions", () => {
 
       const chunkWords = getChunkWords(result);
 
-      expect(chunkWords[0].props.style.textShadow).toContain("0 0 20px");
+      expect(chunkWords[0].props.style.textShadow).toContain("0 6px 18px");
     });
 
     it("should not have text shadow on inactive words", () => {

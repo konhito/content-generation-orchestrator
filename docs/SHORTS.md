@@ -57,14 +57,20 @@ Shorts are condensed versions of your explainer video designed for mobile-first 
 **Prerequisites:** Run `script` and `narration` commands first for your full video.
 
 ```bash
-# Generate everything end-to-end (hook mode - default)
-python -m src.cli short generate <project>
+# Generate everything end-to-end, then render the short
+python -m src.cli short generate <project> --render
 
 # Generate a summary short (sweeps all scenes)
 python -m src.cli short generate <project> --mode summary --variant summary
 
 # Render the short
 python -m src.cli render <project> --short
+```
+
+Example:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli render test-1 --short
 ```
 
 Output: `projects/<project>/short/default/` (or `short/summary/` for summary mode)
@@ -122,8 +128,8 @@ python -m src.cli short generate <project> --mode summary --variant summary
 ### Step-by-Step Generation
 
 ```bash
-# 1. Generate short script (hook analysis + condensed narration)
-python -m src.cli short script <project>
+# 1. Generate the short-first package (research, script, beats, memes, components, recipes)
+python -m src.cli short generate <project>
 
 # 2. Generate vertical scene components
 python -m src.cli short scenes <project>
@@ -134,11 +140,8 @@ python -m src.cli short voiceover <project>
 # 4. Create storyboard with beat timing
 python -m src.cli short storyboard <project>
 
-# 5. (Optional) Generate punchy background music
-python -m src.cli music <project> short
-
-# 6. Render the short
-python -m src.cli render <project> --short
+# 5. Render the short
+python -m src.cli short generate <project> --render
 ```
 
 ### Manual Voiceover Workflow
@@ -217,6 +220,7 @@ python -m src.cli short generate <project> [options]
 | `--skip-custom-scenes` | Use generic visuals instead of custom components |
 | `--force` | Force regenerate even if files exist |
 | `--mock` | Use mock LLM for testing |
+| `--render` | Render the short after generation |
 
 ### Script Options
 
@@ -232,6 +236,7 @@ python -m src.cli short script <project> [options]
 | `--scenes` | Override scene selection (comma-separated scene IDs, hook mode only) |
 | `--force` | Force regenerate even if files exist |
 | `--mock` | Use mock LLM for testing |
+| `--whisper-model` | Whisper model for automatic caption transcription on generated voiceover |
 
 ### Voiceover Options
 
@@ -244,7 +249,7 @@ python -m src.cli short voiceover <project> [options]
 | `--provider` | TTS provider: `elevenlabs`, `edge`, `mock` (default: edge) |
 | `--export-script` | Export recording script for manual voiceover |
 | `--audio` | Process manually recorded audio with Whisper |
-| `--whisper-model` | Whisper model: `tiny`, `base`, `small`, `medium`, `large` |
+| `--whisper-model` | Whisper model: `tiny`, `base`, `small`, `medium`, `large` (used for automatic and manual transcription) |
 
 ### Render Options
 

@@ -11,6 +11,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Callable
 from typing import Any
 
 try:
@@ -22,9 +23,12 @@ from ..config import Config, load_config
 from ..understanding.llm_provider import LLMProvider, get_llm_provider
 from .beat_mode import build_beat_mode_plan
 from .component_plan import build_component_plan
+from .meme_assets import resolve_meme_assets
 from .meme_copy import generate_meme_copy
+from .meme_provider import select_meme_asset_provider, validate_imgflip_credentials
 from .models import ShortMode, ShortScene, ShortScript
 from .niche import get_editing_config, get_script_context, get_voice_config, load_niche
+from .research_aggregator import ResearchAggregator
 from .scene_recipe import SceneRecipeInput, plan_scene_recipes
 from .script_beats import build_script_beats
 
@@ -182,10 +186,12 @@ class ShortFirstGenerator:
         config: Config | None = None,
         llm: LLMProvider | None = None,
         niches_dir: Path | None = None,
+        research_aggregator_factory: Callable[..., ResearchAggregator] | None = None,
     ):
         self.config = config or load_config()
         self.llm = llm or get_llm_provider(self.config)
         self.niches_dir = niches_dir or Path("niches")
+        self.research_aggregator_factory = research_aggregator_factory or ResearchAggregator
 
     def load_niche_profile(self, niche: str | None) -> NicheProfile:
         """Load a niche profile from YAML or built-in defaults."""
@@ -214,6 +220,7 @@ class ShortFirstGenerator:
         source_paths: list[Path] | None = None,
         research: bool = False,
         niche: str = "default",
+        logger: Callable[[str], None] | None = None,
     ) -> ResearchBundle:
         """Create a normalized research bundle from local sources and topic."""
 
@@ -230,19 +237,32 @@ class ShortFirstGenerator:
                 )
             )
 
+        emit = logger or (lambda _message: None)
         if research:
-            notes.append(
-                ResearchNote(
-                    source="research",
-                    title=topic,
-                    snippet=(
-                        "Live research adapters are not required for this local pass. "
-                        "Use the topic and supplied source notes as the research seed."
-                    ),
-                    score=0.5,
-                    metadata={"mode": "seed"},
+            emit("Research: querying Reddit, RSS, DuckDuckGo, webpages, and pytrends")
+            try:
+                profile = load_niche("general" if niche == "default" else niche)
+                aggregator = self.research_aggregator_factory(
+                    topic,
+                    niche=niche,
+                    discovery=profile.get("discovery", {}) or {},
+                    logger=emit,
                 )
-            )
+                live_items = aggregator.gather(limit=10)
+                notes.extend(
+                    ResearchNote(
+                        source=item.source,
+                        title=item.title,
+                        snippet=item.snippet,
+                        url=item.url,
+                        score=item.score,
+                        metadata=item.metadata,
+                    )
+                    for item in live_items
+                )
+                emit(f"Research: aggregated {len(live_items)} live item(s)")
+            except Exception as exc:
+                emit(f"Research: live aggregation failed; using fallback ({exc})")
 
         if not notes:
             notes.append(
@@ -267,9 +287,11 @@ class ShortFirstGenerator:
         duration: int | None = None,
         research: bool = False,
         mock: bool = False,
+        logger: Callable[[str], None] | None = None,
     ) -> ShortFirstResult:
         """Generate short-first files under ``project_dir/short/<variant>``."""
 
+        emit = logger or (lambda _message: None)
         target_duration = _clamp_duration(duration or 50)
         variant_dir = project_dir / "short" / variant
         research_dir = variant_dir / "research"
@@ -289,14 +311,19 @@ class ShortFirstGenerator:
 
         profile = self.load_niche_profile(niche)
         yaml_profile = load_niche("general" if profile.name == "default" else profile.name)
+        emit("Building short-first research bundle")
         bundle = self.build_research_bundle(
             topic=topic,
             source_paths=source_paths,
             research=research,
             niche=profile.name,
+            logger=emit,
         )
+        synctoon_manifest = _load_synctoon_manifest(self.config.character.asset_source)
+        synctoon_options = _synctoon_visual_options(synctoon_manifest)
 
-        prompt = self._build_prompt(bundle, profile, target_duration)
+        emit("Writing short script, beats, and meme plan")
+        prompt = self._build_prompt(bundle, profile, target_duration, synctoon_options)
         raw = _mock_short_payload(topic, target_duration) if mock else self.llm.generate_json(prompt, SHORT_FIRST_SYSTEM_PROMPT)
 
         narration = str(raw.get("narration") or "").strip()
@@ -306,24 +333,85 @@ class ShortFirstGenerator:
         title = str(raw.get("title") or topic).strip()
         hook = str(raw.get("hook") or raw.get("hook_question") or f"Why does {topic} matter?").strip()
         cta = str(raw.get("cta") or "Follow for the full breakdown.").strip()
+        word_budget = max(1, int(target_duration * 2.2) - len(cta.split()))
+        if len(narration.split()) > word_budget and not mock:
+            emit(
+                f"Narration exceeds {target_duration}s budget: "
+                f"{len(narration.split()) + len(cta.split())} words; requesting shorter copy"
+            )
+            try:
+                shortened = self.llm.generate_json(
+                    (
+                        f"Shorten this narration to at most {word_budget} words. "
+                        "Keep sourced facts, the hook, and conclusion. Return JSON with only a narration field.\n\n"
+                        f"{narration}"
+                    ),
+                    "You edit vertical-video narration for strict duration. Return strict JSON only.",
+                )
+                candidate = str(shortened.get("narration") or "").strip()
+                if candidate:
+                    narration = candidate
+            except Exception as exc:
+                emit(f"Narration shortening pass failed; applying hard word budget ({exc})")
+        narration = _enforce_narration_budget(narration, cta, target_duration)
+        emit(
+            f"Narration budget: {len(narration.split()) + len(cta.split())} words "
+            f"for {target_duration}s"
+        )
         beats = list(raw.get("beats") or [])
         script_beats = build_script_beats(narration, profile.name)
+        for beat, raw_beat in zip(script_beats, beats, strict=False):
+            visual_hint = str(raw_beat.get("visual", "")).strip()
+            if visual_hint:
+                beat["visual_description"] = visual_hint
+            if raw_beat.get("caption"):
+                beat["caption_text"] = str(raw_beat.get("caption", "")).strip()
+        visual_direction = _normalize_visual_direction(
+            raw.get("visual_direction") or raw.get("visual_style") or {},
+            script_beats,
+            synctoon_manifest,
+            profile.name,
+        )
         raw_memes = _build_meme_items(raw, script_beats, yaml_profile)
-        meme_items = generate_meme_copy(raw_memes, narration, [], provider="mock" if mock else "openai", llm=self.llm)
+        meme_provider = select_meme_asset_provider(mock=mock)
+        emit(f"Meme plan: raw={len(raw_memes)} provider={meme_provider}")
+        meme_items = generate_meme_copy(
+            raw_memes,
+            narration,
+            [],
+            provider=meme_provider,
+            llm=self.llm,
+            logger=lambda message: emit(f"Meme: {message}"),
+        )
+        if meme_provider == "imgflip":
+            meme_validation = validate_imgflip_credentials(live=False)
+            emit(f"Meme: Imgflip validation -> {'ok' if meme_validation.ok else 'not ready'}: {meme_validation.message}")
+        meme_items = resolve_meme_assets(
+            meme_items,
+            meme_dir / "assets",
+            public_root=project_dir,
+            provider=meme_provider,
+            logger=lambda message: emit(f"Meme: {message}"),
+        )
+        emit(f"Meme plan: finalized={len(meme_items)}")
         meme_slots = _meme_slots(len(script_beats), len(meme_items))
         beat_mode_plan = build_beat_mode_plan(script_beats, meme_slots=meme_slots)
+        beat_modes_by_id = {str(item["id"]): str(item.get("mode", "")) for item in beat_mode_plan}
         character_plan = {
             "character_id": "character_1",
+            "video_background": visual_direction["video_background"],
+            "beat_modes": beat_modes_by_id,
             "beats": [
                 {
-                    "id": item["id"],
-                    "pose": "body1",
-                    "emotion": "content",
-                    "head": "M",
-                    "reason": item["reason"],
+                    "id": beat["beat_id"],
+                    "mode": beat_modes_by_id.get(str(beat["beat_id"]), ""),
+                    "body_type": visual_direction["beats_by_id"].get(beat["beat_id"], {}).get("body_type", "body1"),
+                    "emotion": visual_direction["beats_by_id"].get(beat["beat_id"], {}).get("emotion", "content"),
+                    "head": visual_direction["beats_by_id"].get(beat["beat_id"], {}).get("head", "M"),
+                    "gesture": visual_direction["beats_by_id"].get(beat["beat_id"], {}).get("gesture", ""),
+                    "reason": visual_direction["beats_by_id"].get(beat["beat_id"], {}).get("reason", ""),
                 }
-                for item in beat_mode_plan
-                if item["mode"] == "character"
+                for beat in script_beats
             ],
         }
         component_plan = build_component_plan(
@@ -333,6 +421,7 @@ class ShortFirstGenerator:
             niche=profile.name,
             mode_plan=beat_mode_plan,
         )
+        emit("Planning mixed scenes and recurring character beats")
         recipe_inputs = _build_scene_recipe_inputs(
             script_beats=script_beats,
             component_plan=component_plan,
@@ -340,6 +429,7 @@ class ShortFirstGenerator:
             project_id=project_id,
             topic=topic,
             niche=profile.name,
+            visual_direction=visual_direction,
         )
         scene_recipes = plan_scene_recipes(
             recipe_inputs,
@@ -371,22 +461,27 @@ class ShortFirstGenerator:
         plans_dir.mkdir(parents=True, exist_ok=True)
         variant_dir.mkdir(parents=True, exist_ok=True)
 
+        emit(f"Saving research bundle -> {research_path}")
         research_path.write_text(
             json.dumps(_bundle_to_dict(bundle), indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        emit(f"Saving short script -> {short_script_path}")
         short_script_path.write_text(
             short_script.model_dump_json(indent=2),
             encoding="utf-8",
         )
+        emit(f"Saving markdown script -> {short_script_md_path}")
         short_script_md_path.write_text(
             _format_short_script_markdown(short_script, beats, profile),
             encoding="utf-8",
         )
+        emit(f"Saving script beats -> {script_beats_path}")
         script_beats_path.write_text(
             json.dumps({"beats": script_beats}, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        emit(f"Saving meme plan -> {meme_plan_path}")
         meme_plan_path.write_text(
             json.dumps(
                 {
@@ -406,18 +501,22 @@ class ShortFirstGenerator:
             ),
             encoding="utf-8",
         )
+        emit(f"Saving component plan -> {component_plan_path}")
         component_plan_path.write_text(
             json.dumps(component_plan, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        emit(f"Saving beat mode plan -> {beat_mode_plan_path}")
         beat_mode_plan_path.write_text(
             json.dumps({"beats": beat_mode_plan}, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        emit(f"Saving character plan -> {character_plan_path}")
         character_plan_path.write_text(
             json.dumps(character_plan, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        emit(f"Saving scene recipe plan -> {scene_recipe_plan_path}")
         scene_recipe_plan_path.write_text(
             json.dumps(
                 {
@@ -430,6 +529,7 @@ class ShortFirstGenerator:
             ),
             encoding="utf-8",
         )
+        emit("Short-first generation complete")
 
         return ShortFirstResult(
             success=True,
@@ -450,7 +550,16 @@ class ShortFirstGenerator:
         bundle: ResearchBundle,
         profile: NicheProfile,
         duration: int,
+        synctoon_options: dict[str, Any],
     ) -> str:
+        body_types = ", ".join(synctoon_options.get("body_types", [])[:32])
+        body_aliases = ", ".join(
+            f"{alias}->{target}" for alias, target in synctoon_options.get("body_aliases", {}).items()
+        )
+        heads = ", ".join(synctoon_options.get("heads", []))
+        backgrounds = ", ".join(
+            f"{item['name']}={item['path']}" for item in synctoon_options.get("backgrounds", [])
+        )
         return f"""Create a {duration}-second vertical short script.
 
 Research:
@@ -468,12 +577,199 @@ Requirements:
 - Generate meme moments as structured timing instructions, not code.
 - Prefer component-friendly visual descriptions: attention maps, token grids, flow diagrams, masked grids, progress bars, meme cards.
 - Keep claims grounded in the research/source notes.
+
+Synctoon visual options:
+- Choose ONE video background for the whole short and keep it consistent.
+- Pick body types and gestures per beat from the provided options.
+- Body types: {body_types}
+- Semantic body aliases: {body_aliases}
+- Head variants: {heads}
+- Background images: {backgrounds}
+
+Return an extra top-level "visual_direction" object:
+{{
+  "video_background": {{"name": "...", "path": "...", "reason": "..."}},
+  "beats": [
+    {{"beat_id": "beat_001", "body_type": "body6", "head": "M", "emotion": "content", "gesture": "explain", "reason": "..."}}
+  ]
+}}
+
+Keep the background fixed across all beats. Make body choice vary beat-to-beat when it improves humor or emphasis.
 """
 
 
 def _compact(text: str, limit: int) -> str:
     compacted = re.sub(r"\s+", " ", text).strip()
     return compacted[:limit]
+
+
+def _load_synctoon_manifest(asset_source: str) -> dict[str, Any]:
+    root = Path(asset_source)
+    if root.is_file():
+        manifest_path = root
+    else:
+        manifest_path = root / "character-manifest.json"
+        if not manifest_path.exists():
+            for candidate in (
+                root / "character_1" / "character-manifest.json",
+                root / "characters" / "synctoon" / "character_1" / "character-manifest.json",
+                root / "remotion" / "public" / "characters" / "synctoon" / "character_1" / "character-manifest.json",
+            ):
+                if candidate.exists():
+                    manifest_path = candidate
+                    break
+    return json.loads(manifest_path.read_text(encoding="utf-8"))
+
+
+def _synctoon_visual_options(manifest: dict[str, Any]) -> dict[str, Any]:
+    assets = manifest.get("assets", {})
+    body_assets = assets.get("body", {})
+    head_assets = assets.get("head", {})
+    backgrounds = assets.get("background", {})
+    body_types = sorted(
+        {
+            _manifest_asset_stem(str(item.get("path", "")))
+            for item in body_assets.values()
+            if _manifest_asset_stem(str(item.get("path", "")))
+        }
+    )
+    heads = sorted(
+        {
+            _manifest_asset_stem(str(item.get("path", "")))
+            for item in head_assets.values()
+            if _manifest_asset_stem(str(item.get("path", "")))
+        }
+    )
+    background_options = sorted(
+        [
+            {
+                "name": str(name),
+                "path": str(item.get("path", "")),
+            }
+            for name, item in backgrounds.items()
+            if str(item.get("path", "")).strip()
+        ],
+        key=lambda item: item["name"],
+    )
+    body_aliases = {
+        str(name): _manifest_asset_stem(str(item.get("path", "")))
+        for name, item in body_assets.items()
+        if ":" in str(name) and _manifest_asset_stem(str(item.get("path", "")))
+    }
+    return {
+        "body_types": body_types,
+        "body_aliases": body_aliases,
+        "heads": heads,
+        "backgrounds": background_options,
+    }
+
+
+def _manifest_asset_stem(path_text: str) -> str:
+    return Path(path_text).stem.strip()
+
+
+def _resolve_background_name(
+    requested: Any,
+    manifest: dict[str, Any],
+    fallback_background: str,
+) -> dict[str, str]:
+    backgrounds = manifest.get("assets", {}).get("background", {})
+    if isinstance(requested, dict):
+        name = str(requested.get("name") or "").strip()
+        path = str(requested.get("path") or "").strip()
+        if name and path:
+            return {"name": name, "path": path}
+    if isinstance(requested, str) and requested in backgrounds:
+        item = backgrounds[requested]
+        path = str(item.get("path", "")).strip()
+        if path:
+            return {"name": requested, "path": path}
+    if fallback_background in backgrounds:
+        item = backgrounds[fallback_background]
+        path = str(item.get("path", "")).strip()
+        if path:
+            return {"name": fallback_background, "path": path}
+    for name, item in backgrounds.items():
+        path = str(item.get("path", "")).strip()
+        if path:
+            return {"name": str(name), "path": path}
+    return {"name": fallback_background, "path": ""}
+
+
+def _resolve_body_type(
+    requested: str,
+    manifest: dict[str, Any],
+    fallback_body: str,
+) -> str:
+    body_assets = manifest.get("assets", {}).get("body", {})
+    if requested in body_assets:
+        path = str(body_assets[requested].get("path", "")).strip()
+        stem = Path(path).stem
+        return stem or requested
+    if fallback_body in body_assets:
+        path = str(body_assets[fallback_body].get("path", "")).strip()
+        stem = Path(path).stem
+        return stem or fallback_body
+    return fallback_body
+
+
+def _normalize_visual_direction(
+    raw_direction: dict[str, Any],
+    script_beats: list[dict[str, Any]],
+    manifest: dict[str, Any],
+    niche: str,
+) -> dict[str, Any]:
+    if not isinstance(raw_direction, dict):
+        raw_direction = {}
+    options = _synctoon_visual_options(manifest)
+    available_bodies = options["body_types"] or ["body1"]
+    available_heads = options["heads"] or ["M"]
+    available_backgrounds = options["backgrounds"] or [
+        {"name": "plain", "path": "characters/synctoon/character_1/background/plain/plain.png"}
+    ]
+    fallback_background_name = str(manifest.get("fallbacks", {}).get("background", available_backgrounds[0]["name"]))
+    selected_background = _resolve_background_name(
+        raw_direction.get("video_background"),
+        manifest,
+        fallback_background_name,
+    )
+    if not selected_background["path"]:
+        selected_background = available_backgrounds[0]
+
+    beats: list[dict[str, Any]] = []
+    raw_beats = raw_direction.get("beats") or []
+    for index, beat in enumerate(script_beats):
+        beat_id = str(beat.get("beat_id", f"beat_{index + 1:03d}"))
+        raw_beat = next(
+            (item for item in raw_beats if str(item.get("beat_id", "")) == beat_id),
+            raw_beats[index] if index < len(raw_beats) else {},
+        )
+        body_type = _resolve_body_type(
+            str(raw_beat.get("body_type") or available_bodies[index % len(available_bodies)]),
+            manifest,
+            available_bodies[index % len(available_bodies)],
+        )
+        head = "M"
+        gesture = str(raw_beat.get("gesture") or raw_beat.get("emotion") or beat.get("caption_text") or beat.get("visual_description") or "explain").strip()
+        if not gesture:
+            gesture = "explain"
+        beats.append(
+            {
+                "beat_id": beat_id,
+                "body_type": body_type,
+                "head": head,
+                "emotion": str(raw_beat.get("emotion") or ("content" if niche != "comedy" else "happy")),
+                "gesture": gesture,
+                "reason": str(raw_beat.get("reason") or ""),
+                "background_image": selected_background["path"],
+            }
+        )
+
+    return {
+        "video_background": selected_background,
+        "beats_by_id": {item["beat_id"]: item for item in beats},
+        "beats": beats,
+    }
 
 
 def _meme_slots(beat_count: int, meme_count: int) -> set[int]:
@@ -514,7 +810,8 @@ def _build_meme_items(raw: dict, script_beats: list[dict], profile: dict) -> lis
     moments = raw.get("meme_moments") or []
     editing = get_editing_config(profile)
     low, high = editing.get("meme_beats", [1, 3])
-    target = max(low, min(high, len(moments) or high))
+    beat_target = max(2, len(script_beats) // 4)
+    target = max(low, min(high, max(len(moments), beat_target)))
     items: list[dict] = []
     for index, moment in enumerate(moments[:target]):
         if not isinstance(moment, dict):
@@ -548,6 +845,30 @@ def _beat_duration(beat: Any, total_duration: int, beat_count: int, index: int) 
         if start is not None and end is not None:
             return max(1.0, float(end) - float(start))
     return total_duration / max(1, beat_count or index + 1)
+
+
+def _enforce_narration_budget(narration: str, cta: str, duration_seconds: float) -> str:
+    """Hard-cap narration at 132 WPM while preferring complete sentences."""
+    max_total_words = max(1, int(duration_seconds * 2.2))
+    narration_budget = max(1, max_total_words - len(cta.split()))
+    words = narration.split()
+    if len(words) <= narration_budget:
+        return narration.strip()
+
+    candidate = words[:narration_budget]
+    sentence_end = next(
+        (
+            index
+            for index in range(len(candidate) - 1, max(-1, len(candidate) // 2 - 1), -1)
+            if candidate[index].endswith((".", "!", "?"))
+        ),
+        None,
+    )
+    if sentence_end is not None:
+        candidate = candidate[: sentence_end + 1]
+    elif candidate:
+        candidate[-1] = candidate[-1].rstrip(",;:") + "."
+    return " ".join(candidate)
 
 
 def _bundle_to_dict(bundle: ResearchBundle) -> dict[str, Any]:
@@ -600,6 +921,7 @@ def _build_scene_recipe_inputs(
     project_id: str,
     topic: str,
     niche: str,
+    visual_direction: dict[str, Any],
 ) -> list[SceneRecipeInput]:
     components_by_id = {
         str(item.get("id")): item for item in component_plan.get("components", [])
@@ -607,6 +929,7 @@ def _build_scene_recipe_inputs(
     meme_beat_ids = {
         str(item.get("id")) for item in beat_mode_plan if item.get("mode") == "meme"
     }
+    beats_by_id = visual_direction.get("beats_by_id", {}) if isinstance(visual_direction, dict) else {}
     total = len(script_beats)
     return [
         SceneRecipeInput(
@@ -626,6 +949,13 @@ def _build_scene_recipe_inputs(
             ),
             has_meme=str(beat.get("beat_id")) in meme_beat_ids,
             seriousness_score=_seriousness_score(project_id, topic, niche),
+            body_type=str(beats_by_id.get(str(beat.get("beat_id")), {}).get("body_type", "body1")),
+            head="M",
+            emotion=str(beats_by_id.get(str(beat.get("beat_id")), {}).get("emotion", "content")),
+            gesture=str(beats_by_id.get(str(beat.get("beat_id")), {}).get("gesture", "")),
+            background_image=str(
+                beats_by_id.get(str(beat.get("beat_id")), {}).get("background_image", "")
+            ),
         )
         for index, beat in enumerate(script_beats)
     ]

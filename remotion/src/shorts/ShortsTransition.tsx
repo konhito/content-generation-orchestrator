@@ -33,7 +33,7 @@ export const ShortsTransition: React.FC<ShortsTransitionProps> = ({from, to, loc
         border: `${punch ? 18 : 8}px solid ${punch ? SHORTS_COLORS.warning : SHORTS_COLORS.primary}`,
         opacity: punch ? 1 - progress : 0.75 * (1 - progress),
         transform: `translate(-50%, -50%) rotate(${punch ? -2 + progress * 4 : 0}deg)`,
-        boxShadow: `0 0 ${80 * scale}px ${SHORTS_COLORS.primary}55`,
+        boxShadow: `0 ${18 * scale}px ${60 * scale}px ${SHORTS_COLORS.primaryGlow}`,
       }} />
     </div>
   );

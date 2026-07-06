@@ -6,11 +6,20 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ..audio import EdgeTTS, TTSResult, WordTimestamp, get_tts_provider
+from ..audio.transcribe import get_transcriber
 from ..config import Config, TTSConfig, load_config
 from .narration import SceneNarration
 
 if TYPE_CHECKING:
     from ..short.models import ShortScript, ShortsStoryboard
+
+
+def _format_srt_time(seconds: float) -> str:
+    milliseconds = max(0, round(seconds * 1000))
+    hours, remainder = divmod(milliseconds, 3_600_000)
+    minutes, remainder = divmod(remainder, 60_000)
+    whole_seconds, milliseconds = divmod(remainder, 1000)
+    return f"{hours:02}:{minutes:02}:{whole_seconds:02},{milliseconds:03}"
 
 
 @dataclass
@@ -67,6 +76,33 @@ class ShortVoiceover:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
+        return path
+
+    def export_srt(self, path: Path, words_per_cue: int = 5) -> Path:
+        """Export readable subtitle cues from word-level timestamps."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+        cues: list[list[WordTimestamp]] = []
+        current: list[WordTimestamp] = []
+        for timestamp in self.word_timestamps:
+            if current and timestamp.start_seconds - current[-1].end_seconds >= 0.65:
+                cues.append(current)
+                current = []
+            current.append(timestamp)
+            sentence_end = timestamp.word.rstrip().endswith((".", "!", "?"))
+            if len(current) >= words_per_cue or (sentence_end and len(current) >= 2):
+                cues.append(current)
+                current = []
+        if current:
+            cues.append(current)
+
+        blocks = []
+        for index, cue in enumerate(cues, start=1):
+            blocks.append(
+                f"{index}\n"
+                f"{_format_srt_time(cue[0].start_seconds)} --> {_format_srt_time(cue[-1].end_seconds)}\n"
+                f"{' '.join(word.word for word in cue)}"
+            )
+        path.write_text("\n\n".join(blocks) + ("\n" if blocks else ""), encoding="utf-8")
         return path
 
     @classmethod
@@ -247,6 +283,7 @@ class VoiceoverGenerator:
         short_script: "ShortScript",
         output_dir: Path,
         filename: str = "short_voiceover.mp3",
+        whisper_model: str = "base",
     ) -> ShortVoiceover:
         """Generate voiceover for a YouTube Short.
 
@@ -257,12 +294,11 @@ class VoiceoverGenerator:
             short_script: The short script with condensed narrations.
             output_dir: Directory to save audio files.
             filename: Name of the output audio file.
+            whisper_model: Whisper model size for timestamps.
 
         Returns:
             ShortVoiceover with audio path and word timestamps.
         """
-        from ..short.models import ShortScript  # Import here to avoid circular
-
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         audio_path = output_dir / filename
@@ -283,25 +319,43 @@ class VoiceoverGenerator:
 
         print(f"Generating short voiceover ({len(full_narration)} chars)...")
 
-        # Generate with timestamps
+        # Generate the audio first, then re-transcribe it so captions follow
+        # the actual rendered speech rather than the TTS boundary estimates.
         result = self.tts.generate_with_timestamps(
             full_narration,
             audio_path,
         )
 
+        transcribed_duration = result.duration_seconds
+        transcribed_word_timestamps = result.word_timestamps
+
+        try:
+            transcriber = get_transcriber(model=whisper_model)
+            transcription = transcriber.transcribe(result.audio_path)
+            transcribed_duration = transcription.duration_seconds
+            transcribed_word_timestamps = transcription.word_timestamps
+            print(
+                f"  Whisper transcription: model={whisper_model} "
+                f"words={len(transcribed_word_timestamps)}"
+            )
+        except Exception as exc:
+            print(f"  Whisper transcription failed; using TTS timestamps: {exc}")
+
         short_voiceover = ShortVoiceover(
             audio_path=result.audio_path,
-            duration_seconds=result.duration_seconds,
-            word_timestamps=result.word_timestamps,
+            duration_seconds=transcribed_duration,
+            word_timestamps=transcribed_word_timestamps,
         )
 
         # Save manifest
         manifest_path = output_dir / "short_voiceover_manifest.json"
         short_voiceover.save_manifest(manifest_path)
+        srt_path = short_voiceover.export_srt(output_dir / "short_voiceover.srt")
 
         print(f"  Audio: {audio_path}")
         print(f"  Duration: {result.duration_seconds:.2f}s")
         print(f"  Words: {len(result.word_timestamps)}")
+        print(f"  SRT: {srt_path}")
 
         return short_voiceover
 
@@ -366,10 +420,12 @@ class VoiceoverGenerator:
         # Save manifest
         manifest_path = output_dir / "short_voiceover_manifest.json"
         short_voiceover.save_manifest(manifest_path)
+        srt_path = short_voiceover.export_srt(output_dir / "short_voiceover.srt")
 
         print(f"  Audio: {output_audio}")
         print(f"  Duration: {result.duration_seconds:.2f}s")
         print(f"  Words transcribed: {len(result.word_timestamps)}")
+        print(f"  SRT: {srt_path}")
 
         return short_voiceover
 

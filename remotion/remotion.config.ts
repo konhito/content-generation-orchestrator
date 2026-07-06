@@ -17,12 +17,21 @@ const remotionDir = process.cwd();
 const projectDir = path.resolve(remotionDir, `../projects/${projectName}`);
 const projectScenesDir = path.resolve(projectDir, "scenes");
 const shortScenesDir = path.resolve(projectDir, `short/${shortVariant}/scenes`);
+const emptyProjectScenes = path.resolve(remotionDir, "src/scenes/emptyProjectScenes.ts");
+const projectScenesAlias = fs.existsSync(projectScenesDir) ? projectScenesDir : emptyProjectScenes;
+const shortScenesAlias = fs.existsSync(shortScenesDir) ? shortScenesDir : path.resolve(remotionDir, "src/shorts");
 const storyboardPath = path.resolve(projectDir, "storyboard/storyboard.json");
 const shortsStoryboardPath = path.resolve(projectDir, `short/${shortVariant}/storyboard/shorts_storyboard.json`);
 
 console.log(`[remotion.config] Project: ${projectName}`);
 console.log(`[remotion.config] Project dir: ${projectDir}`);
 console.log(`[remotion.config] Short variant: ${shortVariant}`);
+if (projectScenesAlias !== projectScenesDir) {
+  console.log(`[remotion.config] Using empty scene registry for missing project scenes`);
+}
+if (shortScenesAlias !== shortScenesDir) {
+  console.log(`[remotion.config] Using built-in short scenes`);
+}
 
 // Load storyboard.json at build time for dev preview
 let storyboardJson = "null";
@@ -53,8 +62,8 @@ Config.overrideWebpackConfig((config) => {
       ...config.resolve,
       alias: {
         ...config.resolve?.alias,
-        "@project-scenes": projectScenesDir,
-        "@project-short-scenes": shortScenesDir,
+        "@project-scenes": projectScenesAlias,
+        "@project-short-scenes": shortScenesAlias,
         "@remotion-components": path.resolve(remotionDir, "src/components"),
       },
       // Include remotion node_modules for project scene resolution

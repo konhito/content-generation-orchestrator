@@ -1,11 +1,13 @@
 import React from "react";
+import {Img, staticFile} from "remotion";
 import {interpolate, spring} from "remotion";
 
 import {ShortsCharacterScene} from "./ShortsCharacterScene";
 import type {ShortsBeat} from "./ShortsPlayer";
 import {ShortsVisualArea} from "./ShortsVisualArea";
 import type {VisualRecipe} from "./recipeTypes";
-import {SHORTS_COLORS, SHORTS_FONTS, SHORTS_MOTION} from "./shortsStyle";
+import {SHORTS_COLORS, SHORTS_GLASS, SHORTS_MOTION} from "./shortsStyle";
+import type {CharacterTrack} from "./characterTypes";
 
 type RecipeBeat = ShortsBeat & {visual_recipe?: VisualRecipe};
 
@@ -14,6 +16,24 @@ export const recipeLayerPlan = (recipe: VisualRecipe) => ({
   componentPosition: recipe.component.position,
   memeVisible: recipe.meme.role !== "none" && recipe.meme.intensity > 0,
 });
+
+export const shouldShowMixedStagePanel = (recipe: VisualRecipe) =>
+  recipe.component.position === "main_stage";
+
+export const shouldShowMixedVisualPanel = (recipe: VisualRecipe) =>
+  recipe.component.position === "main_stage" ||
+  recipe.component.position === "background_stage" ||
+  recipe.component.component_type === "meme_card";
+
+const recipeTheme = (recipe: VisualRecipe) => {
+  if (recipe.meme.intensity > 0) return SHORTS_COLORS.secondary;
+  if (recipe.intent === "hook" || recipe.attention_strategy === "visual_metaphor") return SHORTS_COLORS.primary;
+  if (recipe.intent === "contrast" || recipe.intent === "reveal") return SHORTS_COLORS.accent;
+  if (recipe.component.component_type.includes("chart") || recipe.component.component_type.includes("timeline")) {
+    return SHORTS_COLORS.warning;
+  }
+  return SHORTS_COLORS.primary;
+};
 
 export const visualBeatForMixedScene = (beat: RecipeBeat): RecipeBeat => ({
   ...beat,
@@ -28,10 +48,12 @@ export const ShortsMixedScene: React.FC<{
   scale: number;
 }> = ({beat, frame, fps, scale}) => {
   const recipe = beat.visual_recipe;
-  if (!recipe || !beat.character_data) {
+  if (!recipe) {
     return <ShortsVisualArea beat={beat} frame={frame} fps={fps} scale={scale} />;
   }
 
+  const characterTrack = beat.character_data ?? fallbackCharacterTrack(recipe, beat.end_seconds - beat.start_seconds);
+  const theme = recipeTheme(recipe);
   const entrance = spring({frame, fps, config: SHORTS_MOTION.smoothSpring});
   const push = recipe.camera.motion === "slow_push"
       ? interpolate(frame, [0, 120], [0.97, 1.02], {
@@ -41,137 +63,100 @@ export const ShortsMixedScene: React.FC<{
     : 1;
   const visualBeat = visualBeatForMixedScene(beat);
   const mainStage = recipe.component.position === "main_stage";
-  const emphasisWords = recipe.component.emphasis_words.slice(0, 3);
-  const memePop = spring({
-    frame: Math.max(
-      0,
-      frame - Math.round((beat.end_seconds - beat.start_seconds) * fps * 0.45),
-    ),
-    fps,
-    config: SHORTS_MOTION.snappySpring,
-  });
-
+  const memeStage = recipe.component.component_type === "meme_card";
+  const showStagePanel = shouldShowMixedStagePanel(recipe);
+  const showVisualPanel = shouldShowMixedVisualPanel(recipe);
   return (
     <div style={{position: "relative", width: 1080 * scale, height: 1500 * scale, overflow: "hidden"}}>
-      <div
-        style={{
-          position: "absolute",
-          inset: `${120 * scale}px ${80 * scale}px ${170 * scale}px`,
-          borderRadius: 48 * scale,
-          border: `${2 * scale}px solid ${SHORTS_COLORS.primary}44`,
-          background: `radial-gradient(circle at 50% 35%, ${SHORTS_COLORS.primary}1f, ${SHORTS_COLORS.surface}e8 65%)`,
-          boxShadow: `0 30px 100px ${SHORTS_COLORS.primary}18`,
-          transform: `scale(${push})`,
-          opacity: entrance,
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          left: mainStage ? 390 * scale : 135 * scale,
-          top: mainStage ? 220 * scale : 170 * scale,
-          width: mainStage ? 590 * scale : 810 * scale,
-          height: mainStage ? 720 * scale : 610 * scale,
-          borderRadius: 38 * scale,
-          border: `${2 * scale}px solid ${SHORTS_COLORS.primary}30`,
-          background: `${SHORTS_COLORS.background}88`,
-          boxShadow: `0 18px 80px ${SHORTS_COLORS.primary}20`,
-          opacity: mainStage ? 0.98 : 0.92,
-          overflow: "hidden",
-          transform: `scale(${push})`,
-        }}
-      >
-        <ShortsVisualArea beat={visualBeat} frame={frame} fps={fps} scale={scale * (mainStage ? 0.72 : 0.66)} />
-        {emphasisWords.length > 0 && (
-          <div
-            style={{
-              position: "absolute",
-              left: 26 * scale,
-              right: 26 * scale,
-              bottom: 28 * scale,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 12 * scale,
-              justifyContent: mainStage ? "flex-start" : "center",
-            }}
-          >
-            {emphasisWords.map((word) => (
-              <div
-                key={word}
-                style={{
-                  padding: `${8 * scale}px ${14 * scale}px`,
-                  borderRadius: 999,
-                  background: `${SHORTS_COLORS.primary}22`,
-                  border: `${1.5 * scale}px solid ${SHORTS_COLORS.primary}66`,
-                  color: SHORTS_COLORS.text,
-                  fontFamily: SHORTS_FONTS.primary,
-                  fontWeight: 800,
-                  fontSize: 24 * scale,
-                  textTransform: "uppercase",
-                  letterSpacing: 0.8 * scale,
-                }}
-              >
-                {word}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: mainStage ? 410 * scale : 275 * scale,
-          top: mainStage ? 190 * scale : 135 * scale,
-          padding: `${10 * scale}px ${16 * scale}px`,
-          borderRadius: 999,
-          background: SHORTS_COLORS.primary,
-          color: "#050509",
-          fontFamily: SHORTS_FONTS.primary,
-          fontWeight: 900,
-          fontSize: 22 * scale,
-          letterSpacing: 1.2 * scale,
-          textTransform: "uppercase",
-          boxShadow: `0 10px 40px ${SHORTS_COLORS.primary}44`,
-        }}
-      >
-        {recipe.component.component_type.replace(/_/g, " ")}
-      </div>
-
-      <ShortsCharacterScene
-        track={beat.character_data}
-        frame={frame}
-        fps={fps}
-        scale={scale}
-        emphasis={beat.visual.primary_text}
-        position={recipe.character.position}
-        characterScale={recipe.character.scale * (mainStage ? 1 : 0.88)}
-        showStage={false}
-      />
-
-      {recipe.meme.role !== "none" && recipe.meme.intensity > 0 && (
+      {recipe.background_image ? (
+        <Img
+          src={staticFile(recipe.background_image)}
+          data-asset={recipe.background_image}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            filter: "saturate(0.96) contrast(0.95)",
+          }}
+        />
+      ) : null}
+      {showStagePanel ? (
         <div
           style={{
             position: "absolute",
-            right: 100 * scale,
-            top: 230 * scale,
-            padding: `${18 * scale}px ${24 * scale}px`,
+            inset: `${150 * scale}px ${110 * scale}px ${190 * scale}px`,
             borderRadius: 28 * scale,
-            background: "#fff",
-            color: "#050509",
-            fontFamily: SHORTS_FONTS.primary,
-            fontWeight: 900,
-            fontSize: 34 * scale,
-            textTransform: "uppercase",
-            boxShadow: `0 18px 60px ${SHORTS_COLORS.primary}55`,
-            transform: `rotate(-3deg) scale(${0.2 + memePop * 0.8})`,
-            opacity: Math.min(1, memePop) * recipe.meme.intensity * 1.4,
+            ...SHORTS_GLASS,
+            background: "transparent",
+            border: "none",
+            boxShadow: "none",
+            backdropFilter: "none",
+            WebkitBackdropFilter: "none",
+            transform: `scale(${push})`,
+            opacity: entrance,
           }}
-        >
-          {recipe.meme.style === "interrupt_card" ? "WAIT, WHAT?" : "MEME CUT"}
+        />
+      ) : null}
+
+      {showVisualPanel ? (
+        <div
+          style={{
+            position: "absolute",
+            left: memeStage ? 40 * scale : mainStage ? 390 * scale : 135 * scale,
+            top: memeStage ? 90 * scale : mainStage ? 220 * scale : 170 * scale,
+            width: memeStage ? 1000 * scale : mainStage ? 590 * scale : 810 * scale,
+            height: memeStage ? 900 * scale : mainStage ? 720 * scale : 610 * scale,
+            borderRadius: memeStage ? 0 : 24 * scale,
+            border: memeStage ? "none" : `1px solid ${SHORTS_COLORS.border}`,
+            background: memeStage ? "transparent" : SHORTS_COLORS.surfaceSubtle,
+            backdropFilter: memeStage ? undefined : "blur(24px)",
+            WebkitBackdropFilter: memeStage ? undefined : "blur(24px)",
+            boxShadow: memeStage ? "none" : `0 18px 70px ${SHORTS_COLORS.shadow}`,
+            opacity: mainStage ? 0.98 : 0.92,
+            overflow: "hidden",
+            transform: memeStage ? "none" : `scale(${push})`,
+          }}
+          >
+          <ShortsVisualArea beat={visualBeat} frame={frame} fps={fps} scale={scale * (memeStage ? 1 : mainStage ? 0.72 : 0.66)} />
         </div>
-      )}
+      ) : null}
+
+      {recipe.character.presence !== "none" ? (
+        <ShortsCharacterScene
+          track={characterTrack}
+          frame={frame}
+          fps={fps}
+          scale={scale}
+          position={recipe.character.position}
+          characterScale={recipe.character.scale * (mainStage ? 1 : 0.88)}
+          motion={recipe.character.motion}
+          showStage={false}
+        />
+      ) : null}
     </div>
   );
+};
+
+const fallbackCharacterTrack = (recipe: VisualRecipe, durationSeconds: number): CharacterTrack => {
+  const duration = Math.max(0.5, durationSeconds || 4);
+  return {
+    version: 1,
+    character_id: "character_1",
+    duration_seconds: duration,
+    base_pose: recipe.character.body_type || "body1",
+    base_emotion: recipe.character.emotion || "content",
+    events: [
+      {
+        start: 0,
+        end: duration,
+        pose: recipe.character.body_type || "body1",
+        emotion: recipe.character.emotion || "content",
+        head: recipe.character.head || "M",
+      },
+    ],
+    mouth_cues: [],
+    blink_cues: [{start: Math.min(1.2, duration / 2), end: Math.min(1.32, duration / 2 + 0.12)}],
+  };
 };

@@ -31,7 +31,6 @@ from .models import (
 from .generator import ShortGenerator
 from .scene_generator import ShortSceneGenerator
 from .custom_scene_generator import ShortsCustomSceneGenerator
-from .first import ShortFirstGenerator, ShortFirstResult
 
 __all__ = [
     "ShortConfig",
@@ -49,6 +48,4 @@ __all__ = [
     "ShortGenerator",
     "ShortSceneGenerator",
     "ShortsCustomSceneGenerator",
-    "ShortFirstGenerator",
-    "ShortFirstResult",
 ]

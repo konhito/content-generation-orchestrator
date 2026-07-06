@@ -50,4 +50,10 @@ describe("characterAssetPaths", () => {
       mouth: "characters/synctoon/character_1/mouth/sad/a_e_s.png",
     });
   });
+
+  it("falls back unsupported eye emotions to content assets", () => {
+    expect(characterAssetPaths({
+      pose: "body35", emotion: "curious", head: "R", mouth: "m_b_close_h", blinking: false,
+    }).eyes).toBe("characters/synctoon/character_1/eyes/content/content_R.png");
+  });
 });

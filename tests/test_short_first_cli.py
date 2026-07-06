@@ -20,6 +20,7 @@ def test_short_generate_accepts_short_first_options():
         "--research",
         "--duration",
         "50",
+        "--render",
     ])
 
     assert args.command == "short"
@@ -30,6 +31,7 @@ def test_short_generate_accepts_short_first_options():
     assert args.niche == "tech"
     assert args.research is True
     assert args.duration == 50
+    assert args.render is True
 
 
 def test_short_step_commands_exist():
@@ -52,7 +54,7 @@ def test_long_generate_parser_stays_on_cmd_generate():
     assert args.func.__name__ == "cmd_generate"
 
 
-def test_short_generate_topic_runs_automatic_short_flow(tmp_path):
+def test_short_generate_topic_runs_automatic_short_flow(tmp_path, capsys):
     projects_dir = tmp_path / "projects"
     args = Namespace(
         projects_dir=str(projects_dir),
@@ -69,12 +71,20 @@ def test_short_generate_topic_runs_automatic_short_flow(tmp_path):
         skip_voiceover=True,
         skip_custom_scenes=True,
         mock=True,
+        render=False,
     )
 
     result = cmd_short(args)
+    captured = capsys.readouterr()
 
     variant_dir = projects_dir / "auto-short" / "short" / "default"
     assert result == 0
+    assert "SHORT VIDEO GENERATION PIPELINE" in captured.out
+    assert "[1/4] RESEARCH / SCRIPT / MEME PLAN" in captured.out
+    assert "[2/4] VERTICAL SCENES" in captured.out
+    assert "[3/4] VOICEOVER" in captured.out
+    assert "Skipping voiceover generation (--skip-voiceover)" in captured.out
+    assert "[4/4] STORYBOARD" in captured.out
     assert (variant_dir / "research" / "research.json").exists()
     assert (variant_dir / "short_script.json").exists()
     assert (variant_dir / "beats" / "script_beats.json").exists()

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "character_id": "character_1",
+  "duration_seconds": 4.0,
+  "base_pose": "body1",
+  "base_emotion": "content",
+  "events": [
+    {
+      "start": 0.0,
+      "end": 4.0,
+      "pose": "body1",
+      "emotion": "content",
+      "head": "M"
+    }
+  ],
+  "mouth_cues": [
+    {
+      "start": 0.0,
+      "end": 0.1,
+      "shape": "a_e_h"
+    },
+    {
+      "start": 0.1,
+      "end": 0.2,
+      "shape": "a_e_h"
+    },
+    {
+      "start": 0.2,
+      "end": 0.3,
+      "shape": "th_h"
+    },
+    {
+      "start": 0.3,
+      "end": 0.4,
+      "shape": "th_h"
+    },
+    {
+      "start": 0.4,
+      "end": 0.5,
+      "shape": "o_small_h"
+    }
+  ],
+  "blink_cues": [
+    {
+      "start": 1.26,
+      "end": 1.38
+    }
+  ]
+}

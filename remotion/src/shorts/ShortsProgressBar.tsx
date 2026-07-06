@@ -27,7 +27,7 @@ export const ShortsProgressBar: React.FC<ShortsProgressBarProps> = ({
         left: 0,
         right: 0,
         height: height * scale,
-        background: "rgba(255, 255, 255, 0.1)",
+        background: "rgba(148, 163, 184, 0.22)",
       }}
     >
       {/* Progress fill */}
@@ -36,7 +36,7 @@ export const ShortsProgressBar: React.FC<ShortsProgressBarProps> = ({
           height: "100%",
           width: `${clampedProgress * 100}%`,
           background: `linear-gradient(90deg, ${SHORTS_COLORS.primary} 0%, ${SHORTS_COLORS.accent} 100%)`,
-          boxShadow: `0 0 10px ${SHORTS_COLORS.primary}60`,
+          boxShadow: `0 -4px 18px ${SHORTS_COLORS.primaryGlow}`,
           transition: "width 0.1s linear",
         }}
       />

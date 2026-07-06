@@ -13,10 +13,11 @@ from src.voiceover.narration import (
 )
 from src.voiceover.generator import (
     SceneVoiceover,
+    ShortVoiceover,
     VoiceoverResult,
     VoiceoverGenerator,
 )
-from src.audio import WordTimestamp
+from src.audio.transcribe import WordTimestamp
 from src.config import TTSConfig
 
 
@@ -125,6 +126,47 @@ class TestSceneVoiceover:
         assert data["duration_seconds"] == 10.5
         assert len(data["word_timestamps"]) == 2
         assert data["word_timestamps"][0]["word"] == "hello"
+
+
+class TestShortVoiceover:
+    def test_export_srt_groups_readable_word_cues(self, tmp_path):
+        voiceover = ShortVoiceover(
+            audio_path=tmp_path / "short.mp3",
+            duration_seconds=2.0,
+            word_timestamps=[
+                WordTimestamp("Coding", 0.0, 0.3),
+                WordTimestamp("is", 0.32, 0.45),
+                WordTimestamp("mostly", 0.48, 0.8),
+                WordTimestamp("debugging.", 0.82, 1.2),
+                WordTimestamp("Seriously.", 1.4, 1.9),
+            ],
+        )
+
+        path = voiceover.export_srt(tmp_path / "short_voiceover.srt", words_per_cue=4)
+
+        assert path.exists()
+        assert path.read_text(encoding="utf-8") == (
+            "1\n00:00:00,000 --> 00:00:01,200\nCoding is mostly debugging.\n\n"
+            "2\n00:00:01,400 --> 00:00:01,900\nSeriously.\n"
+        )
+
+    def test_export_srt_splits_on_speech_pause_without_punctuation(self, tmp_path):
+        voiceover = ShortVoiceover(
+            audio_path=tmp_path / "short.mp3",
+            duration_seconds=3.0,
+            word_timestamps=[
+                WordTimestamp("nonstop", 0.0, 0.4),
+                WordTimestamp("building", 0.42, 0.8),
+                WordTimestamp("It", 1.8, 2.0),
+                WordTimestamp("isn't", 2.02, 2.4),
+            ],
+        )
+
+        path = voiceover.export_srt(tmp_path / "short_voiceover.srt")
+
+        text = path.read_text(encoding="utf-8")
+        assert "nonstop building\n\n2\n" in text
+        assert "It isn't" in text
 
 
 class TestVoiceoverResult:
@@ -260,6 +302,51 @@ class TestVoiceoverGenerator:
         assert len(result.scenes) == 2
         assert result.total_duration_seconds > 0
         assert (tmp_path / "voiceover_manifest.json").exists()
+
+    def test_generate_short_voiceover_reruns_whisper_by_default(self, tmp_path, monkeypatch):
+        """Test that generated short voiceover is re-transcribed with Whisper."""
+        config = MagicMock()
+        config.tts = MagicMock()
+        tts_provider = MagicMock()
+
+        monkeypatch.setattr("src.voiceover.generator.load_config", MagicMock(return_value=config))
+        monkeypatch.setattr("src.voiceover.generator.get_tts_provider", MagicMock(return_value=tts_provider))
+
+        generator = VoiceoverGenerator(voice="en-US-GuyNeural")
+
+        short_script = MagicMock()
+        short_script.condensed_narration = "Generated narration from TTS."
+        short_script.cta_narration = "Check the description."
+
+        tts_result = MagicMock()
+        tts_result.audio_path = tmp_path / "short_voiceover.mp3"
+        tts_result.duration_seconds = 12.0
+        tts_result.word_timestamps = [
+            WordTimestamp("TTS", 0.0, 0.1),
+            WordTimestamp("timestamps", 0.1, 0.2),
+        ]
+
+        monkeypatch.setattr(generator.tts, "generate_with_timestamps", MagicMock(return_value=tts_result))
+
+        transcriber_result = MagicMock()
+        transcriber_result.duration_seconds = 9.5
+        transcriber_result.word_timestamps = [
+            WordTimestamp("Whisper", 0.0, 0.4),
+            WordTimestamp("wins", 0.5, 0.8),
+        ]
+
+        mock_transcriber = MagicMock()
+        mock_transcriber.transcribe.return_value = transcriber_result
+
+        with patch("src.voiceover.generator.get_transcriber", return_value=mock_transcriber) as mock_get_transcriber:
+            result = generator.generate_short_voiceover(short_script, tmp_path)
+
+        assert mock_get_transcriber.called
+        assert mock_transcriber.transcribe.call_count == 1
+        assert mock_transcriber.transcribe.call_args.args[0] == tts_result.audio_path
+        assert result.duration_seconds == 9.5
+        assert [item.word for item in result.word_timestamps] == ["Whisper", "wins"]
+        assert (tmp_path / "short_voiceover.srt").exists()
 
 
 class TestLLMInferenceProjectVoiceover:

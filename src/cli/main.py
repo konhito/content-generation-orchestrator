@@ -2264,7 +2264,8 @@ def cmd_short(args: argparse.Namespace) -> int:
     """
     import json
     from ..project.loader import create_project, load_project
-    from ..short import ShortGenerator, ShortSceneGenerator
+    from ..short.generator import ShortGenerator
+    from ..short.scene_generator import ShortSceneGenerator
     from ..short.generator import normalize_script_format
     from ..models import Script
 
@@ -2307,17 +2308,32 @@ def cmd_short(args: argparse.Namespace) -> int:
     # Get mode and duration
     mode = getattr(args, "mode", "hook")
     duration = args.duration
+    render_short = bool(short_first and getattr(args, "render", False))
 
     # Set default duration based on mode if not specified
     if duration is None:
         duration = 60 if mode == "summary" else 45
+    pipeline_total = 5 if render_short else 4
 
-    print(f"Generating YouTube Short for: {project.id}")
-    print(f"  Variant: {args.variant}")
-    print(f"  Mode: {'short-first' if short_first else mode}")
-    print(f"  Duration: {duration}s")
     if short_first:
+        print("=" * 60)
+        print("SHORT VIDEO GENERATION PIPELINE")
+        print("=" * 60)
+        print(f"Project: {project.id}")
+        print(f"Title: {project.title}")
+        print(f"Variant: {args.variant}")
+        print("Mode: short-first")
+        print(f"Duration: {duration}s")
+        print(f"Render after generate: {'yes' if render_short else 'no'}")
+        print("=" * 60)
+        print()
         args.skip_custom_scenes = True
+    else:
+        print(f"Generating YouTube Short for: {project.id}")
+        print(f"  Variant: {args.variant}")
+        print(f"  Mode: {mode}")
+        print(f"  Duration: {duration}s")
+        print()
     print(f"  Custom scenes: {not args.skip_custom_scenes}")
     print()
 
@@ -2340,7 +2356,7 @@ def cmd_short(args: argparse.Namespace) -> int:
 
         topic = getattr(args, "topic", None) or project.title
         source_paths = [Path(path) for path in (getattr(args, "source", None) or [])]
-        print("Generating short-first research/script/meme plan...")
+        print(f"[1/{pipeline_total}] RESEARCH / SCRIPT / MEME PLAN")
         first_generator = ShortFirstGenerator()
         result = first_generator.generate(
             project_id=project.id,
@@ -2352,6 +2368,7 @@ def cmd_short(args: argparse.Namespace) -> int:
             duration=duration,
             research=getattr(args, "research", False),
             mock=getattr(args, "mock", False),
+            logger=lambda message: print(f"  {message}"),
         )
     elif mode == "summary":
         print("Analyzing script for summary sweep...")
@@ -2380,7 +2397,19 @@ def cmd_short(args: argparse.Namespace) -> int:
         print(f"Error: {result.error}", file=sys.stderr)
         return 1
 
-    print(f"  Generated short script: {result.short_script_path}")
+    if short_first:
+        print(f"  Generated research bundle: {result.research_path}")
+        print(f"  Generated short script: {result.short_script_path}")
+        print(f"  Generated markdown script: {result.short_script_md_path}")
+        print(f"  Generated beats: {result.script_beats_path}")
+        print(f"  Generated meme plan: {result.meme_plan_path}")
+        print(f"  Generated component plan: {result.component_plan_path}")
+        print(f"  Generated beat mode plan: {result.beat_mode_plan_path}")
+        print(f"  Generated character plan: {result.character_plan_path}")
+        print(f"  Generated scene recipe plan: {result.scene_recipe_plan_path}")
+        print()
+    else:
+        print(f"  Generated short script: {result.short_script_path}")
 
     # Setup variant directory and scenes
     variant_dir = project.short_dir / args.variant
@@ -2391,21 +2420,23 @@ def cmd_short(args: argparse.Namespace) -> int:
     component_plan_path = variant_dir / "components" / "component_plan.json"
 
     # Setup vertical scenes (styles.ts, CTA scene)
-    print("Setting up vertical scenes...")
+    print(f"[2/{pipeline_total}] VERTICAL SCENES")
     short_script = ShortGenerator.load_short_script(result.short_script_path)
     scene_paths = scene_generator.setup_short_scenes(
         project, short_script, variant=args.variant
     )
     print(f"  Generated styles: {scene_paths['styles_path']}")
     print(f"  Generated CTA scene: {scene_paths['cta_path']}")
+    print()
 
     # Generate voiceover FIRST, then create storyboard from actual word timings
     # This ensures captions perfectly match the spoken audio
     shorts_storyboard = None
+    print(f"[3/{pipeline_total}] VOICEOVER")
     if not args.skip_voiceover:
         from ..voiceover import VoiceoverGenerator
 
-        print("Generating voiceover with word timestamps...")
+        print("  Generating voiceover with word timestamps...")
         voiceover_generator = VoiceoverGenerator()
         voiceover_dir = variant_dir / "voiceover"
 
@@ -2413,6 +2444,7 @@ def cmd_short(args: argparse.Namespace) -> int:
             short_voiceover = voiceover_generator.generate_short_voiceover(
                 short_script,
                 voiceover_dir,
+                whisper_model=getattr(args, "whisper_model", "base"),
             )
 
             # Get relative path for Remotion
@@ -2454,17 +2486,19 @@ def cmd_short(args: argparse.Namespace) -> int:
             shorts_storyboard = None
     else:
         print("Skipping voiceover generation (--skip-voiceover)")
+    print()
 
     # Fallback: generate storyboard without voiceover timing
+    print(f"[4/{pipeline_total}] STORYBOARD")
     if shorts_storyboard is None:
-        print("Generating shorts storyboard (without voiceover sync)...")
+        print("  Generating shorts storyboard (without voiceover sync)...")
         shorts_storyboard = generator.generate_shorts_storyboard(
             short_script,
             mock=args.mock,
         )
 
     if component_plan_path.exists():
-        print("Applying clean component plan to storyboard...")
+        print("  Applying clean component plan to storyboard...")
         shorts_storyboard = _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path)
 
     # Save final storyboard
@@ -2478,6 +2512,21 @@ def cmd_short(args: argparse.Namespace) -> int:
         print(f"  Custom scenes generated: {custom_scene_count}")
 
     print()
+    if render_short:
+        print(f"[5/{pipeline_total}] RENDER")
+        render_args = argparse.Namespace(
+            project=args.project,
+            projects_dir=args.projects_dir,
+            short=True,
+            variant=args.variant,
+            resolution=getattr(args, "resolution", "1080p"),
+            fast=getattr(args, "fast", False),
+            concurrency=getattr(args, "concurrency", None),
+            preview=False,
+            gl=None,
+        )
+        return cmd_render(render_args)
+
     print("=" * 60)
     print("SHORT GENERATION COMPLETE")
     print("=" * 60)
@@ -2518,12 +2567,12 @@ def _is_short_first_args(args: argparse.Namespace) -> bool:
 
 
 def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: Path):
-    """Replace generic storyboard beats with the clean Remotion component plan."""
+    """Overlay explanatory component beats onto the base storyboard."""
     import json
+    import re
     import shutil
 
     from ..config import load_config
-    from ..short.character import attach_character_tracks
     from ..short.models import (
         SceneComponentConfig,
         ShortBeatMode,
@@ -2551,8 +2600,50 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
         }
 
     original_words = [word for beat in shorts_storyboard.beats for word in beat.word_timestamps]
-    new_beats = []
-    for item in components:
+    def normalized_beat_id(value):
+        beat_id = str(value)
+        match = re.fullmatch(r"beat_(\d+)", beat_id)
+        return f"beat_{int(match.group(1))}" if match else beat_id
+
+    component_by_id = {normalized_beat_id(item.get("id")): item for item in components}
+    storyboard_beat_count = sum(beat.id != "cta" for beat in shorts_storyboard.beats)
+    ids_follow_same_segmentation = storyboard_beat_count == len(components)
+    updated_beats = []
+    for beat in shorts_storyboard.beats:
+        item = (
+            component_by_id.get(normalized_beat_id(beat.id))
+            if ids_follow_same_segmentation
+            else None
+        )
+        if item is None and beat.id != "cta":
+            midpoint = (beat.start_seconds + beat.end_seconds) / 2
+            item = next(
+                (
+                    candidate
+                    for candidate in components
+                    if float(candidate.get("start_seconds", 0)) <= midpoint
+                    < float(candidate.get("end_seconds", 0))
+                ),
+                None,
+            )
+        if item is None:
+            updated_beats.append(beat)
+            continue
+
+        legacy_mode = str(item.get("mode", "none"))
+        overlay_type = str(
+            item.get(
+                "overlay_type",
+                legacy_mode if legacy_mode in {"component", "meme"} else "none",
+            )
+        )
+        if overlay_type == "none":
+            beat.mode = ShortBeatMode.CHARACTER
+            beat.visual_recipe = None
+            beat.component_name = ""
+            updated_beats.append(beat)
+            continue
+
         visual_data = item.get("visual", {}) or {}
         visual_type_str = str(visual_data.get("type", "text_highlight"))
         try:
@@ -2582,38 +2673,43 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
                 pattern=scene_config_data.get("pattern", "self"),
                 masked_indices=scene_config_data.get("masked_indices", []),
             )
-        start_seconds = float(item.get("start_seconds", 0))
-        end_seconds = float(item.get("end_seconds", item.get("start_seconds", 0) + 3))
-        beat_words = [
-            word for word in original_words
-            if float(word.get("end_seconds", 0)) > start_seconds
-            and float(word.get("start_seconds", 0)) < end_seconds
-        ]
-        new_beats.append(ShortsBeat(
-            id=str(item.get("id", f"component_{len(new_beats) + 1}")),
-            start_seconds=start_seconds,
-            end_seconds=end_seconds,
-            mode=ShortBeatMode(str(item.get("mode", "component"))),
-            visual=ShortsVisual(
-                type=visual_type,
-                primary_text=str(visual_data.get("primary_text", "")),
-                secondary_text=str(visual_data.get("secondary_text", "")),
-                tertiary_text=str(visual_data.get("tertiary_text", "")),
-                color=str(visual_data.get("color", "primary")),
-                scene_config=scene_config,
-            ),
-            caption_text=str(item.get("caption_text", "")),
-            word_timestamps=beat_words,
-            visual_recipe=(
-                VisualRecipe.model_validate(recipes_by_id[str(item.get("id"))])
-                if str(item.get("id")) in recipes_by_id
-                else None
-            ),
-        ))
-    shorts_storyboard.beats = new_beats
-    shorts_storyboard.total_duration_seconds = float(plan.get("duration_seconds", shorts_storyboard.total_duration_seconds))
 
-    if character_config.enabled and any(beat.mode == ShortBeatMode.CHARACTER for beat in new_beats):
+        beat.mode = ShortBeatMode.MEME if overlay_type == "meme" else ShortBeatMode.COMPONENT
+        beat.visual = ShortsVisual(
+            type=visual_type,
+            primary_text=str(visual_data.get("primary_text", "")),
+            secondary_text=str(visual_data.get("secondary_text", "")),
+            tertiary_text=str(visual_data.get("tertiary_text", "")),
+            color=str(visual_data.get("color", "primary")),
+            scene_config=scene_config,
+        )
+        beat.caption_text = str(item.get("caption_text", beat.caption_text))
+        beat.visual_recipe = (
+            VisualRecipe.model_validate(recipes_by_id[str(item.get("id"))])
+            if str(item.get("id")) in recipes_by_id
+            else None
+        )
+        updated_beats.append(beat)
+
+    shorts_storyboard.beats = updated_beats
+
+    needs_character_tracks = any(
+        beat.mode in {ShortBeatMode.CHARACTER, ShortBeatMode.COMPONENT}
+        and (
+            beat.character_data is not None
+            or (
+                beat.visual_recipe is not None
+                and beat.visual_recipe.character.presence != "none"
+            )
+        )
+        for beat in updated_beats
+    )
+    if character_config.enabled and needs_character_tracks:
+        try:
+            from ..short.character import attach_character_tracks
+        except ModuleNotFoundError as exc:  # pragma: no cover - optional runtime dependency
+            print(f"  Warning: Skipping character track attachment ({exc})")
+            return shorts_storyboard
         canonical_assets = Path(character_config.asset_source)
         project_root = component_plan_path.parents[3]
         installed_assets = project_root / "characters/synctoon"
@@ -2622,7 +2718,7 @@ def _apply_component_plan_to_storyboard(shorts_storyboard, component_plan_path: 
             manifest_path = installed_assets / "character_1/character-manifest.json"
             variant_dir = component_plan_path.parent.parent
             warnings = attach_character_tracks(
-                new_beats,
+                updated_beats,
                 manifest_path,
                 variant_dir / "character/tracks",
                 project_root=project_root,
@@ -2647,7 +2743,7 @@ def cmd_short_script(args: argparse.Namespace) -> int:
     """
     import json
     from ..project.loader import create_project, load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
     from ..short.generator import normalize_script_format
     from ..models import Script
 
@@ -2762,7 +2858,13 @@ def cmd_short_research(args: argparse.Namespace) -> int:
     topic = args.topic or project.title
     source_paths = [Path(path) for path in (args.source or [])]
     profile = generator.load_niche_profile(args.niche)
-    bundle = generator.build_research_bundle(topic=topic, source_paths=source_paths, research=args.research, niche=profile.name)
+    bundle = generator.build_research_bundle(
+        topic=topic,
+        source_paths=source_paths,
+        research=args.research,
+        niche=profile.name,
+        logger=lambda message: print(f"  {message}"),
+    )
     output_path = project.short_dir / args.variant / "research" / "research.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(_bundle_to_dict(bundle), indent=2, ensure_ascii=False), encoding="utf-8")
@@ -2774,7 +2876,7 @@ def cmd_short_beats(args: argparse.Namespace) -> int:
     """Build attention-span script beats from short_script.json."""
     import json
     from ..project import load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
     from ..short.script_beats import build_script_beats
 
     try:
@@ -2801,8 +2903,10 @@ def cmd_short_memes(args: argparse.Namespace) -> int:
     """Generate structured meme plan from script beats."""
     import json
     from ..project import load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
+    from ..short.meme_assets import resolve_meme_assets
     from ..short.meme_copy import generate_meme_copy
+    from ..short.meme_provider import select_meme_asset_provider, validate_imgflip_credentials
     from ..short.niche import get_editing_config, load_niche
 
     try:
@@ -2831,15 +2935,35 @@ def cmd_short_memes(args: argparse.Namespace) -> int:
         }
         for index, beat in enumerate(beats[:target])
     ]
-    memes = generate_meme_copy(raw_memes, short_script.condensed_narration, [], provider="mock")
+    provider = select_meme_asset_provider(mock=getattr(args, "mock", False))
+    memes = generate_meme_copy(
+        raw_memes,
+        short_script.condensed_narration,
+        [],
+        provider=provider,
+    )
+    if provider == "imgflip":
+        validation = validate_imgflip_credentials(live=False)
+        print(f"Imgflip validation: {'ok' if validation.ok else 'not ready'} - {validation.message}")
+    memes = resolve_meme_assets(
+        memes,
+        variant_dir / "memes" / "assets",
+        public_root=project.root_dir,
+        provider=provider,
+    )
     output_path = variant_dir / "memes" / "meme_plan.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps({
         "project": project.id,
         "variant": args.variant,
         "niche": args.niche,
-        "provider": "imgflip",
-        "env": {"template_id": "MCP_MEME_TEMPLATE_ID", "username": "IMGFLIP_USERNAME", "password": "IMGFLIP_PASSWORD"},
+        "provider": provider,
+        "env": {
+            "template_id": "MCP_MEME_TEMPLATE_ID",
+            "username": "IMGFLIP_USERNAME",
+            "password": "IMGFLIP_PASSWORD",
+            "giphy_api_key": "GIPHY_API_KEY",
+        },
         "moments": memes,
     }, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Generated shorts meme plan: {output_path}")
@@ -2847,11 +2971,21 @@ def cmd_short_memes(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_short_validate_meme(args: argparse.Namespace) -> int:
+    """Validate Imgflip configuration for shorts meme generation."""
+    from ..short.meme_provider import validate_imgflip_credentials
+
+    validation = validate_imgflip_credentials(live=getattr(args, "live", False))
+    status = "ok" if validation.ok else "not ready"
+    print(f"Imgflip validation: {status} - {validation.message}")
+    return 0 if validation.ok else 1
+
+
 def cmd_short_components(args: argparse.Namespace) -> int:
     """Generate Remotion component plan from beats and memes."""
     import json
     from ..project import load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
     from ..short.component_plan import build_component_plan
 
     try:
@@ -2885,7 +3019,8 @@ def cmd_short_scenes(args: argparse.Namespace) -> int:
     vertical 1080x1920 rendering.
     """
     from ..project import load_project
-    from ..short import ShortGenerator, ShortSceneGenerator
+    from ..short.generator import ShortGenerator
+    from ..short.scene_generator import ShortSceneGenerator
 
     try:
         project = load_project(Path(args.projects_dir) / args.project)
@@ -2931,7 +3066,7 @@ def cmd_short_voiceover(args: argparse.Namespace) -> int:
     - Process a manually recorded audio file with Whisper
     """
     from ..project import load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
     from ..voiceover import VoiceoverGenerator
 
     try:
@@ -3003,6 +3138,7 @@ def cmd_short_voiceover(args: argparse.Namespace) -> int:
         short_voiceover = voiceover_generator.generate_short_voiceover(
             short_script,
             voiceover_dir,
+            whisper_model=args.whisper_model,
         )
         print()
         print("Next step: python -m src.cli short storyboard " + project.id)
@@ -3020,7 +3156,7 @@ def cmd_short_storyboard(args: argparse.Namespace) -> int:
     """
     import json
     from ..project import load_project
-    from ..short import ShortGenerator
+    from ..short.generator import ShortGenerator
     from ..short.generator import normalize_script_format
     from ..short.custom_scene_generator import ShortsCustomSceneGenerator
     from ..voiceover.generator import ShortVoiceover
@@ -4210,6 +4346,17 @@ For manual voiceover recording:
         action="store_true",
         help="Create a research seed bundle before short script generation.",
     )
+    short_generate_parser.add_argument(
+        "--render",
+        action="store_true",
+        help="Render the short after generating storyboard and voiceover.",
+    )
+    short_generate_parser.add_argument(
+        "--whisper-model",
+        choices=["tiny", "base", "small", "medium", "large"],
+        default="base",
+        help="Whisper model size for automatic caption transcription (default: base)",
+    )
     short_generate_parser.set_defaults(func=cmd_short)
 
     # short script
@@ -4302,6 +4449,17 @@ For manual voiceover recording:
     short_memes_parser.add_argument("--variant", default="default", help="Variant name")
     short_memes_parser.add_argument("--niche", default="general", help="Niche profile")
     short_memes_parser.set_defaults(func=cmd_short_memes)
+
+    short_validate_meme_parser = short_subparsers.add_parser(
+        "validate-meme",
+        help="Validate Imgflip credentials for shorts meme generation",
+    )
+    short_validate_meme_parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Also verify the Imgflip API is reachable",
+    )
+    short_validate_meme_parser.set_defaults(func=cmd_short_validate_meme)
 
     # short components
     short_components_parser = short_subparsers.add_parser(

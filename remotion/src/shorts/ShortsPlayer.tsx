@@ -25,7 +25,7 @@ import type { VisualRecipe } from "./recipeTypes";
 import { rendererForMode } from "./shortsDispatch";
 import { SHORTS_COLORS, SHORTS_FONTS } from "./shortsStyle";
 
-export { SHORTS_COLORS, SHORTS_FONTS } from "./shortsStyle";
+export { SHORTS_COLORS, SHORTS_FONTS, SHORTS_GLASS } from "./shortsStyle";
 
 // Try to load custom short scenes from project directory
 // This will be resolved by webpack alias @project-short-scenes
@@ -254,7 +254,7 @@ export const ShortsPlayer: React.FC<ShortsPlayerProps> = ({
           left: 0,
           width: width,
           height: SHORTS_LAYOUT.captionArea.height * scale,
-          background: `linear-gradient(to bottom, transparent 0%, rgba(10, 10, 15, 0.7) 30%, rgba(10, 10, 15, 0.9) 100%)`,
+          background: "linear-gradient(to bottom, transparent 0%, rgba(245, 247, 251, 0.62) 30%, rgba(245, 247, 251, 0.92) 100%)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -324,7 +324,7 @@ const VisualRenderer: React.FC<{
         frame={Math.max(0, frame - beatStartFrame)}
         fps={fps}
         scale={scale}
-        emphasis={beat.visual.primary_text}
+        showStage={false}
       />
     );
   }
@@ -370,7 +370,7 @@ const BackgroundEffect: React.FC<{ frame: number; scale: number }> = ({
           transform: "translate(-50%, -50%)",
           width: 800 * scale,
           height: 800 * scale,
-          background: `radial-gradient(circle, ${SHORTS_COLORS.primary}15 0%, transparent 70%)`,
+          background: `radial-gradient(circle, ${SHORTS_COLORS.primaryGlow} 0%, transparent 70%)`,
           opacity: 0.5 + Math.sin(frame * 0.02) * 0.2,
         }}
       />
@@ -384,8 +384,8 @@ const BackgroundEffect: React.FC<{ frame: number; scale: number }> = ({
           right: 0,
           bottom: 0,
           backgroundImage: `
-            linear-gradient(${SHORTS_COLORS.primary}08 1px, transparent 1px),
-            linear-gradient(90deg, ${SHORTS_COLORS.primary}08 1px, transparent 1px)
+            linear-gradient(rgba(10, 132, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(10, 132, 255, 0.06) 1px, transparent 1px)
           `,
           backgroundSize: `${60 * scale}px ${60 * scale}px`,
           opacity: 0.3,

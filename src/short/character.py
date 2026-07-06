@@ -7,8 +7,8 @@ import json
 import re
 from pathlib import Path
 from typing import Any
-
-import httpx
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from .models import BlinkCue, CharacterEvent, CharacterTrack, MouthCue, ShortBeatMode, ShortsBeat
 
@@ -110,21 +110,52 @@ def request_gentle_alignment(
     url: str,
     timeout: float,
     *,
-    post: Any = httpx.post,
+    post: Any | None = None,
 ) -> list[dict[str, Any]]:
     """Request word and phone alignment from a Gentle-compatible service."""
 
+    if post is not None:
+        with audio_path.open("rb") as audio_file:
+            response = post(
+                url,
+                files={
+                    "audio": (audio_path.name, audio_file, "application/octet-stream"),
+                    "transcript": ("transcript.txt", transcript, "text/plain"),
+                },
+                timeout=timeout,
+            )
+            response.raise_for_status()
+            payload = response.json()
+        return list(payload.get("words", []))
+
+    boundary = f"----videoexplainer{hashlib.sha256(f'{audio_path}:{transcript}'.encode('utf-8')).hexdigest()[:16]}"
+    body = bytearray()
     with audio_path.open("rb") as audio_file:
-        response = post(
-            url,
-            files={
-                "audio": (audio_path.name, audio_file, "application/octet-stream"),
-                "transcript": ("transcript.txt", transcript, "text/plain"),
-            },
-            timeout=timeout,
-        )
-        response.raise_for_status()
-        payload = response.json()
+        parts = {
+            "audio": (audio_path.name, audio_file.read(), "application/octet-stream"),
+            "transcript": ("transcript.txt", transcript.encode("utf-8"), "text/plain; charset=utf-8"),
+        }
+        for field_name, (filename, content, content_type) in parts.items():
+            body.extend(f"--{boundary}\r\n".encode("utf-8"))
+            body.extend(
+                f'Content-Disposition: form-data; name="{field_name}"; filename="{filename}"\r\n'.encode("utf-8")
+            )
+            body.extend(f"Content-Type: {content_type}\r\n\r\n".encode("utf-8"))
+            body.extend(content)
+            body.extend(b"\r\n")
+    body.extend(f"--{boundary}--\r\n".encode("utf-8"))
+
+    request = Request(
+        url,
+        data=bytes(body),
+        headers={
+            "Content-Type": f"multipart/form-data; boundary={boundary}",
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
+    with urlopen(request, timeout=timeout) as response:
+        payload = json.loads(response.read().decode("utf-8"))
     return list(payload.get("words", []))
 
 
@@ -142,6 +173,22 @@ def _fallback_key(
     return fallback
 
 
+def _resolve_pose_name(requested: str, manifest: dict[str, Any], warnings: list[str]) -> str:
+    assets = manifest.get("assets", {}).get("body", {})
+    if requested in assets:
+        path = str(assets[requested].get("path", "")).strip()
+        stem = Path(path).stem
+        return stem or requested
+    fallback = str(manifest.get("fallbacks", {}).get("body", "body1"))
+    if fallback in assets:
+        path = str(assets[fallback].get("path", "")).strip()
+        stem = Path(path).stem
+        warnings.append(f"unknown body asset {requested!r}; using {fallback!r}")
+        return stem or fallback
+    warnings.append(f"unknown body asset {requested!r}; using {fallback!r}")
+    return fallback
+
+
 def build_character_track(
     *,
     beat_id: str,
@@ -154,7 +201,7 @@ def build_character_track(
     """Build a validated track using manifest keys only."""
 
     warnings: list[str] = []
-    pose = _fallback_key("body", str(cue.get("pose", "body1")), manifest, warnings)
+    pose = _resolve_pose_name(str(cue.get("pose", "body1")), manifest, warnings)
     head = _fallback_key("head", str(cue.get("head", "M")), manifest, warnings)
     emotion_name = str(cue.get("emotion", "content"))
     eye_candidate = f"{emotion_name}_{head}"
@@ -224,7 +271,7 @@ def attach_character_tracks(
                     aligner_url,
                     aligner_timeout,
                 )
-            except (OSError, httpx.HTTPError, ValueError) as exc:
+            except (OSError, HTTPError, URLError, ValueError) as exc:
                 warnings.append(f"Gentle alignment unavailable; using word timing fallback: {exc}")
     for beat in beats:
         recipe_wants_character = (
@@ -234,16 +281,7 @@ def attach_character_tracks(
         if beat.mode != ShortBeatMode.CHARACTER and not recipe_wants_character:
             continue
         duration = beat.end_seconds - beat.start_seconds
-        relative_words = [
-            {
-                **item,
-                "start_seconds": max(0.0, float(item.get("start_seconds", 0)) - beat.start_seconds),
-                "end_seconds": min(duration, float(item.get("end_seconds", 0)) - beat.start_seconds),
-            }
-            for item in beat.word_timestamps
-            if float(item.get("end_seconds", 0)) > beat.start_seconds
-            and float(item.get("start_seconds", 0)) < beat.end_seconds
-        ]
+        relative_words = _beat_relative_word_timestamps(beat.word_timestamps, beat.start_seconds, beat.end_seconds)
         relative_gentle = [
             {
                 **item,
@@ -258,7 +296,23 @@ def attach_character_tracks(
             beat_id=beat.id,
             duration_seconds=duration,
             word_timestamps=relative_words,
-            cue={"pose": "body1", "emotion": "content", "head": "M"},
+            cue={
+                "pose": (
+                    beat.visual_recipe.character.body_type
+                    if beat.visual_recipe is not None
+                    else "body1"
+                ),
+                "emotion": (
+                    beat.visual_recipe.character.emotion
+                    if beat.visual_recipe is not None
+                    else "content"
+                ),
+                "head": (
+                    beat.visual_recipe.character.head
+                    if beat.visual_recipe is not None
+                    else "M"
+                ),
+            },
             manifest=manifest,
             gentle_words=relative_gentle,
         )
@@ -268,3 +322,42 @@ def attach_character_tracks(
         beat.character_data = track
         warnings.extend(f"{beat.id}: {warning}" for warning in beat_warnings)
     return warnings
+
+
+def _beat_relative_word_timestamps(
+    word_timestamps: list[dict[str, Any]],
+    beat_start_seconds: float,
+    beat_end_seconds: float,
+) -> list[dict[str, Any]]:
+    """Normalize word timings that may already be beat-local or may be absolute."""
+
+    duration = beat_end_seconds - beat_start_seconds
+    if not word_timestamps:
+        return []
+
+    max_end = max(float(item.get("end_seconds", 0)) for item in word_timestamps)
+    min_start = min(float(item.get("start_seconds", 0)) for item in word_timestamps)
+    looks_beat_local = min_start >= -0.001 and max_end <= duration + 0.001
+
+    if looks_beat_local:
+        return [
+            {
+                **item,
+                "start_seconds": max(0.0, float(item.get("start_seconds", 0))),
+                "end_seconds": min(duration, float(item.get("end_seconds", 0))),
+            }
+            for item in word_timestamps
+            if float(item.get("end_seconds", 0)) > 0
+            and float(item.get("start_seconds", 0)) < duration
+        ]
+
+    return [
+        {
+            **item,
+            "start_seconds": max(0.0, float(item.get("start_seconds", 0)) - beat_start_seconds),
+            "end_seconds": min(duration, float(item.get("end_seconds", 0)) - beat_start_seconds),
+        }
+        for item in word_timestamps
+        if float(item.get("end_seconds", 0)) > beat_start_seconds
+        and float(item.get("start_seconds", 0)) < beat_end_seconds
+    ]

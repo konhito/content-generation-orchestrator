@@ -32,6 +32,11 @@ class SceneRecipeInput:
     component_type: str = "concept_card"
     has_meme: bool = False
     seriousness_score: float = 0.0
+    body_type: str = "body1"
+    head: str = "M"
+    emotion: str = "content"
+    gesture: str = ""
+    background_image: str = ""
 
 
 NICHE_MEME_BASE = {
@@ -134,6 +139,39 @@ def _recipe_id(strategy: str) -> tuple[str, str]:
     return mapping[strategy]
 
 
+def _character_position_for_recipe(
+    strategy: str,
+    layout: str,
+    beat_index: int,
+    beat_count: int,
+) -> str:
+    if layout == "character_sidecar_visual_main":
+        return "side_left" if beat_index % 2 == 0 else "side_right"
+    if strategy == "meme_interruption":
+        return "upper_right" if beat_index % 2 == 0 else "upper_left"
+    if strategy == "visual_metaphor":
+        return "upper_right" if beat_index % 2 == 0 else "lower_left"
+    if strategy == "rapid_evidence_wall":
+        return "lower_left" if beat_index % 2 == 0 else "lower_right"
+    if strategy == "before_after_comparison":
+        return "side_left" if beat_index < beat_count / 2 else "side_right"
+    return "lower_center"
+
+
+def _character_motion_for_recipe(intent: str, strategy: str, seriousness_score: float) -> str:
+    if seriousness_score >= 0.75:
+        return "subtle_bob"
+    if strategy in {"meme_interruption", "reaction_stack"}:
+        return "snap_shift"
+    if strategy in {"host_reacts_to_evidence", "timeline_walkthrough"}:
+        return "side_bob"
+    if intent == "hook":
+        return "lean_in"
+    if intent in {"contrast", "reveal"}:
+        return "quick_shift"
+    return "gentle_bob"
+
+
 def _meme_intensity(item: SceneRecipeInput, intent: str, strategy: str) -> float:
     if not item.has_meme:
         return 0.0
@@ -155,15 +193,20 @@ def plan_scene_recipes(items: list[SceneRecipeInput], seed: str) -> list[VisualR
         strategy = _attention_strategy(item, intent, chooser)
         recipe_id, layout = _recipe_id(strategy)
         meme_intensity = _meme_intensity(item, intent, strategy)
+        character_position = _character_position_for_recipe(strategy, layout, item.beat_index, item.beat_count)
+        if character_position.startswith("side"):
+            character_scale = 0.42
+        elif character_position.startswith("upper"):
+            character_scale = 0.56
+        elif character_position == "center_float":
+            character_scale = 0.68
+        else:
+            character_scale = 0.78
         component_role = (
             "supporting_evidence"
             if strategy in {"host_reacts_to_evidence", "rapid_evidence_wall"}
             else "main_explanation"
         )
-        character_position = (
-            "side_left" if layout == "character_sidecar_visual_main" else "lower_center"
-        )
-        character_scale = 0.58 if character_position == "side_left" else 0.82
 
         recipes.append(
             VisualRecipe(
@@ -171,12 +214,17 @@ def plan_scene_recipes(items: list[SceneRecipeInput], seed: str) -> list[VisualR
                 layout=layout,
                 intent=intent,
                 attention_strategy=strategy,
+                background_image=_scene_background(item.background_image, chooser),
                 character=RecipeCharacterLayer(
                     presence="primary",
                     position=character_position,
                     scale=character_scale,
                     pose_intent="react" if "reacts" in strategy else "explain",
+                    body_type=item.body_type or "body1",
+                    head="M",
                     emotion="curious" if intent in {"hook", "explain"} else "happy",
+                    motion=_character_motion_for_recipe(intent, strategy, item.seriousness_score),
+                    gesture=item.gesture or intent,
                 ),
                 component=RecipeComponentLayer(
                     role=component_role,
@@ -215,3 +263,12 @@ def plan_scene_recipes(items: list[SceneRecipeInput], seed: str) -> list[VisualR
             )
         )
     return recipes
+
+
+def _scene_background(background_image: str, chooser: random.Random) -> str:
+    normalized = background_image.replace("\\", "/")
+    low_detail = ("/background/explanation/", "/background/office/")
+    if normalized and not any(marker in normalized for marker in low_detail):
+        return background_image
+    scene = chooser.choice(("classroom", "living-room-1", "library-and-book-shop", "outdoor-cafe", "street"))
+    return f"characters/synctoon/character_1/background/{scene}/{scene}.png"
